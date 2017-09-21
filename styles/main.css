@@ -1,0 +1,333 @@
+/**
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+html,
+body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+#show-filters {
+  background-color: white;
+}
+#cards {
+  width: 100%;
+}
+#cards .rating {
+  float: left;
+  padding-bottom: 14px;
+}
+#review-card .rating {
+  clear: both;
+  width: 100%;
+}
+#cards .details {
+  float: right;
+  color: #aaa;
+}
+#cards .info {
+  font-weight: bold;
+  color: #666;
+}
+#section-header {
+  display: block;
+}
+.price {
+  color: #009c1d;
+  font-weight: bold;
+}
+header .rating {
+  float: left;
+  padding: 0px;
+  margin: 0px;
+  position: relative;
+  top: -18px;
+  padding-right: 10px;
+}
+.location-card-wide.mdl-card {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.location-card-wide .mdl-card__title {
+  color: #fff;
+  height: 176px;
+  background-size: cover;
+  background-position: center;
+  padding: 0px;
+}
+.location-card-wide .mdl-card__actions {
+  text-align: right;
+}
+.gradient {
+  width: 100%;
+  height: 100%;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+50,000000+99&0+50,1+100 */
+  background: -moz-linear-gradient(
+    top,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.98) 99%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.98) 99%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.98) 99%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#000000', GradientType=0);
+  /* IE6-9 */
+}
+.location-card-wide .mdl-card__title-text {
+  margin-top: 130px;
+  margin-left: 20px;
+}
+.location-card-wide .mdl-card__menu {
+  color: #fff;
+}
+
+@media screen and (max-width: 600px) {
+  .location-card-wide.mdl-card .details {
+    text-align: left;
+    width: 100%;
+    clear: both;
+    padding-bottom: 10px;
+  }
+}
+
+header {
+  display: flex !important;
+}
+.mdl-layout__header--transparent {
+  background: url('../assets/demos/transparent.jpg') center / cover;
+}
+
+@media screen and (max-width: 840px) {
+  header button {
+    width: 100% !important;
+  }
+  header .details {
+    width: 100%;
+    clear: both;
+  }
+}
+
+@media screen and (min-width: 840px) {
+  .mdl-layout__header--transparent {
+    padding-top: 246px;
+  }
+  .content {
+    padding: 10px;
+  }
+}
+
+#review-card .content {
+  padding: 10px;
+}
+
+.mdl-layout__header--transparent #filter {
+  border-top-color: white;
+}
+.mdl-layout__header-row span {
+  margin-left: 15px;
+  margin-top: 17px;
+}
+.mdl-grid {
+  max-width: 1024px;
+  margin: auto;
+}
+.material-icons {
+  font-size: 36px;
+  top: 8px;
+  position: relative;
+}
+.mdl-layout__header-row {
+  padding: 0;
+  margin: 0 auto;
+}
+.mdl-card__supporting-text {
+  width: auto;
+  height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#messages {
+  overflow-y: auto;
+  margin-bottom: 10px;
+  height: calc(100% - 80px);
+}
+#message-filler {
+  flex-grow: 1;
+}
+.message-container:first-of-type {
+  border-top-width: 0;
+}
+.message-container {
+  display: block;
+  margin-top: 10px;
+  border-top: 1px solid #f3f3f3;
+  padding-top: 10px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.message-container.visible {
+  opacity: 1;
+}
+.message-container .pic {
+  background-image: url('/images/profile_placeholder.png');
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  background-size: 30px;
+  border-radius: 20px;
+}
+.message-container .spacing {
+  display: table-cell;
+  vertical-align: top;
+}
+.message-container .message {
+  display: table-cell;
+  width: calc(100% - 40px);
+  padding: 5px 0 5px 10px;
+}
+.message-container .name {
+  display: inline-block;
+  width: 100%;
+  padding-left: 40px;
+  color: #bbb;
+  font-style: italic;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+#message-form {
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 48px);
+  float: left;
+}
+#image-form {
+  display: flex;
+  flex-direction: row;
+  width: 48px;
+  float: right;
+}
+#message-form button,
+#image-form button {
+  width: 100px;
+  margin: 15px 0 0 10px;
+}
+.mdl-card {
+  min-height: 0;
+}
+.mdl-card {
+  background: linear-gradient(white, #f9f9f9);
+  justify-content: space-between;
+}
+h3 {
+  margin-bottom: 0px;
+}
+#filter,
+#info {
+  border-top: 2px solid #f2736a;
+}
+#info {
+  border-top-color: white;
+}
+#info .content {
+}
+header h3 {
+  margin-bottom: 20px;
+}
+#filter #active-filters {
+  line-height: 34px;
+}
+header .mdl-button {
+  float: right;
+  background-color: white !important;
+}
+header .mdl-button .material-icons {
+  font-size: 22px;
+}
+main {
+  width: 100%;
+}
+#review-card #rating .material-icons {
+  font-size: 20px;
+}
+#review-card .author {
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.mdl-textfield__label:after {
+  background-color: #0288d1;
+}
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label {
+  color: #0288d1;
+}
+.mdl-button .material-icons {
+  top: -1px;
+  margin-right: 5px;
+}
+
+b.light {
+  font-weight: normal;
+  opacity: 0.5;
+}
+
+#dialog-add-review h4 {
+  text-align: center;
+}
+
+.star-input {
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 10px;
+  user-select: none;
+  cursor: pointer;
+}
+#site-header a {
+  color: white;
+  text-decoration: none;
+}
+
+#placeholder-config {
+  padding: 20px;
+  opacity: 0.8;
+  font-size: 16px;
+}
+
+#placeholder-config .text {
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+#placeholder-config .mdl-button__ripple-container {
+  float: right;
+}
+
+dialog .mdl-menu__container {
+  z-index: 1000;
+  top: 0px;
+}
