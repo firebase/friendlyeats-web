@@ -1,6 +1,6 @@
 {
-  "name": "FireEats",
-  "short_name": "FireEats",
+  "name": "FriendlyEats",
+  "short_name": "FriendlyEats",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "FireEats",
+  "name": "FriendlyEats",
   "launch_path": "/",
   "description": "Find great places to eat!",
   "developer": {
@@ -15,7 +15,7 @@
   },
   "locales": {
     "en": {
-      "name": "FireEats",
+      "name": "FriendlyEats",
       "description": "Find great places to eat!"
     }
   },
