@@ -22,3 +22,11 @@ firebase serve --project YOUR_PROJECT_ID
 ```
 
 You will also need to enable Anonymous Authentication in your Firebase Console
+
+## Support
+
+- [Firebase Support](https://firebase.google.com/support/)
+
+## License
+
+© Google, 2017. Licensed under an [Apache-2](../LICENSE) license.
