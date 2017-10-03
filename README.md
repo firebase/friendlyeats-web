@@ -9,19 +9,7 @@ For more information about Firestore visit [the docs][firestore-docs].
 
 ## Setup
 
-Install the Firebase CLI:
-
-```
-npm -g i firebase-tools
-```
-
-Then run a local server:
-
-```
-firebase serve --project YOUR_PROJECT_ID
-```
-
-You will also need to enable Anonymous Authentication in your Firebase Console
+Please follow the [Cloud Firestore Web Codelab](https://codelabs.developers.google.com/codelabs/firestore-web) to setup this project.
 
 ## Support
 
