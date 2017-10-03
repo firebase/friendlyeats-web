@@ -1,19 +1,24 @@
-# friendlyeats-web
+# FriendlyEats (Web)
 
 ## Introduction
 
-Friendly Eats is a restaurant recommendation app built on Cloud Firestore.
+Fire Eats is a restaurant recommendation app built on Cloud Firestore.
 For more information about Firestore visit [the docs][firestore-docs].
+
+[firestore-docs]: https://firebase.google.com/docs/firestore/
 
 ## Setup
 
-  * None!
+Install the Firebase CLI:
 
-## Getting Started
+```
+npm -g i firebase-tools
+```
 
-  * Run `firebase serve`
+Then run a local server:
 
-[firestore-docs]: https://firebase.google.com/docs/firestore/
-[setup-web]: https://firebase.google.com/docs/firestore/client/setup-web
-[auth-providers]: https://console.firebase.google.com/project/_/authentication/providers
-[firebaseui]: https://github.com/firebase/FirebaseUI-Web
+```
+firebase serve --project YOUR_PROJECT_ID
+```
+
+You will also need to enable Anonymous Authentication in your Firebase Console
