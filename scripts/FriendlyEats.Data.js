@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict";
+'use strict';
 
 FriendlyEats.prototype.addRestaurant = function(data) {
   /*
@@ -23,13 +23,13 @@ FriendlyEats.prototype.addRestaurant = function(data) {
 
 FriendlyEats.prototype.addRating = function(restaurantID, rating) {
   /*
-    TODO: Retrieve add a rating to a resterant
+    TODO: Retrieve add a rating to a restaurant
   */
 };
 
 FriendlyEats.prototype.getRestaurant = function(id) {
   /*
-    TODO: Retrieve a single restaraunt
+    TODO: Retrieve a single restaurant
   */
 };
 

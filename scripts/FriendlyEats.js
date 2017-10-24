@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict";
+'use strict';
 
 function FriendlyEats() {
   const self = this;
 
   self.filters = {
-    city: "",
-    price: "",
-    category: "",
-    sort: "Rating"
+    city: '',
+    price: '',
+    category: '',
+    sort: 'Rating'
   };
 
   self.dialogs = {};
 
-  firebase.auth().signInAnonymously().then(function ()  {
+  firebase.auth().signInAnonymously().then(function() {
     self.initTemplates();
     self.initRouter();
     self.initReviewDialog();
     self.initFilterDialog();
-  }).catch(function (err) {
+  }).catch(function(err) {
     console.log(err);
   });
 }
@@ -43,19 +43,19 @@ FriendlyEats.prototype.initRouter = function() {
 
   self.router
     .on({
-      "/": function ()  {
+      '/': function() {
         self.updateQuery(self.filters);
       }
     })
     .on({
-      "/setup": function ()  {
+      '/setup': function()  {
         self.viewSetup();
       }
     })
     .on({
-      "/restaurants/*": function ()  {
+      '/restaurants/*': function() {
         let path = self.getCleanPath(document.location.pathname);
-        const id = path.split("/")[2];
+        const id = path.split('/')[2];
         self.viewRestaurant(id);
       }
     })
@@ -63,18 +63,18 @@ FriendlyEats.prototype.initRouter = function() {
 
   firebase
     .firestore()
-    .collection("restaurants")
+    .collection('restaurants')
     .limit(1)
-    .onSnapshot(function (snapshot) {
+    .onSnapshot(function(snapshot) {
       if (snapshot.empty) {
-        self.router.navigate("/setup");
+        self.router.navigate('/setup');
       }
     });
 };
 
 FriendlyEats.prototype.getCleanPath = function(dirtyPath) {
-  if (dirtyPath.startsWith("/index.html")) {
-    return dirtyPath.split("/").slice(1).join("/");
+  if (dirtyPath.startsWith('/index.html')) {
+    return dirtyPath.split('/').slice(1).join('/');
   } else {
     return dirtyPath;
   }
@@ -90,99 +90,99 @@ FriendlyEats.prototype.getRandomItem = function(arr) {
 
 FriendlyEats.prototype.data = {
   words: [
-    "Bar",
-    "Fire",
-    "Grill",
-    "Drive Thru",
-    "Place",
-    "Best",
-    "Spot",
-    "Prime",
-    "Eatin'"
+    'Bar',
+    'Fire',
+    'Grill',
+    'Drive Thru',
+    'Place',
+    'Best',
+    'Spot',
+    'Prime',
+    'Eatin\''
   ],
   cities: [
-    "Albuquerque",
-    "Arlington",
-    "Atlanta",
-    "Austin",
-    "Baltimore",
-    "Boston",
-    "Charlotte",
-    "Chicago",
-    "Cleveland",
-    "Colorado Springs",
-    "Columbus",
-    "Dallas",
-    "Denver",
-    "Detroit",
-    "El Paso",
-    "Fort Worth",
-    "Fresno",
-    "Houston",
-    "Indianapolis",
-    "Jacksonville",
-    "Kansas City",
-    "Las Vegas",
-    "Long Island",
-    "Los Angeles",
-    "Louisville",
-    "Memphis",
-    "Mesa",
-    "Miami",
-    "Milwaukee",
-    "Nashville",
-    "New York",
-    "Oakland",
-    "Oklahoma",
-    "Omaha",
-    "Philadelphia",
-    "Phoenix",
-    "Portland",
-    "Raleigh",
-    "Sacramento",
-    "San Antonio",
-    "San Diego",
-    "San Francisco",
-    "San Jose",
-    "Tucson",
-    "Tulsa",
-    "Virginia Beach",
-    "Washington",
+    'Albuquerque',
+    'Arlington',
+    'Atlanta',
+    'Austin',
+    'Baltimore',
+    'Boston',
+    'Charlotte',
+    'Chicago',
+    'Cleveland',
+    'Colorado Springs',
+    'Columbus',
+    'Dallas',
+    'Denver',
+    'Detroit',
+    'El Paso',
+    'Fort Worth',
+    'Fresno',
+    'Houston',
+    'Indianapolis',
+    'Jacksonville',
+    'Kansas City',
+    'Las Vegas',
+    'Long Island',
+    'Los Angeles',
+    'Louisville',
+    'Memphis',
+    'Mesa',
+    'Miami',
+    'Milwaukee',
+    'Nashville',
+    'New York',
+    'Oakland',
+    'Oklahoma',
+    'Omaha',
+    'Philadelphia',
+    'Phoenix',
+    'Portland',
+    'Raleigh',
+    'Sacramento',
+    'San Antonio',
+    'San Diego',
+    'San Francisco',
+    'San Jose',
+    'Tucson',
+    'Tulsa',
+    'Virginia Beach',
+    'Washington'
   ],
   categories: [
-    "Brunch",
-    "Burgers",
-    "Coffee",
-    "Deli",
-    "Dim Sum",
-    "Indian",
-    "Italian",
-    "Mediterranean",
-    "Mexican",
-    "Pizza",
-    "Ramen",
-    "Sushi",
+    'Brunch',
+    'Burgers',
+    'Coffee',
+    'Deli',
+    'Dim Sum',
+    'Indian',
+    'Italian',
+    'Mediterranean',
+    'Mexican',
+    'Pizza',
+    'Ramen',
+    'Sushi'
   ],
   ratings: [
     {
       rating: 1,
-      text: "Would never eat here again!"
+      text: 'Would never eat here again!'
     },
     {
       rating: 2,
-      text: "Not my cup of tea."
+      text: 'Not my cup of tea.'
     },
     {
       rating: 3,
-      text: "Exactly okay :/"
+      text: 'Exactly okay :/'
     },
     {
       rating: 4,
-      text: "Actually pretty good, would recommend!"
+      text: 'Actually pretty good, would recommend!'
     },
     {
       rating: 5,
-      text: "This is my favorite place. Literally."
+      text: 'This is my favorite place. Literally.'
     }
   ]
 };
