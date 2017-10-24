@@ -15,6 +15,9 @@
  */
 'use strict';
 
+/**
+ * Adds a set of mock Restaurants to the Cloud Firestore.
+ */
 FriendlyEats.prototype.addMockRestaurants = function() {
   const self = this;
   const promises = [];
@@ -52,7 +55,10 @@ FriendlyEats.prototype.addMockRestaurants = function() {
 
   return Promise.all(promises);
 };
-  
+
+/**
+ * Adds a set of mock Ratings to the given Restaurant.
+ */
 FriendlyEats.prototype.addMockRatings = function(restaurantID) {
   const self = this;
   const ratingPromises = [];
