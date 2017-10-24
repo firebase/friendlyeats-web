@@ -81,7 +81,7 @@ FriendlyEats.prototype.getCleanPath = function(dirtyPath) {
 };
 
 FriendlyEats.prototype.getFirebaseConfig = function() {
-  return firebase.apps[0].options_;
+  return firebase.app().options;
 };
 
 FriendlyEats.prototype.getRandomItem = function(arr) {
