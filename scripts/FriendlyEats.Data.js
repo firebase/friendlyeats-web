@@ -21,9 +21,15 @@ FriendlyEats.prototype.addRestaurant = function(data) {
   */
 };
 
-FriendlyEats.prototype.addRating = function(restaurantID, rating) {
+FriendlyEats.prototype.getAllRestaurants = function(render) {
   /*
-    TODO: Retrieve add a rating to a restaurant
+    TODO: Retrieve list of restaurants
+  */
+};
+
+FriendlyEats.prototype.getDocumentsInQuery = function(query, render) {
+  /*
+    TODO: Render all documents in the provided query
   */
 };
 
@@ -33,20 +39,14 @@ FriendlyEats.prototype.getRestaurant = function(id) {
   */
 };
 
-FriendlyEats.prototype.getAllRestaurants = function(render) {
-  /*
-    TODO: Retrieve list of restaurants
-  */
-};
-
 FriendlyEats.prototype.getFilteredRestaurants = function(filters, render) {
   /*
     TODO: Retrieve filtered list of restaurants
   */
 };
 
-FriendlyEats.prototype.getDocumentsInQuery = function(query, render) {
+FriendlyEats.prototype.addRating = function(restaurantID, rating) {
   /*
-    TODO: Render all documents in the provided query
+    TODO: Retrieve add a rating to a restaurant
   */
 };
