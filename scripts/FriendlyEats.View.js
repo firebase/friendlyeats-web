@@ -309,7 +309,7 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
         });
       } else {
         mainEl = this.renderTemplate('no-ratings', {
-          add_mock_data () {
+          add_mock_data: () => {
             this.addMockRatings(id).then(() => {
               this.rerender();
             });
