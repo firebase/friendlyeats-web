@@ -16,84 +16,81 @@
 'use strict';
 
 FriendlyEats.prototype.initTemplates = function() {
-  const self = this;
-  self.templates = {};
-  document.querySelectorAll('.template').forEach(function(el) {
-    self.templates[el.getAttribute('id')] = el;
+  this.templates = {};
+  document.querySelectorAll('.template').forEach(el => {
+    this.templates[el.getAttribute('id')] = el;
   });
 };
 
 FriendlyEats.prototype.viewHome = function() {
-  const self = this;
-  self.getAllRestaurants();
+  this.getAllRestaurants();
 };
 
 FriendlyEats.prototype.viewList = function(filters, filter_description) {
-  const self = this;
   if (!filter_description) {
     filter_description = 'any type of food with any price in any city.';
   }
 
-  const mainEl = self.renderTemplate('main-adjusted');
-  const headerEl = self.renderTemplate('header-base', {
+  const mainEl = this.renderTemplate('main-adjusted');
+  const headerEl = this.renderTemplate('header-base', {
     hasSectionHeader: true
   });
 
-  self.replaceElement(
-    headerEl.querySelector('#section-header'),
-    self.renderTemplate('filter-display', { filter_description })
+  this.replaceElement(
+      headerEl.querySelector('#section-header'),
+      this.renderTemplate('filter-display', { filter_description })
   );
 
-  self.replaceElement(document.querySelector('.header'), headerEl);
-  self.replaceElement(document.querySelector('main'), mainEl);
+  this.replaceElement(document.querySelector('.header'), headerEl);
+  this.replaceElement(document.querySelector('main'), mainEl);
 
-  headerEl.querySelector('#show-filters').addEventListener('click', function() {
-    self.dialogs.filter.show();
+  headerEl.querySelector('#show-filters').addEventListener('click', () => {
+    this.dialogs.filter.show();
   });
 
-  const renderResults = function(doc) {
+  const renderResults = doc => {
     if (!doc) {
-      const headerEl = self.renderTemplate('header-base', {
+      const headerEl = this.renderTemplate('header-base', {
         hasSectionHeader: true
       });
     
-      const noResultsEl = self.renderTemplate('no-results');
+      const noResultsEl = this.renderTemplate('no-results');
 
-      self.replaceElement(
-        headerEl.querySelector('#section-header'),
-        self.renderTemplate('filter-display', { filter_description })
+      this.replaceElement(
+          headerEl.querySelector('#section-header'),
+          this.renderTemplate('filter-display', { filter_description })
       );
 
-      headerEl.querySelector('#show-filters').addEventListener('click', function() {
-        self.dialogs.filter.show();
+      headerEl.querySelector('#show-filters').addEventListener('click', () => {
+        this.dialogs.filter.show();
       });
-    
-      self.replaceElement(document.querySelector('.header'), headerEl);
-      self.replaceElement(document.querySelector('main'), noResultsEl);
+
+      this.replaceElement(document.querySelector('.header'), headerEl);
+      this.replaceElement(document.querySelector('main'), noResultsEl);
       return;
     }
     const data = doc.data();
     data['.id'] = doc.id;
-    data['go_to_restaurant'] = function()  {
-      self.router.navigate(`/restaurants/${doc.id}`);
+    data['go_to_restaurant'] = () => {
+      this.router.navigate(`/restaurants/${doc.id}`);
     };
 
-    const el = self.renderTemplate('restaurant-card', data);
-    el.querySelector('.rating').append(self.renderRating(data.avgRating));
-    el.querySelector('.price').append(self.renderPrice(data.price));
+    const el = this.renderTemplate('restaurant-card', data);
+    el.querySelector('.rating').append(this.renderRating(data.avgRating));
+    el.querySelector('.price').append(this.renderPrice(data.price));
 
     mainEl.querySelector('#cards').append(el);
   };
 
   if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
-    self.getFilteredRestaurants({
+    this.getFilteredRestaurants({
      city: filters.city || 'Any',
      category: filters.category || 'Any',
      price: filters.price,
      sort: filters.sort 
     }, renderResults);
   } else {
-    self.getAllRestaurants(renderResults);
+    this.getAllRestaurants(renderResults);
   }
 
   const toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
@@ -103,70 +100,68 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
 };
 
 FriendlyEats.prototype.viewSetup = function() {
-  const self = this;
-  const headerEl = self.renderTemplate('header-base', {
+  const headerEl = this.renderTemplate('header-base', {
     hasSectionHeader: false
   });
 
-  const config = self.getFirebaseConfig();
-  const noRestaurantsEl = self.renderTemplate('no-restaurants', config);
+  const config = this.getFirebaseConfig();
+  const noRestaurantsEl = this.renderTemplate('no-restaurants', config);
 
   const button = noRestaurantsEl.querySelector('#add_mock_data');
   let addingMockData = false;
 
-  button.addEventListener('click', function() {
+  button.addEventListener('click', () => {
     if (addingMockData) return;
     addingMockData = true;
 
     this.style.opacity = '0.4';
     this.innerText = 'Please wait...';
 
-    self.addMockRestaurants().then(function() {
-      self.rerender();
+    this.addMockRestaurants().then(() => {
+      this.rerender();
     });
   });
 
-  self.replaceElement(document.querySelector('.header'), headerEl);
-  self.replaceElement(document.querySelector('main'), noRestaurantsEl);
+  this.replaceElement(document.querySelector('.header'), headerEl);
+  this.replaceElement(document.querySelector('main'), noRestaurantsEl);
 
   firebase
   .firestore()
   .collection('restaurants')
   .limit(1)
-  .onSnapshot(function(snapshot) {
+  .onSnapshot(snapshot => {
     if (snapshot.size && !addingMockData) {
-      self.router.navigate('/');
+      this.router.navigate('/');
     }
   });
 };
 
 FriendlyEats.prototype.initReviewDialog = function() {
-  const self = this;
   const dialog = document.querySelector('#dialog-add-review');
-  self.dialogs.add_review = new mdc.dialog.MDCDialog(dialog); 
-  
-  self.dialogs.add_review.listen('MDCDialog:accept', function() {
-    let pathname = self.getCleanPath(document.location.pathname);
+  this.dialogs.add_review = new mdc.dialog.MDCDialog(dialog);
+
+  this.dialogs.add_review.listen('MDCDialog:accept', () => {
+    let pathname = this.getCleanPath(document.location.pathname);
     let id = pathname.split('/')[2];
 
-    self.addRating(id, {
+    this.addRating(id, {
       rating,
       text: dialog.querySelector('#text').value,
       userName: 'Anonymous (Web)',
       timestamp: new Date(),
       userId: firebase.auth().currentUser.uid
-    }).then(function() {
-      self.rerender();
+    }).then(() => {
+      this.rerender();
     });
   });
 
   let rating = 0;
 
-  dialog.querySelectorAll('.star-input i').forEach(function(el) {
-    const rate = function()  {
+  dialog.querySelectorAll('.star-input i').forEach(el => {
+    const rate = () => {
       let after = false;
       rating = 0;
-      [].slice.call(el.parentNode.children).forEach(function(child) {
+      [].slice.call(el.parentNode.children).forEach(child => {
         if (!after) {
           rating++;
           child.innerText = 'star';
@@ -182,89 +177,86 @@ FriendlyEats.prototype.initReviewDialog = function() {
 
 FriendlyEats.prototype.initFilterDialog = function() {
   // TODO: Reset filter dialog to init state on close.
-  const self = this;
+  this.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
 
-  self.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
-  
-  self.dialogs.filter.listen('MDCDialog:accept', function() {
-    self.updateQuery(self.filters);
+  this.dialogs.filter.listen('MDCDialog:accept', () => {
+    this.updateQuery(this.filters);
   });
 
   const dialog = document.querySelector('aside');
   const pages = dialog.querySelectorAll('.page');
 
-  self.replaceElement(
+  this.replaceElement(
     dialog.querySelector('#category-list'),
-    self.renderTemplate('item-list', { items: ['Any'].concat(self.data.categories) })
+      this.renderTemplate('item-list', { items: ['Any'].concat(this.data.categories) })
   );
 
-  self.replaceElement(
-    dialog.querySelector('#city-list'),
-    self.renderTemplate('item-list', { items: ['Any'].concat(self.data.cities) })
+  this.replaceElement(
+      dialog.querySelector('#city-list'),
+      this.renderTemplate('item-list', { items: ['Any'].concat(this.data.cities) })
   );
 
-  const renderAllList = function() {
-    self.replaceElement(
-      dialog.querySelector('#all-filters-list'),
-      self.renderTemplate('all-filters-list', self.filters)
+  const renderAllList = () => {
+    this.replaceElement(
+        dialog.querySelector('#all-filters-list'),
+        this.renderTemplate('all-filters-list', this.filters)
     );
   
-    dialog.querySelectorAll('#page-all .mdc-list-item').forEach(function(el) {
-      el.addEventListener('click', function() {
+    dialog.querySelectorAll('#page-all .mdc-list-item').forEach(el => {
+      el.addEventListener('click', () => {
         const id = el.id.split('-').slice(1).join('-');
         displaySection(id);
       });
     });
   };
 
-  const displaySection = function(id) {
+  const displaySection = id => {
     if (id === 'page-all') {
       renderAllList();
     }
 
-    pages.forEach(function(sel) {
+    pages.forEach(sel => {
       if (sel.id === id) {
         sel.style.display = 'block';
       } else {
         sel.style.display = 'none';
       }
     });
-  }
+  };
 
-  pages.forEach(function(sel) {
+  pages.forEach(sel => {
     const type = sel.id.split('-')[1];
     if (type === 'all') return;
 
-    sel.querySelectorAll('.mdc-list-item').forEach(function(el) {
-      el.addEventListener('click', function() {
-        self.filters[type] = el.innerText.trim() === 'Any'? '' : el.innerText.trim();
+    sel.querySelectorAll('.mdc-list-item').forEach(el => {
+      el.addEventListener('click', () => {
+        this.filters[type] = el.innerText.trim() === 'Any'? '' : el.innerText.trim();
         displaySection('page-all');
       });
     });
   });
 
   displaySection('page-all');
-  dialog.querySelectorAll('.back').forEach(function(el) {
-    el.addEventListener('click', function() {
+  dialog.querySelectorAll('.back').forEach(el => {
+    el.addEventListener('click', () => {
       displaySection('page-all');
     });
   });
 };
 
 FriendlyEats.prototype.updateQuery = function(filters) {
-  const self = this;
   let query_description = '';
 
   if (filters.category !== '') {
     query_description += `${filters.category} places`;
   } else {
-    query_description += 'any restaraunt';
+    query_description += 'any restaurant';
   }
 
   if (filters.city !== '') {
     query_description += ` in ${filters.city}`;
   } else {
-    query_description += ' located  anywhere';
+    query_description += ' located anywhere';
   }
 
   if (filters.price !== '') {
@@ -279,96 +271,93 @@ FriendlyEats.prototype.updateQuery = function(filters) {
     query_description += ' sorted by # of reviews';
   }
 
-  self.viewList(filters, query_description);
+  this.viewList(filters, query_description);
 };
 
 FriendlyEats.prototype.viewRestaurant = function(id) {
-  const self = this;
   let sectionHeaderEl;
-  return self.getRestaurant(id)
-    .then(function(doc) {
+  return this.getRestaurant(id)
+    .then(doc => {
       const data = doc.data();
-      const dialog =  self.dialogs.add_review;
+      const dialog =  this.dialogs.add_review;
 
-      data.show_add_review = function()  {
+      data.show_add_review = () => {
         dialog.show();
       };
 
-      sectionHeaderEl = self.renderTemplate('restaurant-header', data);
+      sectionHeaderEl = this.renderTemplate('restaurant-header', data);
       sectionHeaderEl
         .querySelector('.rating')
-        .append(self.renderRating(data.avgRating));
+        .append(this.renderRating(data.avgRating));
 
       sectionHeaderEl
         .querySelector('.price')
-        .append(self.renderPrice(data.price));
+        .append(this.renderPrice(data.price));
       return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
     })
-    .then(function(ratings) {
+    .then(ratings => {
       let mainEl;
 
       if (ratings.size) {
-        mainEl = self.renderTemplate('main');
+        mainEl = this.renderTemplate('main');
 
-        ratings.forEach(function(rating) {
+        ratings.forEach(rating => {
           const data = rating.data();
-          const el = self.renderTemplate('review-card', data);
-          el.querySelector('.rating').append(self.renderRating(data.rating));
+          const el = this.renderTemplate('review-card', data);
+          el.querySelector('.rating').append(this.renderRating(data.rating));
           mainEl.querySelector('#cards').append(el);
         });
       } else {
-        mainEl = self.renderTemplate('no-ratings', {
+        mainEl = this.renderTemplate('no-ratings', {
           add_mock_data () {
-            self.addMockRatings(id).then(function() {
-              self.rerender();
+            this.addMockRatings(id).then(() => {
+              this.rerender();
             });
           }
         });
       }
 
-      const headerEl = self.renderTemplate('header-base', {
+      const headerEl = this.renderTemplate('header-base', {
         hasSectionHeader: true
       });
 
-      self.replaceElement(document.querySelector('.header'), sectionHeaderEl);
-      self.replaceElement(document.querySelector('main'), mainEl);
+      this.replaceElement(document.querySelector('.header'), sectionHeaderEl);
+      this.replaceElement(document.querySelector('main'), mainEl);
     })
-    .then(function()  {
-      self.router.updatePageLinks();
+    .then(() => {
+      this.router.updatePageLinks();
     })
-    .catch(function(err) {
+    .catch(err => {
       console.warn('Error rendering page', err);
     });
 };
 
 FriendlyEats.prototype.renderTemplate = function(id, data) {
-  const self = this;
-  const template = self.templates[id];
+  const template = this.templates[id];
   const el = template.cloneNode(true);
   el.removeAttribute('hidden');
-  self.render(el, data);
+  this.render(el, data);
   return el;
 };
 
 FriendlyEats.prototype.render = function(el, data) {
   if (!data) return;
-  const self = this;
 
   const modifiers = {
-    'data-fir-foreach': function(tel) {
+    'data-fir-foreach': tel => {
       const field = tel.getAttribute('data-fir-foreach');
-      const values = self.getDeepItem(data, field);
+      const values = this.getDeepItem(data, field);
 
-      values.forEach(function(value, index) {
+      values.forEach((value, index) => {
         const cloneTel = tel.cloneNode(true);
         tel.parentNode.append(cloneTel);
 
-        Object.keys(modifiers).forEach(function(selector) {
+        Object.keys(modifiers).forEach(selector => {
           const children = Array.prototype.slice.call(
             cloneTel.querySelectorAll(`[${selector}]`)
           );
           children.push(cloneTel);
-          children.forEach(function(childEl) {
+          children.forEach(childEl => {
             const currentVal = childEl.getAttribute(selector);
 
             if (!currentVal) return;
@@ -382,39 +371,39 @@ FriendlyEats.prototype.render = function(el, data) {
 
       tel.parentNode.removeChild(tel);
     },
-    'data-fir-content': function(tel) {
+    'data-fir-content': tel => {
       const field = tel.getAttribute('data-fir-content');
-      tel.innerText = self.getDeepItem(data, field);
+      tel.innerText = this.getDeepItem(data, field);
     },
-    'data-fir-click': function(tel) {
-      tel.addEventListener('click', function()  {
+    'data-fir-click': tel => {
+      tel.addEventListener('click', () => {
         const field = tel.getAttribute('data-fir-click');
-        self.getDeepItem(data, field)();
+        this.getDeepItem(data, field)();
       });
     },
-    'data-fir-if': function(tel) {
+    'data-fir-if': tel => {
       const field = tel.getAttribute('data-fir-if');
-      if (!self.getDeepItem(data, field)) {
+      if (!this.getDeepItem(data, field)) {
         tel.style.display = 'none';
       }
     },
-    'data-fir-if-not': function(tel) {
+    'data-fir-if-not': tel => {
       const field = tel.getAttribute('data-fir-if-not');
-      if (self.getDeepItem(data, field)) {
+      if (this.getDeepItem(data, field)) {
         tel.style.display = 'none';
       }
     },
-    'data-fir-attr': function(tel) {
+    'data-fir-attr': tel => {
       const chunks = tel.getAttribute('data-fir-attr').split(':');
       const attr = chunks[0];
       const field = chunks[1];
-      tel.setAttribute(attr, self.getDeepItem(data, field));
+      tel.setAttribute(attr, this.getDeepItem(data, field));
     },
-    'data-fir-style': function(tel) {
+    'data-fir-style': tel => {
       const chunks = tel.getAttribute('data-fir-style').split(':');
       const attr = chunks[0];
       const field = chunks[1];
-      let value = self.getDeepItem(data, field);
+      let value = this.getDeepItem(data, field);
 
       if (attr.toLowerCase() === 'backgroundimage') {
         value = `url(${value})`;
@@ -425,16 +414,16 @@ FriendlyEats.prototype.render = function(el, data) {
 
   const preModifiers = ['data-fir-foreach'];
 
-  preModifiers.forEach(function(selector) {
+  preModifiers.forEach(selector => {
     const modifier = modifiers[selector];
-    self.useModifier(el, selector, modifier);
+    this.useModifier(el, selector, modifier);
   });
 
-  Object.keys(modifiers).forEach(function(selector) {
+  Object.keys(modifiers).forEach(selector => {
     if (preModifiers.indexOf(selector) !== -1) return;
 
     const modifier = modifiers[selector];
-    self.useModifier(el, selector, modifier);
+    this.useModifier(el, selector, modifier);
   });
 };
 
@@ -443,21 +432,20 @@ FriendlyEats.prototype.useModifier = function(el, selector, modifier) {
 };
 
 FriendlyEats.prototype.getDeepItem = function(obj, path) {
-  path.split('/').forEach(function(chunk) {
+  path.split('/').forEach(chunk => {
     obj = obj[chunk];
   });
   return obj;
 };
 
 FriendlyEats.prototype.renderRating = function(rating) {
-  const self = this;
-  const el = self.renderTemplate('rating', {});
+  const el = this.renderTemplate('rating', {});
   for (let r = 0; r < 5; r += 1) {
     let star;
     if (r < Math.floor(rating)) {
-      star = self.renderTemplate('star-icon', {});
+      star = this.renderTemplate('star-icon', {});
     } else {
-      star = self.renderTemplate('star-border-icon', {});
+      star = this.renderTemplate('star-border-icon', {});
     }
     el.append(star);
   }
@@ -465,8 +453,7 @@ FriendlyEats.prototype.renderRating = function(rating) {
 };
 
 FriendlyEats.prototype.renderPrice = function(price) {
-  const self = this;
-  const el = self.renderTemplate('price', {});
+  const el = this.renderTemplate('price', {});
   for (let r = 0; r < price; r += 1) {
     el.append('$');
   }
@@ -479,6 +466,5 @@ FriendlyEats.prototype.replaceElement = function(parent, content) {
 };
 
 FriendlyEats.prototype.rerender = function() {
-  const self = this;
-  self.router.navigate(document.location.pathname + '?' + new Date().getTime());
+  this.router.navigate(document.location.pathname + '?' + new Date().getTime());
 };

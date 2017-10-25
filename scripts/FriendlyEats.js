@@ -15,48 +15,51 @@
  */
 'use strict';
 
+/**
+ * Initializes the FriendlyEats app.
+ */
 function FriendlyEats() {
-  const self = this;
-
-  self.filters = {
+  this.filters = {
     city: '',
     price: '',
     category: '',
     sort: 'Rating'
   };
 
-  self.dialogs = {};
+  this.dialogs = {};
 
-  firebase.auth().signInAnonymously().then(function() {
-    self.initTemplates();
-    self.initRouter();
-    self.initReviewDialog();
-    self.initFilterDialog();
-  }).catch(function(err) {
+  firebase.auth().signInAnonymously().then(() => {
+    this.initTemplates();
+    this.initRouter();
+    this.initReviewDialog();
+    this.initFilterDialog();
+  }).catch(err => {
     console.log(err);
   });
 }
 
+/**
+ * Initializes the router for the FriendlyEats app.
+ */
 FriendlyEats.prototype.initRouter = function() {
-  const self = this;
-  self.router = new Navigo();
+  this.router = new Navigo();
 
-  self.router
+  this.router
     .on({
-      '/': function() {
-        self.updateQuery(self.filters);
+      '/': () => {
+        this.updateQuery(this.filters);
       }
     })
     .on({
-      '/setup': function()  {
-        self.viewSetup();
+      '/setup': () => {
+        this.viewSetup();
       }
     })
     .on({
-      '/restaurants/*': function() {
+      '/restaurants/*': () => {
         let path = self.getCleanPath(document.location.pathname);
         const id = path.split('/')[2];
-        self.viewRestaurant(id);
+        this.viewRestaurant(id);
       }
     })
     .resolve();
@@ -65,9 +68,9 @@ FriendlyEats.prototype.initRouter = function() {
     .firestore()
     .collection('restaurants')
     .limit(1)
-    .onSnapshot(function(snapshot) {
+    .onSnapshot(snapshot => {
       if (snapshot.empty) {
-        self.router.navigate('/setup');
+        this.router.navigate('/setup');
       }
     });
 };
