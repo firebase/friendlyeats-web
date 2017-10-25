@@ -86,7 +86,7 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
     this.getFilteredRestaurants({
      city: filters.city || 'Any',
      category: filters.category || 'Any',
-     price: filters.price,
+     price: filters.price || 'Any',
      sort: filters.sort 
     }, renderResults);
   } else {
