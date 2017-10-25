@@ -55,7 +55,10 @@
  #site-header, #filter {background-color: #3367D6;}
  
  #generic-header button {color: black;}
- 
+
+ .location-card {
+   cursor: pointer;
+ }
  .location-card.mdc-card {
    width: 100%;
    margin-bottom: 20px;
