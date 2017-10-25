@@ -19,23 +19,22 @@
  * Adds a set of mock Restaurants to the Cloud Firestore.
  */
 FriendlyEats.prototype.addMockRestaurants = function() {
-  const self = this;
   const promises = [];
 
   for (let i = 0; i < 20; i++) {
     let name =
-      self.getRandomItem(self.data.words) +
-      ' ' +
-      self.getRandomItem(self.data.words);
-    let category = self.getRandomItem(self.data.categories);
-    let city = self.getRandomItem(self.data.cities);
+        this.getRandomItem(this.data.words) +
+        ' ' +
+        this.getRandomItem(this.data.words);
+    let category = this.getRandomItem(this.data.categories);
+    let city = this.getRandomItem(this.data.cities);
     let price = Math.floor(Math.random() * 4) + 1;
     let photoID = Math.floor(Math.random() * 22) + 1;
     let photo = `https://storage.googleapis.com/firestorequickstarts.appspot.com/food_${photoID}.png`;
     let numRatings = 0;
     let avgRating = 0;
 
-    const promise = self.addRestaurant({
+    const promise = this.addRestaurant({
       name,
       category,
       price,
@@ -60,16 +59,15 @@ FriendlyEats.prototype.addMockRestaurants = function() {
  * Adds a set of mock Ratings to the given Restaurant.
  */
 FriendlyEats.prototype.addMockRatings = function(restaurantID) {
-  const self = this;
   const ratingPromises = [];
   for (let r = 0; r < 5*Math.random(); r++) {
-    const rating = self.data.ratings[
-      parseInt(self.data.ratings.length*Math.random())
+    const rating = this.data.ratings[
+      parseInt(this.data.ratings.length*Math.random())
     ];
     rating.userName = 'Bot (Web)';
     rating.timestamp = new Date();
     rating.userId = firebase.auth().currentUser.uid;
-    ratingPromises.push(self.addRating(restaurantID, rating));
+    ratingPromises.push(this.addRating(restaurantID, rating));
   }
   return Promise.all(ratingPromises);
 };

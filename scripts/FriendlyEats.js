@@ -57,7 +57,7 @@ FriendlyEats.prototype.initRouter = function() {
     })
     .on({
       '/restaurants/*': () => {
-        let path = self.getCleanPath(document.location.pathname);
+        let path = this.getCleanPath(document.location.pathname);
         const id = path.split('/')[2];
         this.viewRestaurant(id);
       }
