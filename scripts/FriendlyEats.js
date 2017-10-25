@@ -190,6 +190,6 @@ FriendlyEats.prototype.data = {
   ]
 };
 
-window.onload = function() {
+window.onload = () => {
   window.app = new FriendlyEats();
 };
