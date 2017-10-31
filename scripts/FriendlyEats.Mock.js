@@ -58,8 +58,7 @@ FriendlyEats.prototype.addMockRestaurants = function() {
 /**
  * Adds a set of mock Ratings to the given Restaurant.
  */
-FriendlyEats.prototype.addMockRatings = function(restaurantID) {
-  const ratingPromises = [];
+FriendlyEats.prototype.addMockRatings = async function(restaurantID) {
   for (let r = 0; r < 5*Math.random(); r++) {
     const rating = this.data.ratings[
       parseInt(this.data.ratings.length*Math.random())
@@ -67,7 +66,6 @@ FriendlyEats.prototype.addMockRatings = function(restaurantID) {
     rating.userName = 'Bot (Web)';
     rating.timestamp = new Date();
     rating.userId = firebase.auth().currentUser.uid;
-    ratingPromises.push(this.addRating(restaurantID, rating));
+    await this.addRating(restaurantID, rating);
   }
-  return Promise.all(ratingPromises);
 };
