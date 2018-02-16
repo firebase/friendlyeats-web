@@ -242,7 +242,6 @@ FriendlyEats.prototype.initFilterDialog = function() {
       return;
     }
 
-    var that = this;
     sel.querySelectorAll('.mdc-list-item').forEach(function(el) {
       el.addEventListener('click', function() {
         that.filters[type] = el.innerText.trim() === 'Any'? '' : el.innerText.trim();
