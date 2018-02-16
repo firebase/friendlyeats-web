@@ -5,4 +5,4 @@ install:
   - npm install -g eslint
   - npm install
 script:
-  - test.sh
+  - ./test.sh
