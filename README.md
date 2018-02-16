@@ -18,3 +18,7 @@ Please follow the [Cloud Firestore Web Codelab](https://codelabs.developers.goog
 ## License
 
 © Google, 2017. Licensed under an [Apache-2](../LICENSE) license.
+
+## Build Status
+
+[![Build Status](https://travis-ci.org/firebase/friendlyeats-web.svg?branch=master)](https://travis-ci.org/firebase/friendlyeats-web)

@@ -9,6 +9,7 @@
   },
   "author": "",
   "devDependencies": {
+    "eslint": "^4.17.0",
     "prettier": "^1.5.3"
   }
 }
