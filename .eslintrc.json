@@ -1,0 +1,42 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "curly": [
+            "error",
+            "all"
+        ],
+        "consistent-this": [
+            "error",
+            "that"
+        ],
+        "no-console": 0,
+        "no-unused-vars": 0
+    },
+    "globals": {
+        "Navigo": true,
+        "mdc": true,
+        "importScripts": true,
+        "FriendlyEats": true,
+        "firebase": true,
+        "Promise": true
+    }
+}
