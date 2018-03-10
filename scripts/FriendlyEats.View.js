@@ -82,9 +82,9 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
       that.router.navigate('/restaurants/' + doc.id);
     };
 
-    var el = this.renderTemplate('restaurant-card', data);
-    el.querySelector('.rating').append(this.renderRating(data.avgRating));
-    el.querySelector('.price').append(this.renderPrice(data.price));
+    var el = that.renderTemplate('restaurant-card', data);
+    el.querySelector('.rating').append(that.renderRating(data.avgRating));
+    el.querySelector('.price').append(that.renderPrice(data.price));
 
     mainEl.querySelector('#cards').append(el);
   };
