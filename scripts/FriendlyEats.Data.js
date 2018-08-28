@@ -30,10 +30,13 @@ FriendlyEats.prototype.getAllRestaurants = function(render) {
 
 FriendlyEats.prototype.getDocumentsInQuery = function(query, render) {
   query.onSnapshot(function(snapshot) {
-    if (!snapshot.size) return render();
+    if (!snapshot.size){
+      return render();
+    }
     
-    snapshot.docChanges.forEach(function(change) {
-      if (change.type === 'added') {
+    var changedDocs = snapshot.docChanges();
+    changedDocs.forEach(function(change) {
+      if (change.type === "added"){
         render(change.doc);
       }
     });
