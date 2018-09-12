@@ -1,0 +1,32 @@
+{
+  "environment": "web",
+  "source": "1BWtoYJ4wh9MAgVx6KsIhEnvG3KqRyjkqNS0DscWA5xQ",
+  "format": "md",
+  "prefix": "../../",
+  "mainga": "UA-49880327-14",
+  "updated": "2018-09-10T20:42:34Z",
+  "id": "firestore-web",
+  "duration": 0,
+  "title": "Cloud Firestore Web Codelab",
+  "summary": "In this codelab you'll learn how to build a Web app that uses Cloud Firestore.",
+  "theme": "firebase",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "Firebase"
+  ],
+  "tags": [
+    "devfest18",
+    "firebase17",
+    "gdd17",
+    "io2018",
+    "jsconfeu",
+    "kiosk",
+    "tag-firebase",
+    "tag-web",
+    "web"
+  ],
+  "feedback": "https://github.com/firebase/friendlyeats-web/issues",
+  "url": "firestore-web"
+}
