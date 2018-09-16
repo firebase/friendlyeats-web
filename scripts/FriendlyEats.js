@@ -28,6 +28,8 @@ function FriendlyEats() {
 
   this.dialogs = {};
 
+  firebase.firestore().settings({ timestampsInSnapshots: true });
+
   var that = this;
   firebase.auth().signInAnonymously().then(function() {
     that.initTemplates();
