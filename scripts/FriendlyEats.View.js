@@ -79,9 +79,9 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
 
     // Support deletion by introducing a custom "removed" property on the doc.
     if (doc.removed) {
-      var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
-      if (existingLocationCard) {
-        mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
+      var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
+      if (locationCardToDelete) {
+        mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
       }
 
       return;  
