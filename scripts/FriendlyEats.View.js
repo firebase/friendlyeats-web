@@ -53,8 +53,39 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
     that.dialogs.filter.show();
   });
 
-  var renderResults = function(doc) {
-    if (!doc) {
+  var renderer = {
+    remove: function(doc) {
+      var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
+      if (locationCardToDelete) {
+        mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
+      }
+
+      return;
+    },
+    display: function(doc) {
+      var data = doc.data();
+      data['.id'] = doc.id;
+      data['go_to_restaurant'] = function() {
+        that.router.navigate('/restaurants/' + doc.id);
+      };
+  
+      var el = that.renderTemplate('restaurant-card', data);
+      el.querySelector('.rating').append(that.renderRating(data.avgRating));
+      el.querySelector('.price').append(that.renderPrice(data.price));
+      // Setting the id allows to locating the individual restaurant card
+      el.querySelector('.location-card').id = 'doc-' + doc.id;
+  
+      var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
+      if (existingLocationCard) {
+        // modify
+        existingLocationCard.parentNode.before(el);
+        mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
+      } else {
+        // add
+        mainEl.querySelector('#cards').append(el);
+      }
+    },
+    empty: function() {
       var headerEl = that.renderTemplate('header-base', {
         hasSectionHeader: true
       });
@@ -76,38 +107,6 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
       that.replaceElement(document.querySelector('main'), noResultsEl);
       return;
     }
-
-    // Support deletion by introducing a custom "removed" property on the doc.
-    if (doc.removed) {
-      var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
-      if (locationCardToDelete) {
-        mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
-      }
-
-      return;  
-    }
-
-    var data = doc.data();
-    data['.id'] = doc.id;
-    data['go_to_restaurant'] = function() {
-      that.router.navigate('/restaurants/' + doc.id);
-    };
-
-    var el = that.renderTemplate('restaurant-card', data);
-    el.querySelector('.rating').append(that.renderRating(data.avgRating));
-    el.querySelector('.price').append(that.renderPrice(data.price));
-    // Setting the id allows to locating the individual restaurant card
-    el.querySelector('.location-card').id = 'doc-' + doc.id;
-
-    var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
-    if (existingLocationCard) {
-      // modify
-      existingLocationCard.parentNode.before(el);
-      mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
-    } else {
-      // add
-      mainEl.querySelector('#cards').append(el);
-    }
   };
 
   if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
@@ -116,9 +115,9 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
       category: filters.category || 'Any',
       price: filters.price || 'Any',
       sort: filters.sort
-    }, renderResults);
+    }, renderer);
   } else {
-    this.getAllRestaurants(renderResults);
+    this.getAllRestaurants(renderer);
   }
 
   var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
