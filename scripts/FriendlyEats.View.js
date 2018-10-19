@@ -320,7 +320,7 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
 
       data.show_add_review = function() {
         // Reset the state before showing the dialog
-        dialog.root_.querySelector('#text').value = ''
+        dialog.root_.querySelector('#text').value = '';
         dialog.root_.querySelectorAll('.star-input i').forEach(function(el) {
           el.innerText = 'star_border';
         });
