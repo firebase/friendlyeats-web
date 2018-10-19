@@ -76,6 +76,17 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
       that.replaceElement(document.querySelector('main'), noResultsEl);
       return;
     }
+
+    // Support deletion by introducing a custom "removed" property on the doc.
+    if (doc.removed) {
+      var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
+      if (existingLocationCard) {
+        mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
+      }
+
+      return;  
+    }
+
     var data = doc.data();
     data['.id'] = doc.id;
     data['go_to_restaurant'] = function() {
@@ -85,8 +96,18 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
     var el = that.renderTemplate('restaurant-card', data);
     el.querySelector('.rating').append(that.renderRating(data.avgRating));
     el.querySelector('.price').append(that.renderPrice(data.price));
+    // Setting the id allows to locating the individual restaurant card
+    el.querySelector('.location-card').id = 'doc-' + doc.id;
 
-    mainEl.querySelector('#cards').append(el);
+    var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
+    if (existingLocationCard) {
+      // modify
+      existingLocationCard.parentNode.before(el);
+      mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
+    } else {
+      // add
+      mainEl.querySelector('#cards').append(el);
+    }
   };
 
   if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
@@ -298,6 +319,12 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
       var dialog =  that.dialogs.add_review;
 
       data.show_add_review = function() {
+        // Reset the state before showing the dialog
+        dialog.root_.querySelector('#text').value = ''
+        dialog.root_.querySelectorAll('.star-input i').forEach(function(el) {
+          el.innerText = 'star_border';
+        });
+
         dialog.show();
       };
 
