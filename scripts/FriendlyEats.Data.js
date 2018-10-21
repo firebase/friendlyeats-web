@@ -21,13 +21,13 @@ FriendlyEats.prototype.addRestaurant = function(data) {
   */
 };
 
-FriendlyEats.prototype.getAllRestaurants = function(render) {
+FriendlyEats.prototype.getAllRestaurants = function(renderer) {
   /*
     TODO: Retrieve list of restaurants
   */
 };
 
-FriendlyEats.prototype.getDocumentsInQuery = function(query, render) {
+FriendlyEats.prototype.getDocumentsInQuery = function(query, renderer) {
   /*
     TODO: Render all documents in the provided query
   */
