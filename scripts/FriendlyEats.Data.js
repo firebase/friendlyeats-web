@@ -39,7 +39,7 @@ FriendlyEats.prototype.getRestaurant = function(id) {
   */
 };
 
-FriendlyEats.prototype.getFilteredRestaurants = function(filters, render) {
+FriendlyEats.prototype.getFilteredRestaurants = function(filters, renderer) {
   /*
     TODO: Retrieve filtered list of restaurants
   */
