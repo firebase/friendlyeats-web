@@ -1,114 +1,106 @@
 {
   "indexes": [
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "price",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "avgRating",
-          "order": "DESCENDING"
+          "mode": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "city",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "avgRating",
-          "order": "DESCENDING"
+          "mode": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "price",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "numRatings",
-          "order": "DESCENDING"
+          "mode": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "city",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "numRatings",
-          "order": "DESCENDING"
+          "mode": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "category",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "avgRating",
-          "order": "DESCENDING"
+          "mode": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "category",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "price",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "city",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "price",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "restaurants",
-      "queryScope": "COLLECTION",
+      "collectionId": "restaurants",
       "fields": [
         {
           "fieldPath": "category",
-          "order": "ASCENDING"
+          "mode": "ASCENDING"
         },
         {
           "fieldPath": "numRatings",
-          "order": "DESCENDING"
+          "mode": "DESCENDING"
         }
       ]
     }
