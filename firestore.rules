@@ -1,5 +1,7 @@
+rules_version = "2";
 service cloud.firestore {
   match /databases/{database}/documents {
+
         // Restaurants:
         //   - Authenticated user can read
         //   - Authenticated user can create/update (for demo)
@@ -10,7 +12,7 @@ service cloud.firestore {
       allow update: if request.auth != null
                     && request.resource.data.name == resource.data.name
       allow delete: if false;
-      
+
       // Ratings:
       //   - Authenticated user can read
       //   - Authenticated user can create if userId matches
@@ -20,7 +22,7 @@ service cloud.firestore {
         allow create: if request.auth != null
                       && request.resource.data.userId == request.auth.uid;
         allow update, delete: if false;
-        
+
         }
     }
   }
