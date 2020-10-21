@@ -28,6 +28,18 @@ FriendlyEats.prototype.getAllRestaurants = function(renderer) {
 };
 
 FriendlyEats.prototype.getDocumentsInQuery = function(query, renderer) {
+ 
+  query.onSnapshot(function(snapshot) {
+    if (!snapshot.size) return renderer.empty(); // Display "There are no restaurants".
+
+    snapshot.docChanges().forEach(function(change) {
+      if (change.type === 'removed') {
+        renderer.remove(change.doc);
+      } else {
+        renderer.display(change.doc);
+      }
+    });
+  });  
   /*
     TODO: Render all documents in the provided query
   */
