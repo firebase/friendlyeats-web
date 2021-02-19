@@ -53,7 +53,7 @@ Duration: 05:00
 
 1. In the  [Firebase console](https://console.firebase.google.com), click **Add project**, then name the Firebase project **FriendlyEats**.
 
-        Remember the Project ID for your Firebase project.
+> Remember the Project ID for your Firebase project.
 
 2. Click **Create project**.
 
@@ -593,4 +593,3 @@ To learn more about Cloud Firestore, visit the following resources:
 *  [Introduction to Cloud Firestore](https://firebase.google.com/docs/firestore/)
 *  [Choosing a Data Structure](https://firebase.google.com/docs/firestore/manage-data/structure-data)
 *  [Cloud Firestore Web Samples](https://firebase.google.com/docs/firestore/client/samples-web)
-
