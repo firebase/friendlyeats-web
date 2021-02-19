@@ -1,0 +1,29 @@
+name: Generate Preview
+on:
+  pull_request:
+    paths:
+    - 'steps/**'
+jobs:
+  build_and_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go environment
+        uses: actions/setup-go@v2.1.3
+      - name: Generate preview
+        working-directory: ./steps
+        run: |
+          go get github.com/googlecodelabs/tools/claat
+          $HOME/go/bin/claat export index.lab.md
+      - name: Save PR number
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+      - uses: actions/upload-artifact@v2
+        with:
+          name: preview
+          path: steps/firestore-web/
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: pr/
