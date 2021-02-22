@@ -1,0 +1,3 @@
+firestore-web
+!firestore-web/.firebaserc
+!firestore-web/firebase.json
