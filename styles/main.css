@@ -94,7 +94,7 @@
  
  header {display: flex !important;}
  
- .mdc-layout__header--transparent {background: url('../assets/demos/transparent.jpg') center / cover;}
+ //.mdc-layout__header--transparent {background: url('../assets/demos/transparent.jpg') center / cover;}
  
  header .details {
    width: 100%;
