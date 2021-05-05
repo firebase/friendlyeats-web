@@ -118,7 +118,7 @@ Clone the  [GitHub repository](https://github.com/firebase/friendlyeats-web) fro
 git clone https://github.com/firebase/friendlyeats-web
 ```
 
-The sample code should have been cloned into the 📁`friendlyeats-web` directory, make sure your command line are ran from this directory from now on: 
+The sample code should have been cloned into the 📁`friendlyeats-web` directory. From now on, make sure to run all your command lines from this directory: 
 
 ```console
 cd friendlyeats-web
@@ -217,11 +217,11 @@ In this section, we'll write some data to Cloud Firestore so that we can populat
 
 ### Data Model
 
-Firestore data is split into collections, documents, fields, and subcollections. We will store each restaurants as a document in a top-level collection called `restaurants`.
+Firestore data is split into collections, documents, fields, and subcollections. We will store each restaurant as a document in a top-level collection called `restaurants`.
 
 <img src="img/img3.png" alt="img3.png"  width="333.60" />
 
-Later, we'll store each reviews in a subcollection called `ratings` in each restaurants.
+Later, we'll store each review in a subcollection called `ratings` under each restaurant.
 
 <img src="img/img4.png" alt="img4.png"  width="295.53" />
 
