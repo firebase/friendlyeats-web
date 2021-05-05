@@ -118,7 +118,7 @@ Clone the  [GitHub repository](https://github.com/firebase/friendlyeats-web) fro
 git clone https://github.com/firebase/friendlyeats-web
 ```
 
-The sample code should have been cloned into the 📁`friendlyeats-web` directory. From now on, make sure to run all your command lines from this directory: 
+The sample code should have been cloned into the 📁`friendlyeats-web` directory. From now on, make sure to run all your commands from this directory: 
 
 ```console
 cd friendlyeats-web
