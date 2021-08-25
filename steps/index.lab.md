@@ -19,6 +19,11 @@ duration: 47
 ## Overview
 Duration: 01:00
 
+> aside negative
+This codelab uses v8 of the Firebase JavaScript SDKs. It is recommended that you use
+v9 for your applications. This codelab will soon be updated to v9. The concepts
+described in this codelab are still valid. See Firebase documentation to
+[learn more about SDK versions 8 and 9](https://firebase.google.com/docs/web/learn-more?authuser=0#modular-version).
 
 ### Goals
 
