@@ -15,16 +15,17 @@
  */
 'use strict';
 
-FriendlyEats.prototype.addRestaurant = function(data) {
   /*
-    TODO: Implement adding a document
+    The code above adds a new document to the restaurants collection. The document data comes from a plain JavaScript object.
+     We do this by first getting a reference to a Cloud Firestore collection restaurants then add‘ing the data.
   */
+FriendlyEats.prototype.addRestaurant = function(data) {
+  var collection = firebase.firestore().collection('restaurants');
+  return collection.add(data);
 };
 
 FriendlyEats.prototype.getAllRestaurants = function(renderer) {
-  /*
-    TODO: Retrieve list of restaurants
-  */
+
 };
 
 FriendlyEats.prototype.getDocumentsInQuery = function(query, renderer) {
