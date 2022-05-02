@@ -13,185 +13,207 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+import { View } from './FriendlyEats.View';
+import { Data } from './FriendlyEats.Data';
+import { Mock } from './FriendlyEats.Mock';
+import { config } from './config';
+
+firebase.initializeApp(config.firebase);
 
 /**
  * Initializes the FriendlyEats app.
  */
-function FriendlyEats() {
-  this.filters = {
-    city: '',
-    price: '',
-    category: '',
-    sort: 'Rating'
+class FriendlyEats {
+
+  constructor() {
+    this.filters = {
+      city: '',
+      price: '',
+      category: '',
+      sort: 'Rating'
+    };
+  
+    this.router = new Navigo();
+    this.dialogs = {};
+
+    this.db = new Data();
+    this.mock = new Mock({
+      friendlyEats: this,
+      data: this.db,
+    });
+  
+    firebase.auth().signInAnonymously().then(() => {
+      this.view = new View({
+        friendlyEats: this,
+        data: this.db,
+        router: this.router,
+        dialogs: this.dialogs,
+      });
+      this.setRoutes();
+      this.view.initReviewDialog();
+      this.view.initFilterDialog();
+
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  /**
+   * Initializes the router for the FriendlyEats app.
+   */
+  setRoutes() {
+    this.router
+      .on({
+        '/': () => {
+          this.view.updateQuery(this.filters);
+        }
+      })
+      .on({
+        '/setup': () => {
+          this.view.viewSetup();
+        }
+      })
+      .on({
+        '/restaurants/*': () => {
+          let path = this.getCleanPath(document.location.pathname);
+          let id = path.split('/')[2];
+          this.view.viewRestaurant(id);
+        }
+      })
+      .resolve();
+  
+    firebase
+      .firestore()
+      .collection('restaurants')
+      .limit(1)
+      .onSnapshot((snapshot) => {
+        if (snapshot.empty) {
+          this.router.navigate('/setup');
+        }
+      });    
+  }
+
+  getCleanPath(dirtyPath) {
+    if (dirtyPath.startsWith('/index.html')) {
+      return dirtyPath.split('/').slice(1).join('/');
+    } else {
+      return dirtyPath;
+    }
   };
 
-  this.dialogs = {};
+  getFirebaseConfig() {
+    return firebase.app().options;
+  };
 
-  var that = this;
-  firebase.auth().signInAnonymously().then(function() {
-    that.initTemplates();
-    that.initRouter();
-    that.initReviewDialog();
-    that.initFilterDialog();
-  }).catch(function(err) {
-    console.log(err);
-  });
+  getRandomItem(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  };
+
+  get data() {
+    return {
+      words: [
+        'Bar',
+        'Fire',
+        'Grill',
+        'Drive Thru',
+        'Place',
+        'Best',
+        'Spot',
+        'Prime',
+        'Eatin\''
+      ],
+      cities: [
+        'Albuquerque',
+        'Arlington',
+        'Atlanta',
+        'Austin',
+        'Baltimore',
+        'Boston',
+        'Charlotte',
+        'Chicago',
+        'Cleveland',
+        'Colorado Springs',
+        'Columbus',
+        'Dallas',
+        'Denver',
+        'Detroit',
+        'El Paso',
+        'Fort Worth',
+        'Fresno',
+        'Houston',
+        'Indianapolis',
+        'Jacksonville',
+        'Kansas City',
+        'Las Vegas',
+        'Long Island',
+        'Los Angeles',
+        'Louisville',
+        'Memphis',
+        'Mesa',
+        'Miami',
+        'Milwaukee',
+        'Nashville',
+        'New York',
+        'Oakland',
+        'Oklahoma',
+        'Omaha',
+        'Philadelphia',
+        'Phoenix',
+        'Portland',
+        'Raleigh',
+        'Sacramento',
+        'San Antonio',
+        'San Diego',
+        'San Francisco',
+        'San Jose',
+        'Tucson',
+        'Tulsa',
+        'Virginia Beach',
+        'Washington'
+      ],
+      categories: [
+        'Brunch',
+        'Burgers',
+        'Coffee',
+        'Deli',
+        'Dim Sum',
+        'Indian',
+        'Italian',
+        'Mediterranean',
+        'Mexican',
+        'Pizza',
+        'Ramen',
+        'Sushi'
+      ],
+      ratings: [
+        {
+          rating: 1,
+          text: 'Would never eat here again!'
+        },
+        {
+          rating: 2,
+          text: 'Not my cup of tea.'
+        },
+        {
+          rating: 3,
+          text: 'Exactly okay :/'
+        },
+        {
+          rating: 4,
+          text: 'Actually pretty good, would recommend!'
+        },
+        {
+          rating: 5,
+          text: 'This is my favorite place. Literally.'
+        }
+      ]
+    };
+  }
+
 }
 
-/**
- * Initializes the router for the FriendlyEats app.
- */
-FriendlyEats.prototype.initRouter = function() {
-  this.router = new Navigo();
+// export const app = new FriendlyEats();
 
-  var that = this;
-  this.router
-    .on({
-      '/': function() {
-        that.updateQuery(that.filters);
-      }
-    })
-    .on({
-      '/setup': function() {
-        that.viewSetup();
-      }
-    })
-    .on({
-      '/restaurants/*': function() {
-        var path = that.getCleanPath(document.location.pathname);
-        var id = path.split('/')[2];
-        that.viewRestaurant(id);
-      }
-    })
-    .resolve();
-
-  firebase
-    .firestore()
-    .collection('restaurants')
-    .limit(1)
-    .onSnapshot(function(snapshot) {
-      if (snapshot.empty) {
-        that.router.navigate('/setup');
-      }
-    });
-};
-
-FriendlyEats.prototype.getCleanPath = function(dirtyPath) {
-  if (dirtyPath.startsWith('/index.html')) {
-    return dirtyPath.split('/').slice(1).join('/');
-  } else {
-    return dirtyPath;
-  }
-};
-
-FriendlyEats.prototype.getFirebaseConfig = function() {
-  return firebase.app().options;
-};
-
-FriendlyEats.prototype.getRandomItem = function(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-};
-
-FriendlyEats.prototype.data = {
-  words: [
-    'Bar',
-    'Fire',
-    'Grill',
-    'Drive Thru',
-    'Place',
-    'Best',
-    'Spot',
-    'Prime',
-    'Eatin\''
-  ],
-  cities: [
-    'Albuquerque',
-    'Arlington',
-    'Atlanta',
-    'Austin',
-    'Baltimore',
-    'Boston',
-    'Charlotte',
-    'Chicago',
-    'Cleveland',
-    'Colorado Springs',
-    'Columbus',
-    'Dallas',
-    'Denver',
-    'Detroit',
-    'El Paso',
-    'Fort Worth',
-    'Fresno',
-    'Houston',
-    'Indianapolis',
-    'Jacksonville',
-    'Kansas City',
-    'Las Vegas',
-    'Long Island',
-    'Los Angeles',
-    'Louisville',
-    'Memphis',
-    'Mesa',
-    'Miami',
-    'Milwaukee',
-    'Nashville',
-    'New York',
-    'Oakland',
-    'Oklahoma',
-    'Omaha',
-    'Philadelphia',
-    'Phoenix',
-    'Portland',
-    'Raleigh',
-    'Sacramento',
-    'San Antonio',
-    'San Diego',
-    'San Francisco',
-    'San Jose',
-    'Tucson',
-    'Tulsa',
-    'Virginia Beach',
-    'Washington'
-  ],
-  categories: [
-    'Brunch',
-    'Burgers',
-    'Coffee',
-    'Deli',
-    'Dim Sum',
-    'Indian',
-    'Italian',
-    'Mediterranean',
-    'Mexican',
-    'Pizza',
-    'Ramen',
-    'Sushi'
-  ],
-  ratings: [
-    {
-      rating: 1,
-      text: 'Would never eat here again!'
-    },
-    {
-      rating: 2,
-      text: 'Not my cup of tea.'
-    },
-    {
-      rating: 3,
-      text: 'Exactly okay :/'
-    },
-    {
-      rating: 4,
-      text: 'Actually pretty good, would recommend!'
-    },
-    {
-      rating: 5,
-      text: 'This is my favorite place. Literally.'
-    }
-  ]
-};
-
-window.onload = function() {
-  window.app = new FriendlyEats();
+window.onload = () => {
+  new FriendlyEats();
 };

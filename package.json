@@ -5,11 +5,17 @@
   "main": ".",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fmt": "prettier --write scripts/* styles/*"
+    "fmt": "prettier --write scripts/* styles/*",
+    "serve": "vite"
   },
   "author": "",
   "devDependencies": {
     "eslint": "^4.17.0",
-    "prettier": "^1.5.3"
+    "prettier": "^1.5.3",
+    "vite": "^2.9.6"
+  },
+  "dependencies": {
+    "firebase": "^9.7.0",
+    "navigo": "^8.11.1"
   }
 }
