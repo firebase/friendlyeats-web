@@ -15,9 +15,10 @@
  */
 
 export class Mock {
-  constructor({ friendlyEats, data }) {
+  constructor({ friendlyEats, data, auth }) {
     this.friendlyEats = friendlyEats;
     this.data = data;
+    this.auth = auth;
   }
 
   /**
@@ -28,14 +29,21 @@ export class Mock {
 
     for (let i = 0; i < 20; i++) {
       let name =
-          this.friendlyEats.getRandomItem(this.data.words) +
-          ' ' +
-          this.friendlyEats.getRandomItem(this.data.words);
-      let category = this.friendlyEats.getRandomItem(this.data.categories);
-      let city = this.friendlyEats.getRandomItem(this.data.cities);
+        this.friendlyEats.getRandomItem(this.friendlyEats.mockData.words) +
+        " " +
+        this.friendlyEats.getRandomItem(this.friendlyEats.mockData.words);
+      let category = this.friendlyEats.getRandomItem(
+        this.friendlyEats.mockData.categories
+      );
+      let city = this.friendlyEats.getRandomItem(
+        this.friendlyEats.mockData.cities
+      );
       let price = Math.floor(Math.random() * 4) + 1;
       let photoID = Math.floor(Math.random() * 22) + 1;
-      let photo = 'https://storage.googleapis.com/firestorequickstarts.appspot.com/food_' + photoID + '.png';
+      let photo =
+        "https://storage.googleapis.com/firestorequickstarts.appspot.com/food_" +
+        photoID +
+        ".png";
       let numRatings = 0;
       let avgRating = 0;
 
@@ -50,7 +58,7 @@ export class Mock {
       });
 
       if (!promise) {
-        alert('addRestaurant() is not implemented yet!');
+        alert("addRestaurant() is not implemented yet!");
         return Promise.reject();
       } else {
         promises.push(promise);
@@ -58,23 +66,24 @@ export class Mock {
     }
 
     return Promise.all(promises);
-  };
+  }
 
   /**
    * Adds a set of mock Ratings to the given Restaurant.
    */
   addMockRatings(restaurantID) {
     let ratingPromises = [];
-    for (let r = 0; r < 5*Math.random(); r++) {
+    for (let r = 0; r < 5 * Math.random(); r++) {
       let rating = this.data.ratings[
-        parseInt(this.data.ratings.length*Math.random())
+        parseInt(this.data.ratings.length * Math.random())
       ];
-      rating.userName = 'Bot (Web)';
+      let user = auth.getUser();
+      rating.userName = "Bot (Web)";
+      // For production data, use Firestore's serverTimestamp() function!
       rating.timestamp = new Date();
-      rating.userId = firebase.auth().currentUser.uid;
+      rating.userId = user.uid;
       ratingPromises.push(this.addRating(restaurantID, rating));
     }
     return Promise.all(ratingPromises);
-  };
-
+  }
 }

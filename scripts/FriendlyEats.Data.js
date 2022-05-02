@@ -14,41 +14,61 @@
  * limitations under the License.
  */
 
-export class Data {  
+import {
+  onSnapshot,
+  collection,
+  getFirestore,
+  query,
+  limit,
+  addDoc
+} from "firebase/firestore";
+
+export class Data {
+  constructor({ firebaseApp }) {
+    this.db = getFirestore(firebaseApp);
+  }
+
   addRestaurant(data) {
     /*
       TODO: Implement adding a document
     */
-  };
-  
+  }
+
   getAllRestaurants(renderer) {
     /*
       TODO: Retrieve list of restaurants
     */
-  };
-  
+  }
+
   getDocumentsInQuery(query, renderer) {
     /*
       TODO: Render all documents in the provided query
     */
-  };
-  
+  }
+
   getRestaurant(id) {
     /*
       TODO: Retrieve a single restaurant
     */
-  };
-  
+  }
+
   getFilteredRestaurants(filters, renderer) {
     /*
       TODO: Retrieve filtered list of restaurants
     */
-  };
-  
+  }
+
   addRating(restaurantID, rating) {
     /*
       TODO: Retrieve add a rating to a restaurant
     */
-  };  
+  }
 
+  checkForEmpty(callback) {
+    const restaurantsCol = collection(this.db, "restaurants");
+    const restaurantsQuery = query(restaurantsCol, limit(1));
+    onSnapshot(restaurantsQuery, snapshot => {
+      callback(snapshot);
+    });
+  }
 }

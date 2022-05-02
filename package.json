@@ -6,10 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "fmt": "prettier --write scripts/* styles/*",
-    "serve": "vite"
+    "dev": "vite",
+    "serve": "concurrently npm:dev npm:emulators",
+    "emulators": "firebase emulators:start --only firestore,auth"
   },
   "author": "",
   "devDependencies": {
+    "concurrently": "^7.1.0",
     "eslint": "^4.17.0",
     "prettier": "^1.5.3",
     "vite": "^2.9.6"

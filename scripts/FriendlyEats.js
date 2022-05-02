@@ -13,49 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { View } from './FriendlyEats.View';
-import { Data } from './FriendlyEats.Data';
-import { Mock } from './FriendlyEats.Mock';
-import { config } from './config';
-
-firebase.initializeApp(config.firebase);
+import { View } from "./FriendlyEats.View";
+import { Data } from "./FriendlyEats.Data";
+import { Auth } from "./FriendlyEats.Auth";
+import { Mock } from "./FriendlyEats.Mock";
 
 /**
  * Initializes the FriendlyEats app.
  */
-class FriendlyEats {
-
-  constructor() {
+export class FriendlyEats {
+  constructor(firebaseApp) {
+    this.firebaseApp = firebaseApp;
+    this.auth = new Auth(firebaseApp);
     this.filters = {
-      city: '',
-      price: '',
-      category: '',
-      sort: 'Rating'
+      city: "",
+      price: "",
+      category: "",
+      sort: "Rating"
     };
-  
+
     this.router = new Navigo();
     this.dialogs = {};
 
-    this.db = new Data();
+    this.db = new Data({ firebaseApp });
     this.mock = new Mock({
       friendlyEats: this,
-      data: this.db,
+      data: this.db
     });
-  
-    firebase.auth().signInAnonymously().then(() => {
-      this.view = new View({
-        friendlyEats: this,
-        data: this.db,
-        router: this.router,
-        dialogs: this.dialogs,
-      });
-      this.setRoutes();
-      this.view.initReviewDialog();
-      this.view.initFilterDialog();
 
-    }).catch((err) => {
-      console.log(err);
-    });
+    this.auth
+      .signInAnonymously()
+      .then(() => {
+        this.view = new View({
+          friendlyEats: this,
+          data: this.db,
+          router: this.router,
+          dialogs: this.dialogs,
+          mock: this.mock
+        });
+        this.setRoutes();
+        this.view.initReviewDialog();
+        this.view.initFilterDialog();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   /**
@@ -64,156 +66,148 @@ class FriendlyEats {
   setRoutes() {
     this.router
       .on({
-        '/': () => {
+        "/": () => {
           this.view.updateQuery(this.filters);
         }
       })
       .on({
-        '/setup': () => {
+        "/setup": () => {
           this.view.viewSetup();
         }
       })
       .on({
-        '/restaurants/*': () => {
+        "/restaurants/*": () => {
           let path = this.getCleanPath(document.location.pathname);
-          let id = path.split('/')[2];
+          let id = path.split("/")[2];
           this.view.viewRestaurant(id);
         }
       })
       .resolve();
-  
-    firebase
-      .firestore()
-      .collection('restaurants')
-      .limit(1)
-      .onSnapshot((snapshot) => {
-        if (snapshot.empty) {
-          this.router.navigate('/setup');
-        }
-      });    
+
+    this.db.checkForEmpty(snapshot => {
+      if (snapshot.empty) {
+        this.router.navigate("/setup");
+      }
+    });
   }
 
   getCleanPath(dirtyPath) {
-    if (dirtyPath.startsWith('/index.html')) {
-      return dirtyPath.split('/').slice(1).join('/');
+    if (dirtyPath.startsWith("/index.html")) {
+      return dirtyPath
+        .split("/")
+        .slice(1)
+        .join("/");
     } else {
       return dirtyPath;
     }
-  };
+  }
 
   getFirebaseConfig() {
-    return firebase.app().options;
-  };
+    return this.firebaseApp.options;
+  }
 
   getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
-  };
+  }
 
-  get data() {
+  get mockData() {
     return {
       words: [
-        'Bar',
-        'Fire',
-        'Grill',
-        'Drive Thru',
-        'Place',
-        'Best',
-        'Spot',
-        'Prime',
-        'Eatin\''
+        "Bar",
+        "Fire",
+        "Grill",
+        "Drive Thru",
+        "Place",
+        "Best",
+        "Spot",
+        "Prime",
+        "Eatin'"
       ],
       cities: [
-        'Albuquerque',
-        'Arlington',
-        'Atlanta',
-        'Austin',
-        'Baltimore',
-        'Boston',
-        'Charlotte',
-        'Chicago',
-        'Cleveland',
-        'Colorado Springs',
-        'Columbus',
-        'Dallas',
-        'Denver',
-        'Detroit',
-        'El Paso',
-        'Fort Worth',
-        'Fresno',
-        'Houston',
-        'Indianapolis',
-        'Jacksonville',
-        'Kansas City',
-        'Las Vegas',
-        'Long Island',
-        'Los Angeles',
-        'Louisville',
-        'Memphis',
-        'Mesa',
-        'Miami',
-        'Milwaukee',
-        'Nashville',
-        'New York',
-        'Oakland',
-        'Oklahoma',
-        'Omaha',
-        'Philadelphia',
-        'Phoenix',
-        'Portland',
-        'Raleigh',
-        'Sacramento',
-        'San Antonio',
-        'San Diego',
-        'San Francisco',
-        'San Jose',
-        'Tucson',
-        'Tulsa',
-        'Virginia Beach',
-        'Washington'
+        "Albuquerque",
+        "Arlington",
+        "Atlanta",
+        "Austin",
+        "Baltimore",
+        "Boston",
+        "Charlotte",
+        "Chicago",
+        "Cleveland",
+        "Colorado Springs",
+        "Columbus",
+        "Dallas",
+        "Denver",
+        "Detroit",
+        "El Paso",
+        "Fort Worth",
+        "Fresno",
+        "Houston",
+        "Indianapolis",
+        "Jacksonville",
+        "Kansas City",
+        "Las Vegas",
+        "Long Island",
+        "Los Angeles",
+        "Louisville",
+        "Memphis",
+        "Mesa",
+        "Miami",
+        "Milwaukee",
+        "Nashville",
+        "New York",
+        "Oakland",
+        "Oklahoma",
+        "Omaha",
+        "Philadelphia",
+        "Phoenix",
+        "Portland",
+        "Raleigh",
+        "Sacramento",
+        "San Antonio",
+        "San Diego",
+        "San Francisco",
+        "San Jose",
+        "Tucson",
+        "Tulsa",
+        "Virginia Beach",
+        "Washington"
       ],
       categories: [
-        'Brunch',
-        'Burgers',
-        'Coffee',
-        'Deli',
-        'Dim Sum',
-        'Indian',
-        'Italian',
-        'Mediterranean',
-        'Mexican',
-        'Pizza',
-        'Ramen',
-        'Sushi'
+        "Brunch",
+        "Burgers",
+        "Coffee",
+        "Deli",
+        "Dim Sum",
+        "Indian",
+        "Italian",
+        "Mediterranean",
+        "Mexican",
+        "Pizza",
+        "Ramen",
+        "Sushi"
       ],
       ratings: [
         {
           rating: 1,
-          text: 'Would never eat here again!'
+          text: "Would never eat here again!"
         },
         {
           rating: 2,
-          text: 'Not my cup of tea.'
+          text: "Not my cup of tea."
         },
         {
           rating: 3,
-          text: 'Exactly okay :/'
+          text: "Exactly okay :/"
         },
         {
           rating: 4,
-          text: 'Actually pretty good, would recommend!'
+          text: "Actually pretty good, would recommend!"
         },
         {
           rating: 5,
-          text: 'This is my favorite place. Literally.'
+          text: "This is my favorite place. Literally."
         }
       ]
     };
   }
-
 }
-
-// export const app = new FriendlyEats();
-
-window.onload = () => {
-  new FriendlyEats();
-};
