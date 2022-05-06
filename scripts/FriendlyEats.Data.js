@@ -20,7 +20,13 @@ import {
   getFirestore,
   query,
   limit,
-  addDoc
+  addDoc,
+  orderBy,
+  doc,
+  getDoc,
+  getDocs,
+  where,
+  runTransaction
 } from "firebase/firestore";
 
 export class Data {
@@ -29,39 +35,105 @@ export class Data {
   }
 
   addRestaurant(data) {
-    /*
-      TODO: Implement adding a document
-    */
+    const restaurantsCol = collection(this.db, 'restaurants');
+    return addDoc(restaurantsCol, data);
   }
 
   getAllRestaurants(renderer) {
-    /*
-      TODO: Retrieve list of restaurants
-    */
+    const restaurantsCol = collection(this.db, 'restaurants');
+    const restaurantsQuery = query(restaurantsCol, orderBy("avgRating", "desc"), limit(50));
+    this.getDocumentsInQuery(restaurantsQuery, renderer);
   }
 
-  getDocumentsInQuery(query, renderer) {
-    /*
-      TODO: Render all documents in the provided query
-    */
+  getDocumentsInQuery(restaurantsQuery, renderer) {
+    onSnapshot(restaurantsQuery, (snapshot) => {
+      if (!snapshot.size) return renderer.empty();
+
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "removed") {
+          renderer.remove(change.doc);
+        } else {
+          renderer.display(change.doc);
+        }
+      });
+    });
   }
 
-  getRestaurant(id) {
-    /*
-      TODO: Retrieve a single restaurant
-    */
+  async getRestaurant(id) {
+    const docRef = doc(this.db, "restaurants", id);
+    return await getDoc(docRef);
+  }
+
+  async getRestaurantRatings(doc) {
+    const ratingsCol = collection(doc.ref, 'ratings');
+    const ratingsQuery = query(ratingsCol, orderBy("timestamp", "desc"));
+    return await getDocs(ratingsQuery);
   }
 
   getFilteredRestaurants(filters, renderer) {
-    /*
-      TODO: Retrieve filtered list of restaurants
-    */
+    let filtersWhere = null;
+    let filtersOrder = null;
+
+    if (filters.category !== 'Any') {
+      filtersWhere = where("category", "==", filters.category);
+    }
+
+    if (filters.city !== 'Any') {
+      filtersWhere = where("city", "==", filters.city);
+    }
+
+    if (filters.price !== 'Any') {
+      filtersWhere = where("price", "==", filters.price.length);
+    }
+
+    if (filters.sort === 'Rating') {
+      filtersOrder = orderBy('avgRating', 'desc');
+    } else if (filters.sort === 'Reviews') {
+      filtersOrder = orderBy('numRatings', 'desc');
+    }
+
+    const restaurantsCol = collection(this.db, 'restaurants');
+    let filtersQuery = query(restaurantsCol);
+
+    if (filtersWhere != null) {
+      if (filtersOrder != null) {
+        filtersQuery = query(restaurantsCol, filtersWhere, filtersOrder);
+      } else {
+        filtersQuery = query(restaurantsCol, filtersWhere);
+      }
+    } else {
+      if (filtersOrder != null) {
+        filtersQuery = query(restaurantsCol, filtersOrder);
+      }
+    }
+
+    this.getDocumentsInQuery(filtersQuery, renderer);
   }
 
-  addRating(restaurantID, rating) {
-    /*
-      TODO: Retrieve add a rating to a restaurant
-    */
+  async addRating(restaurantID, rating) {
+    try {
+      const docRef = doc(this.db, "restaurants", restaurantID);
+      const ratingsCol = collection(docRef, 'ratings');
+      const ratingsDocRef = doc(ratingsCol);
+
+      const newRating = await runTransaction(this.db, async (transaction) => {
+        const ratingsDoc = await transaction.get(docRef);
+        const data = ratingsDoc.data();
+        debugger
+        const newAverage =
+            (data.numRatings * data.avgRating + rating.rating) /
+            (data.numRatings + 1);
+
+        transaction.update(ratingsDocRef, {
+          numRatings: data.numRatings + 1,
+          avgRating: newAverage
+        });
+        return transaction.set(ratingsDocRef, rating);
+      });
+    } catch (e) {
+      debugger
+      console.error(e);
+    }
   }
 
   checkForEmpty(callback) {
