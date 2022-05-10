@@ -71,41 +71,33 @@ export class Data {
   }
 
   getFilteredRestaurants(filters, renderer) {
-    let filtersWhere = null;
-    let filtersOrder = null;
+    let filtersWhere = [];
+    let filtersOrder = [];
 
     if (filters.category !== 'Any') {
-      filtersWhere = where("category", "==", filters.category);
+      filtersWhere.push(where("category", "==", filters.category));
     }
 
     if (filters.city !== 'Any') {
-      filtersWhere = where("city", "==", filters.city);
+      filtersWhere.push(where("city", "==", filters.city));
     }
 
     if (filters.price !== 'Any') {
-      filtersWhere = where("price", "==", filters.price.length);
+      filtersWhere.push(where("price", "==", filters.price.length));
     }
 
     if (filters.sort === 'Rating') {
-      filtersOrder = orderBy('avgRating', 'desc');
+      filtersOrder.push(orderBy('avgRating', 'desc'));
     } else if (filters.sort === 'Reviews') {
-      filtersOrder = orderBy('numRatings', 'desc');
+      filtersOrder.push(orderBy('numRatings', 'desc'));
     }
 
     const restaurantsCol = collection(this.db, 'restaurants');
-    let filtersQuery = query(restaurantsCol);
-
-    if (filtersWhere != null) {
-      if (filtersOrder != null) {
-        filtersQuery = query(restaurantsCol, filtersWhere, filtersOrder);
-      } else {
-        filtersQuery = query(restaurantsCol, filtersWhere);
-      }
-    } else {
-      if (filtersOrder != null) {
-        filtersQuery = query(restaurantsCol, filtersOrder);
-      }
-    }
+    const filtersQuery = query(
+      restaurantsCol, 
+      ...filtersWhere, 
+      ...filtersOrder
+    );
 
     this.getDocumentsInQuery(filtersQuery, renderer);
   }
