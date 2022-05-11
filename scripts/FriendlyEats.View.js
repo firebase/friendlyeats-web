@@ -61,7 +61,7 @@ export class View {
     });
 
     let renderer = {
-      remove(doc) {
+      remove: function(doc) {
         let locationCardToDelete = mainEl.querySelector("#doc-" + doc.id);
         if (locationCardToDelete) {
           mainEl
@@ -70,8 +70,8 @@ export class View {
         }
 
         return;
-      },
-      display(doc) {
+      }.bind(this),
+      display: function(doc) {
         let data = doc.data();
         data[".id"] = doc.id;
         data["go_to_restaurant"] = () => {
@@ -95,8 +95,8 @@ export class View {
           // add
           mainEl.querySelector("#cards").append(el);
         }
-      },
-      empty() {
+      }.bind(this),
+      empty: function() {
         let headerEl = this.renderTemplate("header-base", {
           hasSectionHeader: true
         });
@@ -119,7 +119,7 @@ export class View {
         this.replaceElement(document.querySelector(".header"), headerEl);
         this.replaceElement(document.querySelector("main"), noResultsEl);
         return;
-      }
+      }.bind(this)
     };
 
     if (
@@ -191,7 +191,7 @@ export class View {
     this.dialogs.add_review = new mdc.dialog.MDCDialog(dialog);
 
     this.dialogs.add_review.listen("MDCDialog:accept", () => {
-      let pathname = this.getCleanPath(document.location.pathname);
+      let pathname = this.friendlyEats.getCleanPath(document.location.pathname);
       let id = pathname.split("/")[2];
 
       this.data
@@ -228,6 +228,7 @@ export class View {
   }
 
   initFilterDialog() {
+    this.filters = {};
     // TODO: Reset filter dialog to init state on close.
     this.dialogs.filter = new mdc.dialog.MDCDialog(
       document.querySelector("#dialog-filter-all")
@@ -341,7 +342,7 @@ export class View {
   viewRestaurant(id) {
     let sectionHeaderEl;
 
-    return this.getRestaurant(id)
+    return this.data.getRestaurant(id)
       .then(doc => {
         let data = doc.data();
         let dialog = this.dialogs.add_review;
@@ -364,10 +365,7 @@ export class View {
         sectionHeaderEl
           .querySelector(".price")
           .append(this.renderPrice(data.price));
-        return doc.ref
-          .collection("ratings")
-          .orderBy("timestamp", "desc")
-          .get();
+        return this.data.getRestaurantRatings(doc);
       })
       .then(ratings => {
         let mainEl;
@@ -451,7 +449,8 @@ export class View {
       },
       "data-fir-content": tel => {
         let field = tel.getAttribute("data-fir-content");
-        tel.innerText = this.getDeepItem(data, field);
+        const content = this.getDeepItem(data, field);
+        if (content != undefined) tel.innerText = content;
       },
       "data-fir-click": tel => {
         tel.addEventListener("click", () => {

@@ -20,7 +20,13 @@ import {
   getFirestore,
   query,
   limit,
-  addDoc
+  addDoc,
+  orderBy,
+  doc,
+  getDoc,
+  getDocs,
+  where,
+  runTransaction
 } from "firebase/firestore";
 
 export class Data {
@@ -40,15 +46,21 @@ export class Data {
     */
   }
 
-  getDocumentsInQuery(query, renderer) {
+  getDocumentsInQuery(restaurantsQuery, renderer) {
     /*
       TODO: Render all documents in the provided query
     */
   }
 
-  getRestaurant(id) {
+  async getRestaurant(id) {
     /*
       TODO: Retrieve a single restaurant
+    */
+  }
+
+  async getRestaurantRatings(doc) {
+    /*
+      TODO: Retrieve a restaurant's ratings
     */
   }
 
@@ -58,7 +70,7 @@ export class Data {
     */
   }
 
-  addRating(restaurantID, rating) {
+  async addRating(restaurantID, rating) {
     /*
       TODO: Retrieve add a rating to a restaurant
     */

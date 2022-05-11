@@ -47,6 +47,7 @@ export class FriendlyEats {
         this.view = new View({
           friendlyEats: this,
           data: this.db,
+          auth: this.auth,
           router: this.router,
           dialogs: this.dialogs,
           mock: this.mock
