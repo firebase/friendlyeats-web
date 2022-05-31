@@ -76,6 +76,6 @@ jobs:
             await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: ${{ env.pr_number }},
+              issue_number: ${{ steps.unzip.outputs.pr_number }},
               body: 'View preview ${{ steps.deploy_preview.outputs.details_url }}'
             });
