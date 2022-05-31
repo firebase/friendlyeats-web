@@ -42,9 +42,19 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(downloadPr.data));
             fs.writeFileSync('${{github.workspace}}/firestore-web.zip', Buffer.from(downloadPreview.data));
-      - run: |
+      - id: unzip
+        run: |
+          set -eou pipefail
           unzip pr.zip
-          echo "pr_number=$(cat NR)" >> $GITHUB_ENV
+          pr_number=$(cat -e NR)
+          pr_number=${pr_number%?}
+          pr_length=${#pr_number}
+          only_numbers_re="^[0-9]+$"
+          if ! [[ $pr_length <= 10 && $pr_number =~ $only_numbers_re ]] ; then
+            echo "invalid PR number"
+            exit 1
+          fi
+          echo "::set-output name=pr_number::$pr_number"
           mkdir firestore-web
           unzip firestore-web.zip -d firestore-web
       - name: Deploy preview
@@ -55,7 +65,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FIR_CODELABS_89252 }}'
           projectId: fir-codelabs-89252
           entryPoint: firestore-web
-          channelId: firestore-web-${{ env.pr_number }}
+          channelId: firestore-web-${{ steps.unzip.outputs.pr_number }}
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
       - name: Write Comment
