@@ -4,9 +4,9 @@ on:
     workflows: ["Generate Preview"]
     types:
       - completed
-
+permissions: read-all
 jobs:
-  deploy:
+  pre-deploy:
     runs-on: ubuntu-latest
     if: >
       ${{ github.event.workflow_run.event == 'pull_request' &&
@@ -21,18 +21,13 @@ jobs:
                repo: context.repo.repo,
                run_id: ${{ github.event.workflow_run.id }},
             });
-            var matchPrArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "pr"
+            var matchPrNumberArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name.match(/^pr_number_[0-9]{1,6}$/)
             })[0];
+            var downloadPrNumber = matchPreviewArtifact.name.substring(10);
             var matchPreviewArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "preview"
             })[0];
-            var downloadPr = await github.actions.downloadArtifact({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               artifact_id: matchPrArtifact.id,
-               archive_format: 'zip',
-            });
             var downloadPreview = await github.actions.downloadArtifact({
                owner: context.repo.owner,
                repo: context.repo.repo,
@@ -40,13 +35,12 @@ jobs:
                archive_format: 'zip',
             });
             var fs = require('fs');
-            fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(downloadPr.data));
+            fs.writeFileSync('${{github.workspace}}/pr_number.txt', downloadPrNumber);
             fs.writeFileSync('${{github.workspace}}/firestore-web.zip', Buffer.from(downloadPreview.data));
       - id: unzip
         run: |
           set -eou pipefail
-          unzip pr.zip
-          pr_number=$(cat -e NR)
+          pr_number=$(cat -e pr_number.txt)
           pr_number=${pr_number%?}
           pr_length=${#pr_number}
           only_numbers_re="^[0-9]+$"
