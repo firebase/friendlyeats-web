@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
     - 'steps/**'
+permissions: read-all
 jobs:
   build_and_preview:
     runs-on: ubuntu-latest
@@ -17,13 +18,12 @@ jobs:
           $HOME/go/bin/claat export index.lab.md
       - name: Save PR number
         run: |
-          mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
+          echo ${{ github.event.number }} > pr_number.txt
       - uses: actions/upload-artifact@v2
         with:
           name: preview
           path: steps/firestore-web/
       - uses: actions/upload-artifact@v2
         with:
-          name: pr
-          path: pr/
+          name: pr_number_${{ github.event.number }}
+          path: pr_number.txt
