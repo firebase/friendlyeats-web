@@ -38,7 +38,8 @@ export class FriendlyEats {
     this.db = new Data({ firebaseApp });
     this.mock = new Mock({
       friendlyEats: this,
-      data: this.db
+      data: this.db,
+      auth: this.auth,
     });
 
     this.auth

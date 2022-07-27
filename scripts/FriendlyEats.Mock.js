@@ -74,15 +74,15 @@ export class Mock {
   addMockRatings(restaurantID) {
     let ratingPromises = [];
     for (let r = 0; r < 5 * Math.random(); r++) {
-      let rating = this.data.ratings[
-        parseInt(this.data.ratings.length * Math.random())
+      let rating = this.friendlyEats.mockData.ratings[
+        parseInt(this.friendlyEats.mockData.ratings.length * Math.random())
       ];
-      let user = auth.getUser();
+      let user = this.auth.getUser();
       rating.userName = "Bot (Web)";
       // For production data, use Firestore's serverTimestamp() function!
       rating.timestamp = new Date();
       rating.userId = user.uid;
-      ratingPromises.push(this.addRating(restaurantID, rating));
+      ratingPromises.push(this.data.addRating(restaurantID, rating));
     }
     return Promise.all(ratingPromises);
   }

@@ -108,22 +108,21 @@ export class Data {
       const ratingsCol = collection(docRef, 'ratings');
       const ratingsDocRef = doc(ratingsCol);
 
-      const newRating = await runTransaction(this.db, async (transaction) => {
+      await runTransaction(this.db, async (transaction) => {
         const ratingsDoc = await transaction.get(docRef);
         const data = ratingsDoc.data();
-        debugger
         const newAverage =
             (data.numRatings * data.avgRating + rating.rating) /
             (data.numRatings + 1);
 
-        transaction.update(ratingsDocRef, {
+        return transaction.set(ratingsDocRef, {
           numRatings: data.numRatings + 1,
-          avgRating: newAverage
-        });
-        return transaction.set(ratingsDocRef, rating);
+          avgRating: newAverage,
+          ...rating,
+        }, { merge: true });
+        // return transaction.set(ratingsDocRef, rating);
       });
     } catch (e) {
-      debugger
       console.error(e);
     }
   }
