@@ -120,7 +120,6 @@ export class Data {
           avgRating: newAverage,
           ...rating,
         }, { merge: true });
-        // return transaction.set(ratingsDocRef, rating);
       });
     } catch (e) {
       console.error(e);
