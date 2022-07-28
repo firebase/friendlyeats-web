@@ -35,96 +35,45 @@ export class Data {
   }
 
   addRestaurant(data) {
-    const restaurantsCol = collection(this.db, 'restaurants');
-    return addDoc(restaurantsCol, data);
+    /*
+      TODO: Implement adding a document
+    */
   }
 
   getAllRestaurants(renderer) {
-    const restaurantsCol = collection(this.db, 'restaurants');
-    const restaurantsQuery = query(restaurantsCol, orderBy("avgRating", "desc"), limit(50));
-    this.getDocumentsInQuery(restaurantsQuery, renderer);
+    /*
+      TODO: Retrieve list of restaurants
+    */
   }
 
   getDocumentsInQuery(restaurantsQuery, renderer) {
-    onSnapshot(restaurantsQuery, (snapshot) => {
-      if (!snapshot.size) return renderer.empty();
-
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "removed") {
-          renderer.remove(change.doc);
-        } else {
-          renderer.display(change.doc);
-        }
-      });
-    });
+    /*
+      TODO: Render all documents in the provided query
+    */
   }
 
   async getRestaurant(id) {
-    const docRef = doc(this.db, "restaurants", id);
-    return await getDoc(docRef);
+    /*
+      TODO: Retrieve a single restaurant
+    */
   }
 
   async getRestaurantRatings(doc) {
-    const ratingsCol = collection(doc.ref, 'ratings');
-    const ratingsQuery = query(ratingsCol, orderBy("timestamp", "desc"));
-    return await getDocs(ratingsQuery);
+    /*
+      TODO: Retrieve a restaurant's ratings
+    */
   }
 
   getFilteredRestaurants(filters, renderer) {
-    let filtersWhere = [];
-    let filtersOrder = [];
-
-    if (filters.category !== 'Any') {
-      filtersWhere.push(where("category", "==", filters.category));
-    }
-
-    if (filters.city !== 'Any') {
-      filtersWhere.push(where("city", "==", filters.city));
-    }
-
-    if (filters.price !== 'Any') {
-      filtersWhere.push(where("price", "==", filters.price.length));
-    }
-
-    if (filters.sort === 'Rating') {
-      filtersOrder.push(orderBy('avgRating', 'desc'));
-    } else if (filters.sort === 'Reviews') {
-      filtersOrder.push(orderBy('numRatings', 'desc'));
-    }
-
-    const restaurantsCol = collection(this.db, 'restaurants');
-    const filtersQuery = query(
-      restaurantsCol, 
-      ...filtersWhere, 
-      ...filtersOrder
-    );
-
-    this.getDocumentsInQuery(filtersQuery, renderer);
+    /*
+      TODO: Retrieve filtered list of restaurants
+    */
   }
 
   async addRating(restaurantID, rating) {
-    try {
-      const docRef = doc(this.db, "restaurants", restaurantID);
-      const ratingsCol = collection(docRef, 'ratings');
-      const ratingsDocRef = doc(ratingsCol);
-
-      await runTransaction(this.db, async (transaction) => {
-        const ratingsDoc = await transaction.get(docRef);
-        const data = ratingsDoc.data();
-        const newAverage =
-            (data.numRatings * data.avgRating + rating.rating) /
-            (data.numRatings + 1);
-
-        return transaction.set(ratingsDocRef, {
-          numRatings: data.numRatings + 1,
-          avgRating: newAverage,
-          ...rating,
-        }, { merge: true });
-        // return transaction.set(ratingsDocRef, rating);
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    /*
+      TODO: Retrieve add a rating to a restaurant
+    */
   }
 
   checkForEmpty(callback) {
