@@ -12,14 +12,5 @@ export class Auth {
 
   getUser() {
     return this.auth.currentUser;
-    // return new Promise((resolve, reject) => {
-    //   onAuthStateChanged(this.auth, user => {
-    //     if(user != null) {
-    //       resolve(user)
-    //     } else {
-    //       reject(new Error('No user logged in'));
-    //     }
-    //   })
-    // });
   }
 }
