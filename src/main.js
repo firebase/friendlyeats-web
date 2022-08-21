@@ -18,6 +18,7 @@
 
 import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
+import { descriptionForFilter } from './lib/query';
 
  /**
   * Initializes the FriendlyEats app.
@@ -50,34 +51,23 @@ import Setup from './components/setup.svelte';
  FriendlyEats.prototype.initRouter = function() {
    this.router = new Navigo();
  
-   var that = this;
    this.router
-     .on({
-       '/': function() {
-         that.updateQuery(that.filters);
-       }
-     })
-     .on({
-       '/setup': function() {
-         that.viewSetup();
-       }
-     })
-     .on({
-       '/restaurants/*': function() {
-         var path = that.getCleanPath(document.location.pathname);
-         var id = path.split('/')[2];
-         that.viewRestaurant(id);
-       }
-     })
-     .resolve();
- 
+   .on({'/': () => this.viewList(this.filters)})
+   .on({'/setup': () => this.viewSetup()})
+   .on({'/restaurants/*': () => {
+       var path = this.getCleanPath(document.location.pathname);
+       var id = path.split('/')[2];
+       this.viewRestaurant(id);
+    }})
+   .resolve();
+
    firebase
      .firestore()
      .collection('restaurants')
      .limit(1)
-     .onSnapshot(function(snapshot) {
+     .onSnapshot((snapshot) => {
        if (snapshot.empty) {
-         that.router.navigate('/setup');
+         this.router.navigate('/setup');
        }
      });
  };
@@ -367,10 +357,8 @@ FriendlyEats.prototype.initTemplates = function() {
   });
 };
 
-FriendlyEats.prototype.viewList = function(filters, filter_description) {
-  if (!filter_description) {
-    filter_description = 'any type of food with any price in any city.';
-  }
+FriendlyEats.prototype.viewList = function(filters) {
+    const filter_description = descriptionForFilter(this.filters);
 
   var mainEl = this.renderTemplate('main-adjusted');
   var headerEl = this.renderTemplate('header-base', {
@@ -527,8 +515,8 @@ FriendlyEats.prototype.initFilterDialog = function() {
 
   var that = this;
   this.dialogs.filter.listen('MDCDialog:accept', function() {
-    that.updateQuery(that.filters);
-  });
+    that.viewList(that.filters);
+});
 
   var dialog = document.querySelector('aside');
   var pages = dialog.querySelectorAll('.page');
@@ -591,36 +579,6 @@ FriendlyEats.prototype.initFilterDialog = function() {
       displaySection('page-all');
     });
   });
-};
-
-FriendlyEats.prototype.updateQuery = function(filters) {
-  var query_description = '';
-
-  if (filters.category !== '') {
-    query_description += filters.category + ' places';
-  } else {
-    query_description += 'any restaurant';
-  }
-
-  if (filters.city !== '') {
-    query_description += ' in ' + filters.city;
-  } else {
-    query_description += ' located anywhere';
-  }
-
-  if (filters.price !== '') {
-    query_description += ' with a price of ' + filters.price;
-  } else {
-    query_description += ' with any price';
-  }
-
-  if (filters.sort === 'Rating') {
-    query_description += ' sorted by rating';
-  } else if (filters.sort === 'Reviews') {
-    query_description += ' sorted by # of reviews';
-  }
-
-  this.viewList(filters, query_description);
 };
 
 FriendlyEats.prototype.viewRestaurant = function(id) {
