@@ -2,7 +2,6 @@
     import { descriptionForFilter} from '../lib/query';
 
     export let that = null;
-    export let hasSectionHeader = false;
     export let filters = null;
 
     function showFilters() {
@@ -18,18 +17,14 @@
         <span class="mdc-toolbar__title">FriendlyEats</span>
     </section>
     </div>
-    {#if hasSectionHeader}
-    <div id="section-header">
-        {#if filters}
-            <div id="filter" class="mdc-toolbar mdc-layout-grid">
-                <div id="show-filters" on:click={showFilters}>
-                    <div id="active-filters">
-                        <i class="material-icons">filter_list</i>
-                        You're seeing <b>{descriptionForFilter(filters)}</b>
-                    </div>
+    {#if filters && that}
+        <div id="filter" class="mdc-toolbar mdc-layout-grid">
+            <div id="show-filters" on:click={showFilters}>
+                <div id="active-filters">
+                    <i class="material-icons">filter_list</i>
+                    You're seeing <b>{descriptionForFilter(filters)}</b>
                 </div>
             </div>
-        {/if}
-    </div>
-  {/if}
+        </div>
+    {/if}
 </header>

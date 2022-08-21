@@ -128,7 +128,6 @@ FriendlyEats.prototype.viewList = function(filters) {
   mountComponent(document.querySelector('.header'), HeaderBase, {
     that: this,
     filters: this.filters,
-    hasSectionHeader: true,
   });
   replaceElement(document.querySelector('main'), mainEl);
 
@@ -194,7 +193,7 @@ FriendlyEats.prototype.viewList = function(filters) {
 FriendlyEats.prototype.viewSetup = function() {
   var config = this.getFirebaseConfig();
   mountComponent(document.querySelector('main'), Setup, { that: this, config });
-  mountComponent(document.querySelector('.header'), HeaderBase, { hasSectionHeader: false });
+  mountComponent(document.querySelector('.header'), HeaderBase);
 
   firebase
     .firestore()
@@ -369,10 +368,6 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
           }
         });
       }
-
-      var headerEl = that.renderTemplate('header-base', {
-        hasSectionHeader: true
-      });
 
       replaceElement(document.querySelector('.header'), sectionHeaderEl);
       replaceElement(document.querySelector('main'), mainEl);

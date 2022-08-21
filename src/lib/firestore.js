@@ -43,15 +43,31 @@ function getDocumentsInQuery(query, renderer) {
 }
   
 export function getRestaurant(id) {
-    /*
-      TODO: Retrieve a single restaurant
-    */
+    return firebase.firestore().collection('restaurants').doc(id).get();
 }
   
 export function getFilteredRestaurants(filters, renderer) {
-    /*
-      TODO: Retrieve filtered list of restaurants
-    */
+    var query = firebase.firestore().collection('restaurants');
+    
+    if (filters.category !== 'Any') {
+        query = query.where('category', '==', filters.category);
+    }
+    
+    if (filters.city !== 'Any') {
+        query = query.where('city', '==', filters.city);
+    }
+    
+    if (filters.price !== 'Any') {
+        query = query.where('price', '==', filters.price.length);
+    }
+    
+    if (filters.sort === 'Rating') {
+        query = query.orderBy('avgRating', 'desc');
+    } else if (filters.sort === 'Reviews') {
+        query = query.orderBy('numRatings', 'desc');
+    }
+    
+    getDocumentsInQuery(query, renderer);
 }
   
 export function addRating(restaurantID, rating) {
