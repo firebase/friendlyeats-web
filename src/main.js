@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 'use strict';
+'use strict';
 
+import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
 
  /**
@@ -465,13 +466,9 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
 };
 
 FriendlyEats.prototype.viewSetup = function() {
-  var headerEl = this.renderTemplate('header-base', {
-    hasSectionHeader: false
-  });
-
   var config = this.getFirebaseConfig();
   this.mountComponent(document.querySelector('main'), Setup, { that: this, config });
-  this.replaceElement(document.querySelector('.header'), headerEl);
+  this.mountComponent(document.querySelector('.header'), HeaderBase, { hasSectionHeader: false });
 
   firebase
     .firestore()
