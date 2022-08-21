@@ -1,5 +1,14 @@
 <script>
+    import { descriptionForFilter} from '../lib/query';
+
+    export let that = null;
     export let hasSectionHeader = false;
+    export let filters = null;
+
+    function showFilters() {
+        that.dialogs.filter.show();
+    }
+
 </script>
 
 <header id="site-header" class="mdc-toolbar mdc-toolbar--fixed">
@@ -10,6 +19,17 @@
     </section>
     </div>
     {#if hasSectionHeader}
-    <div id="section-header"></div>
-    {/if}
+    <div id="section-header">
+        {#if filters}
+            <div id="filter" class="mdc-toolbar mdc-layout-grid">
+                <div id="show-filters" on:click={showFilters}>
+                    <div id="active-filters">
+                        <i class="material-icons">filter_list</i>
+                        You're seeing <b>{descriptionForFilter(filters)}</b>
+                    </div>
+                </div>
+            </div>
+        {/if}
+    </div>
+  {/if}
 </header>

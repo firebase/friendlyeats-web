@@ -124,24 +124,15 @@ FriendlyEats.prototype.viewList = function(filters) {
     const filter_description = descriptionForFilter(this.filters);
 
   var mainEl = this.renderTemplate('main-adjusted');
-  var headerEl = this.renderTemplate('header-base', {
-    hasSectionHeader: true
+
+  mountComponent(document.querySelector('.header'), HeaderBase, {
+    that: this,
+    filters: this.filters,
+    hasSectionHeader: true,
   });
-
-  replaceElement(
-    headerEl.querySelector('#section-header'),
-    this.renderTemplate('filter-display', {
-      filter_description:filter_description
-    })
-  );
-
-  replaceElement(document.querySelector('.header'), headerEl);
   replaceElement(document.querySelector('main'), mainEl);
 
   var that = this;
-  headerEl.querySelector('#show-filters').addEventListener('click', function() {
-    that.dialogs.filter.show();
-  });
 
   var renderer = {
     remove: function(doc) {
@@ -176,24 +167,8 @@ FriendlyEats.prototype.viewList = function(filters) {
       }
     },
     empty: function() {
-      var headerEl = that.renderTemplate('header-base', {
-        hasSectionHeader: true
-      });
-
       var noResultsEl = that.renderTemplate('no-results');
 
-      replaceElement(
-        headerEl.querySelector('#section-header'),
-        that.renderTemplate('filter-display', {
-          filter_description: filter_description
-        })
-      );
-
-      headerEl.querySelector('#show-filters').addEventListener('click', function() {
-        that.dialogs.filter.show();
-      });
-
-      replaceElement(document.querySelector('.header'), headerEl);
       replaceElement(document.querySelector('main'), noResultsEl);
       return;
     }
