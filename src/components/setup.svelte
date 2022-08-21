@@ -1,17 +1,21 @@
 <script>
 
+import { addMockRestaurants } from '../lib/mock';
+
+
 export let that = null;
 export let config = {};
 
-let addingMockData = false;
+that.addingMockData = false;
 
-function addMockRestaurants(event) {
-  if (addingMockData) {
+function add(event) {
+  if (that.addingMockData) {
     return;
   }
-  addingMockData = true;
+  that.addingMockData = true;
 
-  that.addMockRestaurants().then(function() {
+  addMockRestaurants().then(function() {
+    that.addingMockData = false;
     that.rerender();
   });
 }
@@ -27,8 +31,8 @@ function addMockRestaurants(event) {
     </div>
     <br />
     <!-- svelte-ignore a11y-missing-attribute -->
-    <a class="mdc-button" class:addingMockData on:click={addMockRestaurants}>
-        {#if addingMockData}
+    <a class="mdc-button" class:working={that.addingMockData} on:click={add}>
+        {#if that.addingMockData}
             Please wait...
         {:else}
             Add mock data
@@ -37,7 +41,7 @@ function addMockRestaurants(event) {
 </div>
 
 <style>
-    .addingMockData {
+    .working {
         opacity: 0.4;
     }
 </style>
