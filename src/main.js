@@ -19,6 +19,7 @@
 import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
 import { descriptionForFilter } from './lib/query';
+import { render, replaceElement, mountComponent } from './lib/renderer';
 
  /**
   * Initializes the FriendlyEats app.
@@ -365,15 +366,15 @@ FriendlyEats.prototype.viewList = function(filters) {
     hasSectionHeader: true
   });
 
-  this.replaceElement(
+  replaceElement(
     headerEl.querySelector('#section-header'),
     this.renderTemplate('filter-display', {
       filter_description:filter_description
     })
   );
 
-  this.replaceElement(document.querySelector('.header'), headerEl);
-  this.replaceElement(document.querySelector('main'), mainEl);
+  replaceElement(document.querySelector('.header'), headerEl);
+  replaceElement(document.querySelector('main'), mainEl);
 
   var that = this;
   headerEl.querySelector('#show-filters').addEventListener('click', function() {
@@ -419,7 +420,7 @@ FriendlyEats.prototype.viewList = function(filters) {
 
       var noResultsEl = that.renderTemplate('no-results');
 
-      that.replaceElement(
+      replaceElement(
         headerEl.querySelector('#section-header'),
         that.renderTemplate('filter-display', {
           filter_description: filter_description
@@ -430,8 +431,8 @@ FriendlyEats.prototype.viewList = function(filters) {
         that.dialogs.filter.show();
       });
 
-      that.replaceElement(document.querySelector('.header'), headerEl);
-      that.replaceElement(document.querySelector('main'), noResultsEl);
+      replaceElement(document.querySelector('.header'), headerEl);
+      replaceElement(document.querySelector('main'), noResultsEl);
       return;
     }
   };
@@ -455,8 +456,8 @@ FriendlyEats.prototype.viewList = function(filters) {
 
 FriendlyEats.prototype.viewSetup = function() {
   var config = this.getFirebaseConfig();
-  this.mountComponent(document.querySelector('main'), Setup, { that: this, config });
-  this.mountComponent(document.querySelector('.header'), HeaderBase, { hasSectionHeader: false });
+  mountComponent(document.querySelector('main'), Setup, { that: this, config });
+  mountComponent(document.querySelector('.header'), HeaderBase, { hasSectionHeader: false });
 
   firebase
     .firestore()
@@ -521,18 +522,18 @@ FriendlyEats.prototype.initFilterDialog = function() {
   var dialog = document.querySelector('aside');
   var pages = dialog.querySelectorAll('.page');
 
-  this.replaceElement(
+  replaceElement(
     dialog.querySelector('#category-list'),
     this.renderTemplate('item-list', { items: ['Any'].concat(this.data.categories) })
   );
 
-  this.replaceElement(
+  replaceElement(
     dialog.querySelector('#city-list'),
     this.renderTemplate('item-list', { items: ['Any'].concat(this.data.cities) })
   );
 
   var renderAllList = function() {
-    that.replaceElement(
+    replaceElement(
       dialog.querySelector('#all-filters-list'),
       that.renderTemplate('all-filters-list', that.filters)
     );
@@ -636,8 +637,8 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
         hasSectionHeader: true
       });
 
-      that.replaceElement(document.querySelector('.header'), sectionHeaderEl);
-      that.replaceElement(document.querySelector('main'), mainEl);
+      replaceElement(document.querySelector('.header'), sectionHeaderEl);
+      replaceElement(document.querySelector('main'), mainEl);
     })
     .then(function() {
       that.router.updatePageLinks();
@@ -651,113 +652,8 @@ FriendlyEats.prototype.renderTemplate = function(id, data) {
   var template = this.templates[id];
   var el = template.cloneNode(true);
   el.removeAttribute('hidden');
-  this.render(el, data);
+  render(el, data);
   return el;
-};
-
-FriendlyEats.prototype.render = function(el, data) {
-  if (!data) {
-    return;
-  }
-
-  var that = this;
-  var modifiers = {
-    'data-fir-foreach': function(tel) {
-      var field = tel.getAttribute('data-fir-foreach');
-      var values = that.getDeepItem(data, field);
-
-      values.forEach(function(value, index) {
-        var cloneTel = tel.cloneNode(true);
-        tel.parentNode.append(cloneTel);
-
-        Object.keys(modifiers).forEach(function(selector) {
-          var children = Array.prototype.slice.call(
-            cloneTel.querySelectorAll('[' + selector + ']')
-          );
-          children.push(cloneTel);
-          children.forEach(function(childEl) {
-            var currentVal = childEl.getAttribute(selector);
-
-            if (!currentVal) {
-              return;
-            }
-            childEl.setAttribute(
-              selector,
-              currentVal.replace('~', field + '/' + index)
-            );
-          });
-        });
-      });
-
-      tel.parentNode.removeChild(tel);
-    },
-    'data-fir-content': function(tel) {
-      var field = tel.getAttribute('data-fir-content');
-      tel.innerText = that.getDeepItem(data, field);
-    },
-    'data-fir-click': function(tel) {
-      tel.addEventListener('click', function() {
-        var field = tel.getAttribute('data-fir-click');
-        that.getDeepItem(data, field)();
-      });
-    },
-    'data-fir-if': function(tel) {
-      var field = tel.getAttribute('data-fir-if');
-      if (!that.getDeepItem(data, field)) {
-        tel.style.display = 'none';
-      }
-    },
-    'data-fir-if-not': function(tel) {
-      var field = tel.getAttribute('data-fir-if-not');
-      if (that.getDeepItem(data, field)) {
-        tel.style.display = 'none';
-      }
-    },
-    'data-fir-attr': function(tel) {
-      var chunks = tel.getAttribute('data-fir-attr').split(':');
-      var attr = chunks[0];
-      var field = chunks[1];
-      tel.setAttribute(attr, that.getDeepItem(data, field));
-    },
-    'data-fir-style': function(tel) {
-      var chunks = tel.getAttribute('data-fir-style').split(':');
-      var attr = chunks[0];
-      var field = chunks[1];
-      var value = that.getDeepItem(data, field);
-
-      if (attr.toLowerCase() === 'backgroundimage') {
-        value = 'url(' + value + ')';
-      }
-      tel.style[attr] = value;
-    }
-  };
-
-  var preModifiers = ['data-fir-foreach'];
-
-  preModifiers.forEach(function(selector) {
-    var modifier = modifiers[selector];
-    that.useModifier(el, selector, modifier);
-  });
-
-  Object.keys(modifiers).forEach(function(selector) {
-    if (preModifiers.indexOf(selector) !== -1) {
-      return;
-    }
-
-    var modifier = modifiers[selector];
-    that.useModifier(el, selector, modifier);
-  });
-};
-
-FriendlyEats.prototype.useModifier = function(el, selector, modifier) {
-  el.querySelectorAll('[' + selector + ']').forEach(modifier);
-};
-
-FriendlyEats.prototype.getDeepItem = function(obj, path) {
-  path.split('/').forEach(function(chunk) {
-    obj = obj[chunk];
-  });
-  return obj;
 };
 
 FriendlyEats.prototype.renderRating = function(rating) {
@@ -782,19 +678,6 @@ FriendlyEats.prototype.renderPrice = function(price) {
   return el;
 };
 
-FriendlyEats.prototype.replaceElement = function(parent, content) {
-  parent.innerHTML = '';
-  parent.append(content);
-};
-
 FriendlyEats.prototype.rerender = function() {
   this.router.navigate(document.location.pathname + '?' + new Date().getTime());
-};
-
-FriendlyEats.prototype.mountComponent = function(parent, cls, props = {}) {
-    parent.innerHTML = '';
-    const mounter = document.createElement('div');
-    const component = new cls({target: mounter, props});
-    parent.append(mounter);
-    return component;
 };
