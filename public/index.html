@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
   <link rel="stylesheet" href="/styles/main.css" type="text/css">
+  <link rel="stylesheet" href="/build/bundle.css" type="text/css">
 </head>
 <body>
 <div>
@@ -80,21 +81,6 @@
   <div hidden class="template" id="main">
     <div id="message-cards-container" class="mdc-layout-grid">
       <div id="cards" class="mdc-layout-grid__inner"></div>
-    </div>
-  </div>
-
-  <div hidden class="template" id="no-restaurants">
-    <div id="guy-container" class="mdc-toolbar-fixed-adjust">
-      <img class="guy" src="/images/guy_fireats.png" />
-      <div class="text">
-        This app is connected to the Firebase project "<b data-fir-content="projectId"></b>".<br />
-        <br />
-        Your Cloud Firestore has no documents in <b>/restaurants/</b>.
-      </div>
-      <br />
-      <a class="mdc-button" id="add_mock_data">
-        Add mock data
-      </a>
     </div>
   </div>
 

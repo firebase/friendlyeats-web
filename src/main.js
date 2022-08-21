@@ -16,6 +16,8 @@
  */
  'use strict';
 
+import Setup from './components/setup.svelte';
+
  /**
   * Initializes the FriendlyEats app.
   */
@@ -28,7 +30,8 @@
    };
  
    this.dialogs = {};
- 
+   this.addingMockData = false;
+
    var that = this;
    firebase.auth().signInAnonymously().then(function() {
      that.initTemplates();
@@ -215,21 +218,31 @@
 'use strict';
 
 FriendlyEats.prototype.addRestaurant = function(data) {
-  /*
-    TODO: Implement adding a document
-  */
+  var collection = firebase.firestore().collection('restaurants');
+  return collection.add(data);
 };
 
 FriendlyEats.prototype.getAllRestaurants = function(renderer) {
-  /*
-    TODO: Retrieve list of restaurants
-  */
+    var query = firebase.firestore()
+        .collection('restaurants')
+        .orderBy('avgRating', 'desc')
+        .limit(50);
+
+    this.getDocumentsInQuery(query, renderer);
 };
 
 FriendlyEats.prototype.getDocumentsInQuery = function(query, renderer) {
-  /*
-    TODO: Render all documents in the provided query
-  */
+    query.onSnapshot(function(snapshot) {
+        if (!snapshot.size) return renderer.empty(); // Display "There are no restaurants".
+    
+        snapshot.docChanges().forEach(function(change) {
+          if (change.type === 'removed') {
+            renderer.remove(change.doc);
+          } else {
+            renderer.display(change.doc);
+          }
+        });
+      });
 };
 
 FriendlyEats.prototype.getRestaurant = function(id) {
@@ -273,7 +286,8 @@ FriendlyEats.prototype.addRating = function(restaurantID, rating) {
   */
  FriendlyEats.prototype.addMockRestaurants = function() {
    var promises = [];
- 
+
+   this.addingMockData = true;
    for (var i = 0; i < 20; i++) {
      var name =
          this.getRandomItem(this.data.words) +
@@ -305,7 +319,7 @@ FriendlyEats.prototype.addRating = function(restaurantID, rating) {
      }
    }
  
-   return Promise.all(promises);
+   return Promise.all(promises).then(() => this.addingMockData = false );
  };
  
  /**
@@ -350,10 +364,6 @@ FriendlyEats.prototype.initTemplates = function() {
   document.querySelectorAll('.template').forEach(function(el) {
     that.templates[el.getAttribute('id')] = el;
   });
-};
-
-FriendlyEats.prototype.viewHome = function() {
-  this.getAllRestaurants();
 };
 
 FriendlyEats.prototype.viewList = function(filters, filter_description) {
@@ -460,36 +470,16 @@ FriendlyEats.prototype.viewSetup = function() {
   });
 
   var config = this.getFirebaseConfig();
-  var noRestaurantsEl = this.renderTemplate('no-restaurants', config);
-
-  var button = noRestaurantsEl.querySelector('#add_mock_data');
-  var addingMockData = false;
-
-  var that = this;
-  button.addEventListener('click', function(event) {
-    if (addingMockData) {
-      return;
-    }
-    addingMockData = true;
-
-    event.target.style.opacity = '0.4';
-    event.target.innerText = 'Please wait...';
-
-    that.addMockRestaurants().then(function() {
-      that.rerender();
-    });
-  });
-
+  this.mountComponent(document.querySelector('main'), Setup, { that: this, config });
   this.replaceElement(document.querySelector('.header'), headerEl);
-  this.replaceElement(document.querySelector('main'), noRestaurantsEl);
 
   firebase
     .firestore()
     .collection('restaurants')
     .limit(1)
-    .onSnapshot(function(snapshot) {
-      if (snapshot.size && !addingMockData) {
-        that.router.navigate('/');
+    .onSnapshot(snapshot => {
+      if (snapshot.size && !this.addingMockData) {
+        this.router.navigate('/');
       }
     });
 };
@@ -844,4 +834,12 @@ FriendlyEats.prototype.replaceElement = function(parent, content) {
 
 FriendlyEats.prototype.rerender = function() {
   this.router.navigate(document.location.pathname + '?' + new Date().getTime());
+};
+
+FriendlyEats.prototype.mountComponent = function(parent, cls, props = {}) {
+    parent.innerHTML = '';
+    const mounter = document.createElement('div');
+    const component = new cls({target: mounter, props});
+    parent.append(mounter);
+    return component;
 };
