@@ -2,43 +2,14 @@
 import { onMount } from "svelte";
 import { getAllRestaurants, getFilteredRestaurants } from '../lib/firestore';
 import { replaceElement } from '../lib/renderer';
+import RestaurantCard from "./restaurant-card.svelte";
 
 export let that = null;
 
 let mainEl = null;
+let restaurants = [];
 
 const filters = that.filters;
-
-function remove(doc) {
-    var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
-    if (locationCardToDelete) {
-        mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
-    }
-}
-
-function display(doc) {
-    var data = doc.data();
-    data['.id'] = doc.id;
-    data['go_to_restaurant'] = function() {
-        that.router.navigate('/restaurants/' + doc.id);
-    };
-
-    var el = that.renderTemplate('restaurant-card', data);
-    el.querySelector('.rating').append(that.renderRating(data.avgRating));
-    el.querySelector('.price').append(that.renderPrice(data.price));
-    // Setting the id allows to locating the individual restaurant card
-    el.querySelector('.location-card').id = 'doc-' + doc.id;
-
-    var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
-    if (existingLocationCard) {
-        // modify
-        existingLocationCard.parentNode.before(el);
-        mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
-    } else {
-        // add
-        mainEl.querySelector('#cards').append(el);
-    }
-}
 
 function empty() {
     var noResultsEl = that.renderTemplate('no-results');
@@ -47,15 +18,21 @@ function empty() {
     return;
 }
 
-
 const update = (snapshot) => {
     if (!snapshot.size) return empty(); // Display "There are no restaurants".
     
     snapshot.docChanges().forEach(function(change) {
+        console.log(change);
+        const id = change.doc.id;
+        const found = restaurants.findIndex(doc => doc.id === id);
         if (change.type === 'removed') {
-            remove(change.doc);
+            restaurants = [...restaurants.slice(0, found), ...restaurants.slice(found + 1)];
         } else {
-            display(change.doc);
+            if (found >= 0) {
+                restaurants = [...restaurants.slice(0, found), change.doc, ...restaurants.slice(found + 1)];
+            } else {
+                restaurants = [...restaurants, change.doc];
+            }
         }
     });
 };
@@ -85,5 +62,9 @@ onMount(() => {
   class="mdc-layout-grid mdc-toolbar-fixed-adjust"
   bind:this={mainEl}
 >
-    <div id="cards" class="mdc-layout-grid__inner" />
+    <div id="cards" class="mdc-layout-grid__inner">
+        {#each restaurants as restaurant(restaurant.id)}
+            <RestaurantCard doc={restaurant} />
+        {/each}
+    </div>
 </div>
