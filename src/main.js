@@ -18,12 +18,11 @@
 
 import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
+import ListRestaurants from './components/list-restaurants.svelte';
 import FilterDialog from './components/filter-dialog.svelte';
-import { descriptionForFilter } from './lib/query';
 import { render, replaceElement, mountComponent } from './lib/renderer';
-import { getAllRestaurants, getRestaurant, getFilteredRestaurants, addRating } from './lib/firestore';
+import { getRestaurant, addRating } from './lib/firestore';
 import { addMockRatings } from './lib/mock';
-import { categories, cities } from './lib/data';
 
 
  /**
@@ -58,7 +57,7 @@ import { categories, cities } from './lib/data';
    this.router = new Navigo();
  
    this.router
-   .on({'/': () => this.viewList(this.filters)})
+   .on({'/': () => this.viewList()})
    .on({'/setup': () => this.viewSetup()})
    .on({'/restaurants/*': () => {
        var path = this.getCleanPath(document.location.pathname);
@@ -121,74 +120,12 @@ FriendlyEats.prototype.initTemplates = function() {
   });
 };
 
-FriendlyEats.prototype.viewList = function(filters) {
-    const filter_description = descriptionForFilter(this.filters);
-
-  var mainEl = this.renderTemplate('main-adjusted');
-
+FriendlyEats.prototype.viewList = function() {
   mountComponent(document.querySelector('.header'), HeaderBase, {
     that: this,
     filters: this.filters,
   });
-  replaceElement(document.querySelector('main'), mainEl);
-
-  var that = this;
-
-  var renderer = {
-    remove: function(doc) {
-      var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
-      if (locationCardToDelete) {
-        mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
-      }
-
-      return;
-    },
-    display: function(doc) {
-      var data = doc.data();
-      data['.id'] = doc.id;
-      data['go_to_restaurant'] = function() {
-        that.router.navigate('/restaurants/' + doc.id);
-      };
-  
-      var el = that.renderTemplate('restaurant-card', data);
-      el.querySelector('.rating').append(that.renderRating(data.avgRating));
-      el.querySelector('.price').append(that.renderPrice(data.price));
-      // Setting the id allows to locating the individual restaurant card
-      el.querySelector('.location-card').id = 'doc-' + doc.id;
-  
-      var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
-      if (existingLocationCard) {
-        // modify
-        existingLocationCard.parentNode.before(el);
-        mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
-      } else {
-        // add
-        mainEl.querySelector('#cards').append(el);
-      }
-    },
-    empty: function() {
-      var noResultsEl = that.renderTemplate('no-results');
-
-      replaceElement(document.querySelector('main'), noResultsEl);
-      return;
-    }
-  };
-
-  if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
-    getFilteredRestaurants({
-      city: filters.city || 'Any',
-      category: filters.category || 'Any',
-      price: filters.price || 'Any',
-      sort: filters.sort
-    }, renderer);
-  } else {
-    getAllRestaurants(renderer);
-  }
-
-  var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
-  toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust');
-
-  mdc.autoInit();
+  mountComponent(document.querySelector('main'), ListRestaurants, { that: this });
 };
 
 FriendlyEats.prototype.viewSetup = function() {
@@ -253,7 +190,7 @@ FriendlyEats.prototype.initFilterDialog = function() {
   mountComponent(dialogEl, FilterDialog, { filters: this.filters });
   this.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
 
-  this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList(this.filters) );
+  this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList() );
 };
 
 FriendlyEats.prototype.viewRestaurant = function(id) {
