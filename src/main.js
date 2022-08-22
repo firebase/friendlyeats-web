@@ -250,7 +250,7 @@ FriendlyEats.prototype.initReviewDialog = function() {
 FriendlyEats.prototype.initFilterDialog = function() {
   // TODO: Reset filter dialog to init state on close.
   const dialogEl = document.querySelector('#dialog-filter-all');
-  mountComponent(dialogEl, FilterDialog, {});
+  mountComponent(dialogEl, FilterDialog, { filters: this.filters });
   this.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
 
   var that = this;
@@ -260,44 +260,6 @@ FriendlyEats.prototype.initFilterDialog = function() {
 
   var dialog = document.querySelector('aside');
   var pages = dialog.querySelectorAll('.page');
-
-  replaceElement(
-    dialog.querySelector('#category-list'),
-    this.renderTemplate('item-list', { items: ['Any'].concat(categories) })
-  );
-
-  replaceElement(
-    dialog.querySelector('#city-list'),
-    this.renderTemplate('item-list', { items: ['Any'].concat(cities) })
-  );
-
-  var renderAllList = function() {
-    replaceElement(
-      dialog.querySelector('#all-filters-list'),
-      that.renderTemplate('all-filters-list', that.filters)
-    );
-
-    dialog.querySelectorAll('#page-all .mdc-list-item').forEach(function(el) {
-      el.addEventListener('click', function() {
-        var id = el.id.split('-').slice(1).join('-');
-        displaySection(id);
-      });
-    });
-  };
-
-  var displaySection = function(id) {
-    if (id === 'page-all') {
-      renderAllList();
-    }
-
-    pages.forEach(function(sel) {
-      if (sel.id === id) {
-        sel.style.display = 'block';
-      } else {
-        sel.style.display = 'none';
-      }
-    });
-  };
 
   pages.forEach(function(sel) {
     var type = sel.id.split('-')[1];
@@ -310,13 +272,6 @@ FriendlyEats.prototype.initFilterDialog = function() {
         that.filters[type] = el.innerText.trim() === 'Any'? '' : el.innerText.trim();
         displaySection('page-all');
       });
-    });
-  });
-
-  displaySection('page-all');
-  dialog.querySelectorAll('.back').forEach(function(el) {
-    el.addEventListener('click', function() {
-      displaySection('page-all');
     });
   });
 };
