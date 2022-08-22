@@ -61,7 +61,7 @@ onMount(() => {
     }
 
     var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
-    toolbar.fixedAdjustElement = document.querySelector('.mdc-toolbar-fixed-adjust');
+    toolbar.fixedAdjustElement = mainEl;
 
     mdc.autoInit();
 });
