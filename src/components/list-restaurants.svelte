@@ -7,59 +7,71 @@ export let that = null;
 
 let mainEl = null;
 
-onMount(() => {
-    const filters = that.filters;
-    var renderer = {
-        remove: function(doc) {
-            var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
-            if (locationCardToDelete) {
-                mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
-            }
+const filters = that.filters;
 
-            return;
-        },
-        display: function(doc) {
-            var data = doc.data();
-            data['.id'] = doc.id;
-            data['go_to_restaurant'] = function() {
-                that.router.navigate('/restaurants/' + doc.id);
-            };
-        
-            var el = that.renderTemplate('restaurant-card', data);
-            el.querySelector('.rating').append(that.renderRating(data.avgRating));
-            el.querySelector('.price').append(that.renderPrice(data.price));
-            // Setting the id allows to locating the individual restaurant card
-            el.querySelector('.location-card').id = 'doc-' + doc.id;
-        
-            var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
-            if (existingLocationCard) {
-                // modify
-                existingLocationCard.parentNode.before(el);
-                mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
-            } else {
-                // add
-                mainEl.querySelector('#cards').append(el);
-            }
-        },
-        empty: function() {
-            var noResultsEl = that.renderTemplate('no-results');
+function remove(doc) {
+    var locationCardToDelete = mainEl.querySelector('#doc-' + doc.id);
+    if (locationCardToDelete) {
+        mainEl.querySelector('#cards').removeChild(locationCardToDelete.parentNode);
+    }
+}
 
-            replaceElement(document.querySelector('main'), noResultsEl);
-            return;
-        }
+function display(doc) {
+    var data = doc.data();
+    data['.id'] = doc.id;
+    data['go_to_restaurant'] = function() {
+        that.router.navigate('/restaurants/' + doc.id);
     };
 
-    if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
-        getFilteredRestaurants({
-            city: filters.city || 'Any',
-            category: filters.category || 'Any',
-            price: filters.price || 'Any',
-            sort: filters.sort
-    }, renderer);
-    } else {
-        getAllRestaurants(renderer);
-    }
+    var el = that.renderTemplate('restaurant-card', data);
+    el.querySelector('.rating').append(that.renderRating(data.avgRating));
+    el.querySelector('.price').append(that.renderPrice(data.price));
+    // Setting the id allows to locating the individual restaurant card
+    el.querySelector('.location-card').id = 'doc-' + doc.id;
 
+    var existingLocationCard = mainEl.querySelector('#doc-' + doc.id);
+    if (existingLocationCard) {
+        // modify
+        existingLocationCard.parentNode.before(el);
+        mainEl.querySelector('#cards').removeChild(existingLocationCard.parentNode);
+    } else {
+        // add
+        mainEl.querySelector('#cards').append(el);
+    }
+}
+
+function empty() {
+    var noResultsEl = that.renderTemplate('no-results');
+
+    replaceElement(document.querySelector('main'), noResultsEl);
+    return;
+}
+
+
+const update = (snapshot) => {
+    if (!snapshot.size) return empty(); // Display "There are no restaurants".
+    
+    snapshot.docChanges().forEach(function(change) {
+        if (change.type === 'removed') {
+            remove(change.doc);
+        } else {
+            display(change.doc);
+        }
+    });
+};
+
+if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
+    getFilteredRestaurants({
+        city: filters.city || 'Any',
+        category: filters.category || 'Any',
+        price: filters.price || 'Any',
+        sort: filters.sort
+    }, update);
+} else {
+    getAllRestaurants(update);
+}
+
+onMount(() => {
     var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
     toolbar.fixedAdjustElement = mainEl;
 

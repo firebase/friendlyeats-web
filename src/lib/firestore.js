@@ -19,34 +19,19 @@ export function addRestaurant(data) {
     return collection.add(data);
 }
   
-export function getAllRestaurants(renderer) {
-    const query = firebase.firestore()
+export function getAllRestaurants(update) {
+    return firebase.firestore()
                             .collection('restaurants')
                             .orderBy('avgRating', 'desc')
-                            .limit(50);
-  
-    getDocumentsInQuery(query, renderer);
-}
-  
-function getDocumentsInQuery(query, renderer) {
-    query.onSnapshot(function(snapshot) {
-        if (!snapshot.size) return renderer.empty(); // Display "There are no restaurants".
-      
-        snapshot.docChanges().forEach(function(change) {
-            if (change.type === 'removed') {
-                renderer.remove(change.doc);
-            } else {
-                renderer.display(change.doc);
-            }
-        });
-    });
+                            .limit(50)
+                            .onSnapshot(update);
 }
   
 export function getRestaurant(id) {
     return firebase.firestore().collection('restaurants').doc(id).get();
 }
   
-export function getFilteredRestaurants(filters, renderer) {
+export function getFilteredRestaurants(filters, update) {
     var query = firebase.firestore().collection('restaurants');
     
     if (filters.category !== 'Any') {
@@ -67,7 +52,7 @@ export function getFilteredRestaurants(filters, renderer) {
         query = query.orderBy('numRatings', 'desc');
     }
     
-    getDocumentsInQuery(query, renderer);
+    query.onSnapshot(update);
 }
   
 export function addRating(restaurantID, rating) {
