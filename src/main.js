@@ -18,6 +18,7 @@
 
 import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
+import FilterDialog from './components/filter-dialog.svelte';
 import { descriptionForFilter } from './lib/query';
 import { render, replaceElement, mountComponent } from './lib/renderer';
 import { getAllRestaurants, getRestaurant, getFilteredRestaurants, addRating } from './lib/firestore';
@@ -248,6 +249,8 @@ FriendlyEats.prototype.initReviewDialog = function() {
 
 FriendlyEats.prototype.initFilterDialog = function() {
   // TODO: Reset filter dialog to init state on close.
+  const dialogEl = document.querySelector('#dialog-filter-all');
+  mountComponent(dialogEl, FilterDialog, {});
   this.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
 
   var that = this;
