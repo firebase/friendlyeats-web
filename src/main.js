@@ -253,27 +253,7 @@ FriendlyEats.prototype.initFilterDialog = function() {
   mountComponent(dialogEl, FilterDialog, { filters: this.filters });
   this.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
 
-  var that = this;
-  this.dialogs.filter.listen('MDCDialog:accept', function() {
-    that.viewList(that.filters);
-});
-
-  var dialog = document.querySelector('aside');
-  var pages = dialog.querySelectorAll('.page');
-
-  pages.forEach(function(sel) {
-    var type = sel.id.split('-')[1];
-    if (type === 'all') {
-      return;
-    }
-
-    sel.querySelectorAll('.mdc-list-item').forEach(function(el) {
-      el.addEventListener('click', function() {
-        that.filters[type] = el.innerText.trim() === 'Any'? '' : el.innerText.trim();
-        displaySection('page-all');
-      });
-    });
-  });
+  this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList(this.filters) );
 };
 
 FriendlyEats.prototype.viewRestaurant = function(id) {

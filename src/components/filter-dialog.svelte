@@ -10,6 +10,14 @@ function goBack() {
     page = 'all';
 }
 
+function itemClicked({target}) {
+    if (target.tagName.toLocaleLowerCase() === 'li') {
+        const value = target.textContent.trim();
+        filters[page] = value === 'Any' ? '' : value;
+        goBack();
+    }
+}
+
 </script>
 
 <div class="mdc-dialog__surface">
@@ -26,7 +34,7 @@ function goBack() {
               <i class="material-icons">fastfood</i>
               {#if filters.category}<b>{filters.category}</b>{:else}<span>Any Category</span>{/if}
             </li>
-            <li id="show-page-city" class="mdc-list-item" data-mdc-auto-init="MDCRipple" on:click={() => page = 'category'}>
+            <li id="show-page-city" class="mdc-list-item" data-mdc-auto-init="MDCRipple" on:click={() => page = 'city'}>
               <i class="material-icons">location_on</i>
               {#if filters.city}<b>{filters.city}</b>{:else}<span>Any Location</span>{/if}
             </li>
@@ -52,7 +60,7 @@ function goBack() {
         Category
       </h2>
     </header>
-    <section class="mdc-dialog__body mdc-dialog__body--scrollable">
+    <section class="mdc-dialog__body mdc-dialog__body--scrollable" on:click={itemClicked}>
         {#each ['Any'].concat(categories) as item}
             <li class="mdc-list-item" data-mdc-auto-init="MDCRipple">{item}</li>
         {/each}
@@ -67,7 +75,7 @@ function goBack() {
         Location
       </h2>
     </header>
-    <section class="mdc-dialog__body mdc-dialog__body--scrollable">
+    <section class="mdc-dialog__body mdc-dialog__body--scrollable" on:click={itemClicked}>
         {#each ['Any'].concat(cities) as item}
             <li class="mdc-list-item" data-mdc-auto-init="MDCRipple">{item}</li>
         {/each}
@@ -82,7 +90,7 @@ function goBack() {
         Price
       </h2>
     </header>
-    <section class="mdc-dialog__body mdc-dialog__body--scrollable">
+    <section class="mdc-dialog__body mdc-dialog__body--scrollable" on:click={itemClicked}>
       <ul class="mdc-list">
         <li class="mdc-list-item" data-mdc-auto-init="MDCRipple">Any</li>
         <li class="mdc-list-item" data-mdc-auto-init="MDCRipple">$</li>
@@ -101,7 +109,7 @@ function goBack() {
         Sort By
       </h2>
     </header>
-    <section class="mdc-dialog__body mdc-dialog__body--scrollable">
+    <section class="mdc-dialog__body mdc-dialog__body--scrollable" on:click={itemClicked}>
       <ul class="mdc-list">
         <li class="mdc-list-item" data-mdc-auto-init="MDCRipple">Rating</li>
         <li class="mdc-list-item" data-mdc-auto-init="MDCRipple">Reviews</li>
