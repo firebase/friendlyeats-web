@@ -4,7 +4,7 @@ export let value = 0;
 
 </script>
 
-<div class="rating">
+<div id="rating">
     {#each [0, 1, 2, 3, 4] as r}
         {#if r < value}
             <i class="template material-icons">star</i>

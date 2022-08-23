@@ -20,6 +20,7 @@ import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
 import ListRestaurants from './components/list-restaurants.svelte';
 import FilterDialog from './components/filter-dialog.svelte';
+import RestaurantHeader from './components/restaurant-header.svelte';
 import { render, replaceElement, mountComponent } from './lib/renderer';
 import { getRestaurant, addRating } from './lib/firestore';
 import { addMockRatings } from './lib/mock';
@@ -194,33 +195,11 @@ FriendlyEats.prototype.initFilterDialog = function() {
 };
 
 FriendlyEats.prototype.viewRestaurant = function(id) {
-  var sectionHeaderEl;
-
   var that = this;
   return getRestaurant(id)
-    .then(function(doc) {
-      var data = doc.data();
-      var dialog =  that.dialogs.add_review;
-
-      data.show_add_review = function() {
-        // Reset the state before showing the dialog
-        dialog.root_.querySelector('#text').value = '';
-        dialog.root_.querySelectorAll('.star-input i').forEach(function(el) {
-          el.innerText = 'star_border';
-        });
-
-        dialog.show();
-      };
-
-      sectionHeaderEl = that.renderTemplate('restaurant-header', data);
-      sectionHeaderEl
-        .querySelector('.rating')
-        .append(that.renderRating(data.avgRating));
-
-      sectionHeaderEl
-        .querySelector('.price')
-        .append(that.renderPrice(data.price));
-      return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
+    .then(doc => {
+        mountComponent(document.querySelector('.header'), RestaurantHeader, { that: this, data: doc.data() });
+        return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
     })
     .then(function(ratings) {
       var mainEl;
@@ -244,7 +223,6 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
         });
       }
 
-      replaceElement(document.querySelector('.header'), sectionHeaderEl);
       replaceElement(document.querySelector('main'), mainEl);
     })
     .then(function() {
@@ -273,14 +251,6 @@ FriendlyEats.prototype.renderRating = function(rating) {
       star = this.renderTemplate('star-border-icon', {});
     }
     el.append(star);
-  }
-  return el;
-};
-
-FriendlyEats.prototype.renderPrice = function(price) {
-  var el = this.renderTemplate('price', {});
-  for (var r = 0; r < price; r += 1) {
-    el.append('$');
   }
   return el;
 };

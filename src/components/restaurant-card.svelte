@@ -19,7 +19,9 @@ function clicked(event) {
             <h2>{data.name}</h2>
             <span class="info price">{'$'.repeat(data.price)}</span>
             <div class="details">
-                <Rating value={Math.floor(data.avgRating)} />
+                <div class="rating">
+                    <Rating value={Math.floor(data.avgRating)} />
+                </div>
             </div>
             <div class="details">
                 <span class="info">{data.category}</span>
