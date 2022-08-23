@@ -62,8 +62,8 @@ onMount(() => {
   bind:this={mainEl}
 >
     <div id="cards" class="mdc-layout-grid__inner">
-        {#each restaurants as restaurant(restaurant.id)}
-            <RestaurantCard data={restaurant.data()} />
+        {#each restaurants as doc(doc.id)}
+            <RestaurantCard {that} id={doc.id} data={doc.data()} />
         {/each}
     </div>
 </div>
