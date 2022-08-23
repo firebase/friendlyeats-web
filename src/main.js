@@ -21,9 +21,9 @@ import Setup from './components/setup.svelte';
 import ListRestaurants from './components/list-restaurants.svelte';
 import FilterDialog from './components/filter-dialog.svelte';
 import RestaurantHeader from './components/restaurant-header.svelte';
-import { render, replaceElement, mountComponent } from './lib/renderer';
+import RestaurantReviews from './components/restaurant-reviews.svelte';
+import { render, mountComponent } from './lib/renderer';
 import { getRestaurant, addRating } from './lib/firestore';
-import { addMockRatings } from './lib/mock';
 
 
  /**
@@ -195,40 +195,18 @@ FriendlyEats.prototype.initFilterDialog = function() {
 };
 
 FriendlyEats.prototype.viewRestaurant = function(id) {
-  var that = this;
   return getRestaurant(id)
     .then(doc => {
         mountComponent(document.querySelector('.header'), RestaurantHeader, { that: this, data: doc.data() });
         return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
     })
-    .then(function(ratings) {
-      var mainEl;
-
-      if (ratings.size) {
-        mainEl = that.renderTemplate('main');
-
-        ratings.forEach(function(rating) {
-          var data = rating.data();
-          var el = that.renderTemplate('review-card', data);
-          el.querySelector('.rating').append(that.renderRating(data.rating));
-          mainEl.querySelector('#cards').append(el);
-        });
-      } else {
-        mainEl = that.renderTemplate('no-ratings', {
-          add_mock_data: function() {
-            addMockRatings(id).then(function() {
-              that.rerender();
-            });
-          }
-        });
-      }
-
-      replaceElement(document.querySelector('main'), mainEl);
+    .then(ratings => {
+      mountComponent(document.querySelector('main'), RestaurantReviews, { that: this, id, ratings})
     })
-    .then(function() {
-      that.router.updatePageLinks();
+    .then(() => {
+      this.router.updatePageLinks();
     })
-    .catch(function(err) {
+    .catch(err => {
       console.warn('Error rendering page', err);
     });
 };
@@ -238,20 +216,6 @@ FriendlyEats.prototype.renderTemplate = function(id, data) {
   var el = template.cloneNode(true);
   el.removeAttribute('hidden');
   render(el, data);
-  return el;
-};
-
-FriendlyEats.prototype.renderRating = function(rating) {
-  var el = this.renderTemplate('rating', {});
-  for (var r = 0; r < 5; r += 1) {
-    var star;
-    if (r < Math.floor(rating)) {
-      star = this.renderTemplate('star-icon', {});
-    } else {
-      star = this.renderTemplate('star-border-icon', {});
-    }
-    el.append(star);
-  }
   return el;
 };
 
