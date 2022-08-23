@@ -22,7 +22,6 @@ const update = (snapshot) => {
     if (!snapshot.size) return empty(); // Display "There are no restaurants".
     
     snapshot.docChanges().forEach(function(change) {
-        console.log(change);
         const id = change.doc.id;
         const found = restaurants.findIndex(doc => doc.id === id);
         if (change.type === 'removed') {
@@ -64,7 +63,7 @@ onMount(() => {
 >
     <div id="cards" class="mdc-layout-grid__inner">
         {#each restaurants as restaurant(restaurant.id)}
-            <RestaurantCard doc={restaurant} />
+            <RestaurantCard data={restaurant.data()} />
         {/each}
     </div>
 </div>
