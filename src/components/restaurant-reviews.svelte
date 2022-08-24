@@ -29,7 +29,7 @@ function add_mock_data() {
         <div id="message-cards-container" class="mdc-layout-grid">
             <div id="cards" class="mdc-layout-grid__inner">
                 {#each reviews as review}
-                    <div hidden class="template mdc-layout-grid__cell--span-12" id="review-card">
+                    <div class="mdc-layout-grid__cell--span-12" id="review-card">
                         <div class="review max_width_600">
                             <div class="header">
                                 <div class="author">
