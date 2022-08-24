@@ -22,6 +22,7 @@ import ListRestaurants from './components/list-restaurants.svelte';
 import FilterDialog from './components/filter-dialog.svelte';
 import RestaurantHeader from './components/restaurant-header.svelte';
 import RestaurantReviews from './components/restaurant-reviews.svelte';
+import AddReview from './components/add-review.svelte';
 import { render, mountComponent } from './lib/renderer';
 import { getRestaurant, addRating } from './lib/firestore';
 
@@ -146,7 +147,13 @@ FriendlyEats.prototype.viewSetup = function() {
 };
 
 FriendlyEats.prototype.initReviewDialog = function() {
+  let values = {
+    rating: 0,
+    text: '',
+  };
+
   var dialog = document.querySelector('#dialog-add-review');
+  mountComponent(dialog, AddReview, { values });
   this.dialogs.add_review = new mdc.dialog.MDCDialog(dialog);
 
   var that = this;
@@ -155,8 +162,7 @@ FriendlyEats.prototype.initReviewDialog = function() {
     var id = pathname.split('/')[2];
 
     addRating(id, {
-      rating: rating,
-      text: dialog.querySelector('#text').value,
+      ...values,
       userName: 'Anonymous (Web)',
       timestamp: new Date(),
       userId: firebase.auth().currentUser.uid
@@ -164,32 +170,13 @@ FriendlyEats.prototype.initReviewDialog = function() {
       that.rerender();
     });
   });
-
-  var rating = 0;
-
-  dialog.querySelectorAll('.star-input i').forEach(function(el) {
-    var rate = function() {
-      var after = false;
-      rating = 0;
-      [].slice.call(el.parentNode.children).forEach(function(child) {
-        if (!after) {
-          rating++;
-          child.innerText = 'star';
-        } else {
-          child.innerText = 'star_border';
-        }
-        after = after || child.isSameNode(el);
-      });
-    };
-    el.addEventListener('mouseover', rate);
-  });
 };
 
 FriendlyEats.prototype.initFilterDialog = function() {
   // TODO: Reset filter dialog to init state on close.
   const dialogEl = document.querySelector('#dialog-filter-all');
   mountComponent(dialogEl, FilterDialog, { filters: this.filters });
-  this.dialogs.filter = new mdc.dialog.MDCDialog(document.querySelector('#dialog-filter-all'));
+  this.dialogs.filter = new mdc.dialog.MDCDialog(dialogEl);
 
   this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList() );
 };
