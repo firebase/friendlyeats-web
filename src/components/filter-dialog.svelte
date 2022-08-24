@@ -29,7 +29,7 @@ function itemClicked({target}) {
       </h2>
     </header>
     <section class="mdc-dialog__body mdc-dialog__body--scrollable">
-        <ul class="template mdc-list" id="all-filters-list">
+        <ul class="mdc-list" id="all-filters-list">
             <li id="show-page-category" class="mdc-list-item" data-mdc-auto-init="MDCRipple" on:click={() => page = 'category'}>
               <i class="material-icons">fastfood</i>
               {#if filters.category}<b>{filters.category}</b>{:else}<span>Any Category</span>{/if}

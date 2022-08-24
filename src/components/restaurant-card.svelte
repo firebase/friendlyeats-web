@@ -12,7 +12,7 @@ function clicked(event) {
 
 </script>
 
-<div class="template mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
     <div class="location-card mdc-card mdc-shadow--2dp" on:click={clicked}>
         <div class="mdc-card__title" style:background-image="url({data.photo})" />
         <div class="mdc-card__supporting-text">

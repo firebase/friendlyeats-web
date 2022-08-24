@@ -1,7 +1,6 @@
 <script>
 import { onMount } from "svelte";
 import { getAllRestaurants, getFilteredRestaurants } from '../lib/firestore';
-import { replaceElement } from '../lib/renderer';
 import RestaurantCard from "./restaurant-card.svelte";
 
 export let that = null;
@@ -11,15 +10,11 @@ let restaurants = [];
 
 const filters = that.filters;
 
-function empty() {
-    var noResultsEl = that.renderTemplate('no-results');
-
-    replaceElement(document.querySelector('main'), noResultsEl);
-    return;
-}
-
 const update = (snapshot) => {
-    if (!snapshot.size) return empty(); // Display "There are no restaurants".
+    if (!snapshot.size) {
+        restaurants = [];
+        return;
+    }
     
     snapshot.docChanges().forEach(function(change) {
         const id = change.doc.id;
@@ -61,9 +56,20 @@ onMount(() => {
   class="mdc-layout-grid mdc-toolbar-fixed-adjust"
   bind:this={mainEl}
 >
-    <div id="cards" class="mdc-layout-grid__inner">
-        {#each restaurants as doc(doc.id)}
-            <RestaurantCard {that} id={doc.id} data={doc.data()} />
-        {/each}
-    </div>
+    {#if restaurants.length}
+        <div id="cards" class="mdc-layout-grid__inner">
+            {#each restaurants as doc(doc.id)}
+                <RestaurantCard {that} id={doc.id} data={doc.data()} />
+            {/each}
+        </div>
+    {:else}
+        <div id="no-results">
+            <div id="guy-container" class="mdc-toolbar-fixed-adjust">
+                <img class="guy" src="/images/guy_fireats.png" />
+                <div class="text">
+                    There are no results for your those filters!
+                </div>
+            </div>
+        </div>
+    {/if}
 </div>

@@ -23,7 +23,7 @@ import FilterDialog from './components/filter-dialog.svelte';
 import RestaurantHeader from './components/restaurant-header.svelte';
 import RestaurantReviews from './components/restaurant-reviews.svelte';
 import AddReview from './components/add-review.svelte';
-import { render, mountComponent } from './lib/renderer';
+import { mountComponent } from './lib/renderer';
 import { getRestaurant, addRating } from './lib/firestore';
 
 
@@ -43,7 +43,6 @@ import { getRestaurant, addRating } from './lib/firestore';
 
    var that = this;
    firebase.auth().signInAnonymously().then(function() {
-     that.initTemplates();
      that.initRouter();
      that.initReviewDialog();
      that.initFilterDialog();
@@ -94,33 +93,6 @@ import { getRestaurant, addRating } from './lib/firestore';
  window.onload = function() {
    window.app = new FriendlyEats();
  };
-
- // ==== FriendlyEats.View.js
- /**
- * Copyright 2017 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-'use strict';
-
-FriendlyEats.prototype.initTemplates = function() {
-  this.templates = {};
-
-  var that = this;
-  document.querySelectorAll('.template').forEach(function(el) {
-    that.templates[el.getAttribute('id')] = el;
-  });
-};
 
 FriendlyEats.prototype.viewList = function() {
   mountComponent(document.querySelector('.header'), HeaderBase, {
@@ -196,14 +168,6 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
     .catch(err => {
       console.warn('Error rendering page', err);
     });
-};
-
-FriendlyEats.prototype.renderTemplate = function(id, data) {
-  var template = this.templates[id];
-  var el = template.cloneNode(true);
-  el.removeAttribute('hidden');
-  render(el, data);
-  return el;
 };
 
 FriendlyEats.prototype.rerender = function() {
