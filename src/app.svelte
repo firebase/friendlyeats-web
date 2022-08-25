@@ -5,6 +5,8 @@ import Index from "./routes/index.svelte";
 import Setup from "./routes/setup.svelte";
 import Restaurant from "./routes/restaurant.svelte";
 
+export let that = null;
+
 </script>
 
 <nav>
@@ -14,6 +16,6 @@ import Restaurant from "./routes/restaurant.svelte";
     <a href="/setup">Setup</a>
 </nav>
 
-<Route path="/"><Index/></Route>
-<Route path="/restaurant/:id"><Restaurant/></Route>
-<Route path="/setup"><Setup /></Route>
+<Route path="/"><Index {that}/></Route>
+<Route path="/restaurant/:id"><Restaurant {that}/></Route>
+<Route path="/setup"><Setup {that}/></Route>

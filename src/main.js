@@ -19,7 +19,6 @@
 import App from './app.svelte'; 
 import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
-import ListRestaurants from './components/list-restaurants.svelte';
 import FilterDialog from './components/filter-dialog.svelte';
 import RestaurantHeader from './components/restaurant-header.svelte';
 import RestaurantReviews from './components/restaurant-reviews.svelte';
@@ -56,7 +55,7 @@ import { getRestaurant, addRating } from './lib/firestore';
   * Initializes the router for the FriendlyEats app.
   */
  FriendlyEats.prototype.initRouter = function() {
-  mountComponent(document.querySelector('#app'), App);
+  mountComponent(document.querySelector('#app'), App, {that:this});
 
    firebase
      .firestore()
@@ -84,14 +83,6 @@ import { getRestaurant, addRating } from './lib/firestore';
  window.onload = function() {
    window.app = new FriendlyEats();
  };
-
-FriendlyEats.prototype.viewList = function() {
-  mountComponent(document.querySelector('.header'), HeaderBase, {
-    that: this,
-    filters: this.filters,
-  });
-  mountComponent(document.querySelector('main'), ListRestaurants, { that: this });
-};
 
 FriendlyEats.prototype.viewSetup = function() {
   var config = this.getFirebaseConfig();

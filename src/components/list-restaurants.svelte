@@ -10,7 +10,7 @@ const restaurants = getRestaurants(that.filters);
 let mainEl = null;
 
 onMount(() => {
-    var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
+    // var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
     toolbar.fixedAdjustElement = mainEl;
 
     mdc.autoInit();
