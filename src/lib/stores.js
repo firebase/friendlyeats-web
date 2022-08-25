@@ -1,32 +1,36 @@
-import { writable } from "svelte/store";
-import { getAllRestaurants, getFilteredRestaurants, getRestrantCount } from "./firestore";
+import { get, writable } from "svelte/store";
+import { getAllRestaurants, getFilteredRestaurants, getRestrantCount, getReviewsOfRestaurant } from "./firestore";
 
 
-export function getRestaurants(filters) {
-    let restaurants = [];
-    const store = writable(restaurants);
+function makeUpdater(store) {
+    return (snapshot) => {
+        let list = get(store);
 
-    const update = (snapshot) => {
         if (!snapshot.size) {
-            restaurants = [];
+            list = [];
         } else {
             snapshot.docChanges().forEach(function(change) {
                 const id = change.doc.id;
-                const found = restaurants.findIndex(doc => doc.id === id);
+                const found = list.findIndex(doc => doc.id === id);
                 if (change.type === 'removed') {
-                    restaurants.splice(found, 1);
+                    list.splice(found, 1);
                 } else {
                     if (found >= 0) {
-                        restaurants[found] = change.doc;
+                        list[found] = change.doc;
                     } else {
-                        restaurants.push(change.doc);
+                        list.push(change.doc);
                     }
                 }
             });
         }
 
-        store.set(restaurants);
+        store.set(list);
     };
+}
+
+export function getRestaurants(filters) {
+    const store = writable([]);
+    const updater = makeUpdater(store);
 
     if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
         getFilteredRestaurants({
@@ -34,10 +38,19 @@ export function getRestaurants(filters) {
             category: filters.category || 'Any',
             price: filters.price || 'Any',
             sort: filters.sort
-        }, update);
+        }, updater);
     } else {
-        getAllRestaurants(update);
+        getAllRestaurants(updater);
     }
+    
+    return { subscribe: store.subscribe };
+}
+
+export function getReviews(doc) {
+    const store = writable([]);
+    const updater = makeUpdater(store);
+
+    getReviewsOfRestaurant(doc, updater);
     
     return { subscribe: store.subscribe };
 }

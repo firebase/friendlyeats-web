@@ -83,8 +83,6 @@ FriendlyEats.prototype.initReviewDialog = function() {
       userName: 'Anonymous (Web)',
       timestamp: new Date(),
       userId: firebase.auth().currentUser.uid
-    }).then(function() {
-      that.rerender();
     });
   });
 };
@@ -96,8 +94,4 @@ FriendlyEats.prototype.initFilterDialog = function() {
   this.dialogs.filter = new mdc.dialog.MDCDialog(dialogEl);
 
   this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList() );
-};
-
-FriendlyEats.prototype.rerender = function() {
-  // this.router.navigate(document.location.pathname + '?' + new Date().getTime());
 };

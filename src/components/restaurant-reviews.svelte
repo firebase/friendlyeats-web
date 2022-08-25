@@ -1,34 +1,25 @@
 <script>
 
 import { addMockRatings } from '../lib/mock';
+import { getReviews } from '../lib/stores';
 import Rating from './rating.svelte';
 
-export let that;
-export let id;
-export let ratings;
+export let doc;
 
-let reviews = [];
-
-if (ratings.size) {
-    ratings.forEach(function(rating) {
-        var data = rating.data();
-        reviews.push(data);
-    });
-}
+const reviews = getReviews(doc);
 
 function add_mock_data() {
-    addMockRatings(id).then(function() {
-        that.rerender();
-    });
+    addMockRatings(doc.id);
 }
 
 </script>
 
-{#if ratings.size}
+{#if $reviews.length}
     <div id="main">
         <div id="message-cards-container" class="mdc-layout-grid">
             <div id="cards" class="mdc-layout-grid__inner">
-                {#each reviews as review}
+                {#each $reviews as doc}
+                    {@const review = doc.data()}
                     <div class="mdc-layout-grid__cell--span-12" id="review-card">
                         <div class="review max_width_600">
                             <div class="header">

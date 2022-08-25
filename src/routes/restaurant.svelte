@@ -3,7 +3,7 @@
 import { meta } from 'tinro';
 import RestaurantHeader from '../components/restaurant-header.svelte';
 import RestaurantReviews from '../components/restaurant-reviews.svelte';
-import { getRestaurant, getReviews } from '../lib/firestore';
+import { getRestaurant } from '../lib/firestore';
 
 export let that = null;
 
@@ -17,13 +17,9 @@ const id = route.params['id'];
     <div class="header">
         <RestaurantHeader {that} data={doc.data()}/>
     </div>
-    {#await getReviews(doc)} ... {:then ratings}
-        <main>
-            <RestaurantReviews {that} {id} {ratings} />
-        </main>
-        {:catch err}
-            Load error : {JSON.stringify(err)}
-        {/await}
+    <main>
+        <RestaurantReviews {doc} />
+    </main>
 {:catch err}
     Load error : {JSON.stringify(err)}
 {/await}

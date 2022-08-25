@@ -40,8 +40,8 @@ export function getRestaurant(id) {
     return firebase.firestore().collection('restaurants').doc(id).get();
 }
 
-export function getReviews(doc) {
-    return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
+export function getReviewsOfRestaurant(doc, update) {
+    return doc.ref.collection('ratings').orderBy('timestamp', 'desc').onSnapshot(update);
 }
 
 export function getFilteredRestaurants(filters, update) {
