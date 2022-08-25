@@ -26,11 +26,24 @@ export function getAllRestaurants(update) {
                             .limit(50)
                             .onSnapshot(update);
 }
-  
+
+export function getRestrantCount(update) {
+    return firebase.firestore()
+                            .collection('restaurants')
+                            .limit(1)
+                            .onSnapshot(snapshot => {
+                                update(snapshot.size);
+                            });
+}
+
 export function getRestaurant(id) {
     return firebase.firestore().collection('restaurants').doc(id).get();
 }
-  
+
+export function getReviews(doc) {
+    return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
+}
+
 export function getFilteredRestaurants(filters, update) {
     var query = firebase.firestore().collection('restaurants');
     

@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { getAllRestaurants, getFilteredRestaurants } from "./firestore";
+import { getAllRestaurants, getFilteredRestaurants, getRestrantCount } from "./firestore";
 
 
 export function getRestaurants(filters) {
@@ -39,5 +39,11 @@ export function getRestaurants(filters) {
         getAllRestaurants(update);
     }
     
+    return { subscribe: store.subscribe };
+}
+
+export function restrantIsEmpty() {
+    const store = writable(true);
+    getRestrantCount(count => store.set(!count));
     return { subscribe: store.subscribe };
 }

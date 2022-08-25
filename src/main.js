@@ -17,14 +17,10 @@
 'use strict';
 
 import App from './app.svelte'; 
-import HeaderBase from './components/header-base.svelte';
-import Setup from './components/setup.svelte';
 import FilterDialog from './components/filter-dialog.svelte';
-import RestaurantHeader from './components/restaurant-header.svelte';
-import RestaurantReviews from './components/restaurant-reviews.svelte';
 import AddReview from './components/add-review.svelte';
 import { mountComponent } from './lib/renderer';
-import { getRestaurant, addRating } from './lib/firestore';
+import { addRating } from './lib/firestore';
 
 
  /**
@@ -84,22 +80,6 @@ import { getRestaurant, addRating } from './lib/firestore';
    window.app = new FriendlyEats();
  };
 
-FriendlyEats.prototype.viewSetup = function() {
-  var config = this.getFirebaseConfig();
-  mountComponent(document.querySelector('main'), Setup, { that: this, config });
-  mountComponent(document.querySelector('.header'), HeaderBase);
-
-  firebase
-    .firestore()
-    .collection('restaurants')
-    .limit(1)
-    .onSnapshot(snapshot => {
-      if (snapshot.size && !this.addingMockData) {
-        // this.router.navigate('/');
-      }
-    });
-};
-
 FriendlyEats.prototype.initReviewDialog = function() {
   let values = {
     rating: 0,
@@ -133,23 +113,6 @@ FriendlyEats.prototype.initFilterDialog = function() {
   this.dialogs.filter = new mdc.dialog.MDCDialog(dialogEl);
 
   this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList() );
-};
-
-FriendlyEats.prototype.viewRestaurant = function(id) {
-  return getRestaurant(id)
-    .then(doc => {
-        mountComponent(document.querySelector('.header'), RestaurantHeader, { that: this, data: doc.data() });
-        return doc.ref.collection('ratings').orderBy('timestamp', 'desc').get();
-    })
-    .then(ratings => {
-      mountComponent(document.querySelector('main'), RestaurantReviews, { that: this, id, ratings})
-    })
-    .then(() => {
-      // this.router.updatePageLinks();
-    })
-    .catch(err => {
-      console.warn('Error rendering page', err);
-    });
 };
 
 FriendlyEats.prototype.rerender = function() {
