@@ -16,6 +16,7 @@
  */
 'use strict';
 
+import App from './app.svelte'; 
 import HeaderBase from './components/header-base.svelte';
 import Setup from './components/setup.svelte';
 import ListRestaurants from './components/list-restaurants.svelte';
@@ -55,17 +56,7 @@ import { getRestaurant, addRating } from './lib/firestore';
   * Initializes the router for the FriendlyEats app.
   */
  FriendlyEats.prototype.initRouter = function() {
-   this.router = new Navigo();
- 
-   this.router
-   .on({'/': () => this.viewList()})
-   .on({'/setup': () => this.viewSetup()})
-   .on({'/restaurants/*': () => {
-       var path = this.getCleanPath(document.location.pathname);
-       var id = path.split('/')[2];
-       this.viewRestaurant(id);
-    }})
-   .resolve();
+  mountComponent(document.querySelector('#app'), App);
 
    firebase
      .firestore()
@@ -73,7 +64,7 @@ import { getRestaurant, addRating } from './lib/firestore';
      .limit(1)
      .onSnapshot((snapshot) => {
        if (snapshot.empty) {
-         this.router.navigate('/setup');
+        //  this.router.navigate('/setup');
        }
      });
  };
@@ -113,7 +104,7 @@ FriendlyEats.prototype.viewSetup = function() {
     .limit(1)
     .onSnapshot(snapshot => {
       if (snapshot.size && !this.addingMockData) {
-        this.router.navigate('/');
+        // this.router.navigate('/');
       }
     });
 };
@@ -163,7 +154,7 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
       mountComponent(document.querySelector('main'), RestaurantReviews, { that: this, id, ratings})
     })
     .then(() => {
-      this.router.updatePageLinks();
+      // this.router.updatePageLinks();
     })
     .catch(err => {
       console.warn('Error rendering page', err);
@@ -171,5 +162,5 @@ FriendlyEats.prototype.viewRestaurant = function(id) {
 };
 
 FriendlyEats.prototype.rerender = function() {
-  this.router.navigate(document.location.pathname + '?' + new Date().getTime());
+  // this.router.navigate(document.location.pathname + '?' + new Date().getTime());
 };

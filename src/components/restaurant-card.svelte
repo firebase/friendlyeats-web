@@ -7,7 +7,7 @@ export let id = null;
 export let data = null;
 
 function clicked(event) {
-    that.router.navigate('/restaurants/' + id);
+    // that.router.navigate('/restaurants/' + id);
 }
 
 </script>
