@@ -16,7 +16,6 @@ function add(event) {
 
   addMockRestaurants().then(function() {
     that.addingMockData = false;
-    that.rerender();
   });
 }
 

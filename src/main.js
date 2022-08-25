@@ -39,30 +39,13 @@ import { addRating } from './lib/firestore';
 
    var that = this;
    firebase.auth().signInAnonymously().then(function() {
-     that.initRouter();
+     mountComponent(document.querySelector('#app'), App, {that});
      that.initReviewDialog();
      that.initFilterDialog();
    }).catch(function(err) {
      console.log(err);
    });
  }
- 
- /**
-  * Initializes the router for the FriendlyEats app.
-  */
- FriendlyEats.prototype.initRouter = function() {
-  mountComponent(document.querySelector('#app'), App, {that:this});
-
-   firebase
-     .firestore()
-     .collection('restaurants')
-     .limit(1)
-     .onSnapshot((snapshot) => {
-       if (snapshot.empty) {
-        //  this.router.navigate('/setup');
-       }
-     });
- };
  
  FriendlyEats.prototype.getCleanPath = function(dirtyPath) {
    if (dirtyPath.startsWith('/index.html')) {
