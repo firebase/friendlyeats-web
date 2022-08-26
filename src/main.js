@@ -35,7 +35,6 @@ import { addRating } from './lib/firestore';
    };
  
    this.dialogs = {};
-   this.addingMockData = false;
 
    var that = this;
    firebase.auth().signInAnonymously().then(function() {
@@ -55,14 +54,6 @@ import { addRating } from './lib/firestore';
    }
  };
  
- FriendlyEats.prototype.getFirebaseConfig = function() {
-   return firebase.app().options;
- };
- 
- window.onload = function() {
-   window.app = new FriendlyEats();
- };
-
 FriendlyEats.prototype.initReviewDialog = function() {
   let values = {
     rating: 0,
@@ -95,3 +86,5 @@ FriendlyEats.prototype.initFilterDialog = function() {
 
   this.dialogs.filter.listen('MDCDialog:accept', () => this.viewList() );
 };
+
+window.app = new FriendlyEats();
