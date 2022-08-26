@@ -12,11 +12,18 @@ onMount(() => {
     dialog.listen('MDCDialog:accept', () => dispatch('accept'));
     dialog.listen('MDCDialog:cancel', () => dispatch('cancel'));
 
-    dialog.show();
+    setTimeout(() => dialog.show(), 1);
 });
+
+function noop(node, params) {
+    return {
+        duration: 120,
+        tick() {}
+    };
+}
 
 </script>
 
-<aside class="mdc-dialog" bind:this={dialogEl}>
+<aside class="mdc-dialog" bind:this={dialogEl} out:noop>
     <slot/>
 </aside>
