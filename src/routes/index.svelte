@@ -3,28 +3,34 @@
 import HeaderBase from '../components/header-base.svelte';
 import ListRestaurants from '../components/list-restaurants.svelte';
 import FilterDialog from '../components/filter-dialog.svelte';
-import { mountComponent } from '../lib/renderer';
+import Dialog from '../components/dialog.svelte';
 
 export let that = null;
 
 let filters = that.filters;
+let filtersEditing;
+let dialogOpened = false;
 
 function showFilters(event) {
-    const filtersEditing = {...filters};
-    const dialogEl = document.createElement('aside');
-    dialogEl.classList.add("mdc-dialog");
-    mountComponent(dialogEl, FilterDialog, { filters: filtersEditing });
-    const dialog = new mdc.dialog.MDCDialog(dialogEl);
-    document.body.append(dialogEl);
+    filtersEditing = {...filters};
+    dialogOpened = true;
+}
 
-    dialog.listen('MDCDialog:accept', () => {
-        filters = {...filtersEditing};
-    });
+function onAccept(event) {
+    dialogOpened = false;
+    filters = {...filtersEditing};
+}
 
-    dialog.show();
+function onCancel(event) {
+    dialogOpened = false;
 }
 
 </script>
 
 <div class="header"><HeaderBase {filters} on:open-dialog={showFilters}/></div>
 <main><ListRestaurants {that} {filters}/></main>
+{#if dialogOpened}
+    <Dialog on:accept={onAccept} on:cancel={onCancel}>
+        <FilterDialog filters={filtersEditing}/>
+    </Dialog>
+{/if}
