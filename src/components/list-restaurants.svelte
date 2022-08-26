@@ -4,8 +4,9 @@ import { getRestaurants } from '../lib/stores';
 import RestaurantCard from "./restaurant-card.svelte";
 
 export let that = null;
+export let filters = {};
 
-const restaurants = getRestaurants(that.filters);
+$: restaurants = getRestaurants(filters);
 
 let mainEl = null;
 
