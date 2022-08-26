@@ -2,7 +2,6 @@
 
 import Rating from "./rating.svelte";
 
-export let that = null;
 export let id = null;
 export let data = null;
 

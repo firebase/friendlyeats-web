@@ -14,28 +14,20 @@ isEmpty.subscribe(isEmpty => {
     }
 });
 
-const initialFilters = {
+const filters = {
     city: '',
     price: '',
     category: '',
     sort: 'Rating'
 };
 
-class FriendlyEats {
-    constructor() {
-        this.filters = {...initialFilters};
-
-        firebase.auth().signInAnonymously().then(() => {
-        }).catch(function(err) {
-            console.log(err);
-        });
-    }
-};
-
-let that = new FriendlyEats();
+firebase.auth().signInAnonymously().then(() => {
+}).catch(function(err) {
+    console.log(err);
+});
 
 </script>
 
-<Route path="/"><Index {that}/></Route>
-<Route path="/restaurants/:id"><Restaurant {that}/></Route>
-<Route path="/setup"><Setup {that}/></Route>
+<Route path="/"><Index {filters}/></Route>
+<Route path="/restaurants/:id"><Restaurant/></Route>
+<Route path="/setup"><Setup/></Route>

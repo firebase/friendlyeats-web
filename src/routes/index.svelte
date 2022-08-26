@@ -5,9 +5,7 @@ import ListRestaurants from '../components/list-restaurants.svelte';
 import FilterDialog from '../components/filter-dialog.svelte';
 import Dialog from '../components/dialog.svelte';
 
-export let that = null;
-
-let filters = that.filters;
+export let filters = {};
 let filtersEditing;
 let dialogOpened = false;
 
@@ -23,7 +21,7 @@ function onAccept(event) {
 </script>
 
 <div class="header"><HeaderBase {filters} on:open-dialog={showFilters}/></div>
-<main><ListRestaurants {that} {filters}/></main>
+<main><ListRestaurants {filters}/></main>
 
 <Dialog bind:opened={dialogOpened} on:accept={onAccept}>
     <FilterDialog filters={filtersEditing}/>

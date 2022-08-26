@@ -7,8 +7,6 @@ import RestaurantReviews from '../components/restaurant-reviews.svelte';
 import { getRestaurant, addRating } from '../lib/firestore';
 import AddReview from '../components/add-review.svelte';
 
-export let that = null;
-
 const route = meta();
 const id = route.params['id'];
 
@@ -38,7 +36,7 @@ function onAccept(event) {
     Loading...
 {:then doc}
     <div class="header">
-        <RestaurantHeader {that} data={doc.data()} on:add={openReview}/>
+        <RestaurantHeader data={doc.data()} on:add={openReview}/>
     </div>
     <main>
         <RestaurantReviews {doc} />

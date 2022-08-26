@@ -3,7 +3,6 @@ import { onMount } from "svelte";
 import { getRestaurants } from '../lib/stores';
 import RestaurantCard from "./restaurant-card.svelte";
 
-export let that = null;
 export let filters = {};
 
 $: restaurants = getRestaurants(filters);
@@ -27,7 +26,7 @@ onMount(() => {
     {#if $restaurants.length}
         <div id="cards" class="mdc-layout-grid__inner">
             {#each $restaurants as doc(doc.id)}
-                <RestaurantCard {that} id={doc.id} data={doc.data()} />
+                <RestaurantCard id={doc.id} data={doc.data()} />
             {/each}
         </div>
     {:else}
