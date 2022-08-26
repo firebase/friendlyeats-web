@@ -1,29 +1,26 @@
 <script>
 
-import { createEventDispatcher, onMount } from 'svelte';
+import { createEventDispatcher } from 'svelte';
 
-let dialogEl;
+import DialogBase from "./dialog-base.svelte";
+export let opened = false;
 
 const dispatch = createEventDispatcher();
 
-onMount(() => {
-    const dialog = new mdc.dialog.MDCDialog(dialogEl);
+function onAccept() {
+    opened = false;
+    dispatch('accept');
+}
 
-    dialog.listen('MDCDialog:accept', () => dispatch('accept'));
-    dialog.listen('MDCDialog:cancel', () => dispatch('cancel'));
-
-    setTimeout(() => dialog.show(), 1);
-});
-
-function noop(node, params) {
-    return {
-        duration: 120,
-        tick() {}
-    };
+function onCancel(event) {
+    opened = false;
+    dispatch('cancel');
 }
 
 </script>
 
-<aside class="mdc-dialog" bind:this={dialogEl} out:noop>
-    <slot/>
-</aside>
+{#if opened}
+    <DialogBase on:accept={onAccept} on:cancel={onCancel}>
+        <slot/>
+    </DialogBase>
+{/if}

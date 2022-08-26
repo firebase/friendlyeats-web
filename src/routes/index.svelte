@@ -17,20 +17,14 @@ function showFilters(event) {
 }
 
 function onAccept(event) {
-    dialogOpened = false;
     filters = {...filtersEditing};
-}
-
-function onCancel(event) {
-    dialogOpened = false;
 }
 
 </script>
 
 <div class="header"><HeaderBase {filters} on:open-dialog={showFilters}/></div>
 <main><ListRestaurants {that} {filters}/></main>
-{#if dialogOpened}
-    <Dialog on:accept={onAccept} on:cancel={onCancel}>
-        <FilterDialog filters={filtersEditing}/>
-    </Dialog>
-{/if}
+
+<Dialog bind:opened={dialogOpened} on:accept={onAccept}>
+    <FilterDialog filters={filtersEditing}/>
+</Dialog>
