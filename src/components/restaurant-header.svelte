@@ -1,20 +1,10 @@
 <script>
-
+import { createEventDispatcher } from "svelte";
 import Rating from "./rating.svelte";
 
-export let that = null;
 export let data = {};
 
-function show_add_review() {
-    var dialog =  that.dialogs.add_review;
-    // Reset the state before showing the dialog
-    dialog.root_.querySelector('#text').value = '';
-    dialog.root_.querySelectorAll('.star-input i').forEach(function(el) {
-        el.innerText = 'star_border';
-    });
-
-    dialog.show();
-};
+const dispatch = createEventDispatcher();
 
 </script>
 <div id="restaurant-header">
@@ -35,7 +25,7 @@ function show_add_review() {
                     <span class="light">●</span>
                     <span>{data.city}</span>
                     </div>
-                    <button id="show-add-review" on:click={show_add_review} class="mdc-button fab">
+                    <button id="show-add-review" on:click={() => dispatch('add')} class="mdc-button fab">
                         <i class="material-icons">add</i>
                     </button>
                 </div>
