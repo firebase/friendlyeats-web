@@ -1,5 +1,6 @@
 <script>
 
+import { onMount } from 'svelte';
 import HeaderBase from '../components/header-base.svelte';
 import ListRestaurants from '../components/list-restaurants.svelte';
 import FilterDialog from '../components/filter-dialog.svelte';
@@ -17,6 +18,14 @@ function showFilters(event) {
 function onAccept(event) {
     filters = {...filtersEditing};
 }
+
+onMount(() => {
+    var toolbar = mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
+    toolbar.fixedAdjustElement = document.querySelector('#message-cards-container');
+
+    mdc.autoInit();
+});
+
 
 </script>
 

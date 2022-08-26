@@ -1,4 +1,5 @@
 <script>
+import { router } from "tinro";
 
 import Rating from "./rating.svelte";
 
@@ -6,13 +7,13 @@ export let id = null;
 export let data = null;
 
 function clicked(event) {
-    // that.router.navigate('/restaurants/' + id);
+    router.goto("/restaurants/" + id);
 }
 
 </script>
 
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-    <a class="location-card mdc-card mdc-shadow--2dp" href="/restaurants/{id}">
+    <div class="location-card mdc-card mdc-shadow--2dp" on:click={clicked} >
         <div class="mdc-card__title" style:background-image="url({data.photo})" />
         <div class="mdc-card__supporting-text">
             <h2>{data.name}</h2>
@@ -28,13 +29,5 @@ function clicked(event) {
                 <span class="info">{data.city}</span>
             </div>
         </div>
-    </a>
+    </div>
 </div>
-
-<style>
-
-a {
-    display: block;
-}
-
-</style>
