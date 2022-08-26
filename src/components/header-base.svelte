@@ -1,24 +1,11 @@
 <script>
-    import { descriptionForFilter} from '../lib/query';
-    import { mountComponent } from '../lib/renderer';
-    import { router } from 'tinro';
-    import FilterDialog from './filter-dialog.svelte';
+import { createEventDispatcher } from 'svelte';
 
-    export let filters = null;
+import { descriptionForFilter} from '../lib/query';
 
-    function showFilters() {
-        const dialogEl = document.createElement('aside');
-        dialogEl.classList.add("mdc-dialog");
-        mountComponent(dialogEl, FilterDialog, { filters });
-        const dialog = new mdc.dialog.MDCDialog(dialogEl);
-        document.body.append(dialogEl);
+export let filters = null;
 
-        dialog.listen('MDCDialog:accept', () => {
-            router.goto('/');
-        });
-
-        dialog.show();
-    }
+const dispatch = createEventDispatcher();
 
 </script>
 
@@ -31,7 +18,7 @@
     </div>
     {#if filters}
         <div id="filter" class="mdc-toolbar mdc-layout-grid">
-            <div id="show-filters" on:click={showFilters}>
+            <div id="show-filters" on:click={() => dispatch('open-dialog')}>
                 <div id="active-filters">
                     <i class="material-icons">filter_list</i>
                     You're seeing <b>{descriptionForFilter(filters)}</b>
