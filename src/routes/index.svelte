@@ -7,5 +7,5 @@ export let that = null;
 
 </script>
 
-<div class="header"><HeaderBase {that} filters={that.filters}/></div>
+<div class="header"><HeaderBase filters={that.filters}/></div>
 <main><ListRestaurants {that}/></main>

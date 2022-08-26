@@ -1,11 +1,23 @@
 <script>
     import { descriptionForFilter} from '../lib/query';
+    import { mountComponent } from '../lib/renderer';
+    import { router } from 'tinro';
+    import FilterDialog from './filter-dialog.svelte';
 
-    export let that = null;
     export let filters = null;
 
     function showFilters() {
-        that.dialogs.filter.show();
+        const dialogEl = document.createElement('aside');
+        dialogEl.classList.add("mdc-dialog");
+        mountComponent(dialogEl, FilterDialog, { filters });
+        const dialog = new mdc.dialog.MDCDialog(dialogEl);
+        document.body.append(dialogEl);
+
+        dialog.listen('MDCDialog:accept', () => {
+            router.goto('/');
+        });
+
+        dialog.show();
     }
 
 </script>
@@ -17,7 +29,7 @@
         <span class="mdc-toolbar__title">FriendlyEats</span>
     </section>
     </div>
-    {#if filters && that}
+    {#if filters}
         <div id="filter" class="mdc-toolbar mdc-layout-grid">
             <div id="show-filters" on:click={showFilters}>
                 <div id="active-filters">

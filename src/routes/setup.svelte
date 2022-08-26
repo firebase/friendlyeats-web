@@ -5,8 +5,6 @@ import { restrantIsEmpty } from '../lib/stores';
 import { router } from 'tinro';
 import { addMockRestaurants } from '../lib/mock';
 
-export let that = null;
-
 const isEmpty = restrantIsEmpty();
 isEmpty.subscribe(isEmpty => {
     if (isEmpty) {
@@ -29,7 +27,7 @@ function add(event) {
 
 </script>
 
-<div class="header"><HeaderBase {that}/></div>
+<div class="header"><HeaderBase/></div>
 <main>
     <div id="guy-container" class="mdc-toolbar-fixed-adjust">
         <img class="guy" src="/images/guy_fireats.png" alt=FireEats/>

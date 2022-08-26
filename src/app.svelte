@@ -4,7 +4,6 @@ import { Route } from 'tinro';
 import Index from "./routes/index.svelte";
 import Setup from "./routes/setup.svelte";
 import Restaurant from "./routes/restaurant.svelte";
-import FilterDialog from './components/filter-dialog.svelte';
 import AddReview from './components/add-review.svelte';
 import { mountComponent } from './lib/renderer';
 import { addRating } from './lib/firestore';
@@ -32,7 +31,6 @@ class FriendlyEats {
 
         firebase.auth().signInAnonymously().then(() => {
             this.initReviewDialog();
-            this.initFilterDialog();
         }).catch(function(err) {
             console.log(err);
         });
@@ -58,17 +56,6 @@ class FriendlyEats {
                 timestamp: new Date(),
                 userId: firebase.auth().currentUser.uid
             });
-        });
-    }
-
-    initFilterDialog() {
-        // TODO: Reset filter dialog to init state on close.
-        const dialogEl = document.querySelector('#dialog-filter-all');
-        mountComponent(dialogEl, FilterDialog, { filters: this.filters });
-        this.dialogs.filter = new mdc.dialog.MDCDialog(dialogEl);
-
-        this.dialogs.filter.listen('MDCDialog:accept', () => {
-            router.goto('/');
         });
     }
 };
