@@ -31,9 +31,16 @@ function makeUpdater(store) {
     };
 }
 
-export function getRestaurants(filters) {
+function makeLiveResultStore() {
     const store = writable(undefined);
-    const updater = makeUpdater(store);
+    return {
+        store: { subscribe: store.subscribe },
+        updater: makeUpdater(store),
+    };
+}
+
+export function getRestaurants(filters) {
+    const {store, updater} = makeLiveResultStore();
 
     if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
         getFilteredRestaurants({
@@ -46,16 +53,15 @@ export function getRestaurants(filters) {
         getAllRestaurants(updater);
     }
     
-    return { subscribe: store.subscribe };
+    return store;
 }
 
 export function getReviews(doc) {
-    const store = writable(undefined);
-    const updater = makeUpdater(store);
+    const {store, updater} = makeLiveResultStore();
 
     getReviewsOfRestaurant(doc, updater);
     
-    return { subscribe: store.subscribe };
+    return store;
 }
 
 export function restrantIsEmpty() {
