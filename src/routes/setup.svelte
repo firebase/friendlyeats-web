@@ -4,6 +4,7 @@ import HeaderBase from '../components/header-base.svelte';
 import { restrantIsEmpty } from '../lib/stores';
 import { router } from 'tinro';
 import { addMockRestaurants } from '../lib/mock';
+import Guy from '../components/guy.svelte';
 
 const isEmpty = restrantIsEmpty();
 isEmpty.subscribe(isEmpty => {
@@ -29,8 +30,7 @@ function add(event) {
 
 <div class="header"><HeaderBase/></div>
 <main>
-    <div id="guy-container" class="mdc-toolbar-fixed-adjust">
-        <img class="guy" src="/images/guy_fireats.png" alt=FireEats/>
+    <Guy says="">
         <div class="text">
         This app is connected to the Firebase project "<b data-fir-content="projectId">{config.projectId}</b>".<br />
         <br />
@@ -45,7 +45,7 @@ function add(event) {
                 Add mock data
             {/if}
         </a>
-    </div>
+    </Guy>
 </main>
 
 <style>

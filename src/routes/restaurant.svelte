@@ -6,6 +6,7 @@ import RestaurantHeader from '../components/restaurant-header.svelte';
 import RestaurantReviews from '../components/restaurant-reviews.svelte';
 import { getRestaurant, addRating } from '../lib/firestore';
 import AddReview from '../components/add-review.svelte';
+import Guy from '../components/guy.svelte';
 
 const route = meta();
 const id = route.params['id'];
@@ -33,7 +34,7 @@ function onAccept(event) {
 </script>
 
 {#await getRestaurant(id)}
-    Loading...
+    <Guy says="Loading restaurant..."/>
 {:then doc}
     <div class="header">
         <RestaurantHeader data={doc.data()} on:add={openReview}/>
@@ -42,7 +43,9 @@ function onAccept(event) {
         <RestaurantReviews {doc} />
     </main>
 {:catch err}
-    Load error : {JSON.stringify(err)}
+    <Guy says="Not found">
+        <pre>{JSON.stringify(err, null, 4)}</pre>
+    </Guy>
 {/await}
 
 <Dialog bind:opened={adding} on:accept={onAccept}>

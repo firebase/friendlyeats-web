@@ -2,6 +2,7 @@
 
 import { addMockRatings } from '../lib/mock';
 import { getReviews } from '../lib/stores';
+import Guy from './guy.svelte';
 import Rating from './rating.svelte';
 
 export let doc;
@@ -15,12 +16,7 @@ function add_mock_data() {
 </script>
 
 {#if $reviews === undefined}
-    <div id="no-ratings">
-        <div id="guy-container" class="mdc-toolbar-fixed-adjust">
-            <img class="guy" src="/images/guy_fireats.png" />
-            <div class="text">Loading reviews...</div>
-        </div>
-    </div>
+    <Guy says="Loading reviews..."/>
 {:else if $reviews.length}
     <div id="main">
         <div id="message-cards-container" class="mdc-layout-grid">
@@ -44,13 +40,16 @@ function add_mock_data() {
     </div>
 {:else}
     <div id="no-ratings">
-        <div id="guy-container" class="mdc-toolbar-fixed-adjust">
-            <img class="guy" src="/images/guy_fireats.png" />
-            <div class="text">
-                This restaurant has no ratings.<br />
-            </div>
-            <br />
+        <Guy says="This restaurant has no ratings.">
             <a class="mdc-button" on:click={add_mock_data}>Add mock ratings</a>
-        </div>
+        </Guy>
     </div>
 {/if}
+
+<style>
+
+a {
+    margin-top: 1em;
+}
+
+</style>

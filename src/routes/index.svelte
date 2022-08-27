@@ -7,6 +7,7 @@ import RestaurantCard from "../components/restaurant-card.svelte";
 import HeaderBase from '../components/header-base.svelte';
 import FilterDialog from '../components/filter-dialog.svelte';
 import Dialog from '../components/dialog.svelte';
+import Guy from '../components/guy.svelte';
 
 export let filters = {};
 
@@ -50,12 +51,7 @@ isEmpty.subscribe(isEmpty => {
 <main>
     <div id="message-cards-container" class="mdc-layout-grid mdc-toolbar-fixed-adjust">
         {#if $restaurants === undefined}
-            <div id="guy-container" class="mdc-toolbar-fixed-adjust">
-                <img class="guy" src="/images/guy_fireats.png" />
-                <div class="text">
-                    Loading...
-                </div>
-            </div>
+            <Guy says="Loading..."/>
         {:else if $restaurants.length}
             <div id="cards" class="mdc-layout-grid__inner">
                 {#each $restaurants as doc(doc.id)}
@@ -64,12 +60,7 @@ isEmpty.subscribe(isEmpty => {
             </div>
         {:else}
             <div id="no-results">
-                <div id="guy-container" class="mdc-toolbar-fixed-adjust">
-                    <img class="guy" src="/images/guy_fireats.png" />
-                    <div class="text">
-                        There are no results for your those filters!
-                    </div>
-                </div>
+                <Guy says="There are no results for your those filters!"/>
             </div>
         {/if}
     </div>
