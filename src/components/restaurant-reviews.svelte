@@ -14,7 +14,14 @@ function add_mock_data() {
 
 </script>
 
-{#if $reviews.length}
+{#if $reviews === undefined}
+    <div id="no-ratings">
+        <div id="guy-container" class="mdc-toolbar-fixed-adjust">
+            <img class="guy" src="/images/guy_fireats.png" />
+            <div class="text">Loading reviews...</div>
+        </div>
+    </div>
+{:else if $reviews.length}
     <div id="main">
         <div id="message-cards-container" class="mdc-layout-grid">
             <div id="cards" class="mdc-layout-grid__inner">

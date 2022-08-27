@@ -49,7 +49,14 @@ isEmpty.subscribe(isEmpty => {
 <div class="header"><HeaderBase {filters} on:open-dialog={showFilters}/></div>
 <main>
     <div id="message-cards-container" class="mdc-layout-grid mdc-toolbar-fixed-adjust">
-        {#if $restaurants.length}
+        {#if $restaurants === undefined}
+            <div id="guy-container" class="mdc-toolbar-fixed-adjust">
+                <img class="guy" src="/images/guy_fireats.png" />
+                <div class="text">
+                    Loading...
+                </div>
+            </div>
+        {:else if $restaurants.length}
             <div id="cards" class="mdc-layout-grid__inner">
                 {#each $restaurants as doc(doc.id)}
                     <RestaurantCard id={doc.id} data={doc.data()} />

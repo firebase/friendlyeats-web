@@ -9,6 +9,9 @@ function makeUpdater(store) {
         if (!snapshot.size) {
             list = [];
         } else {
+            if (list === undefined) {
+                list = [];
+            }
             snapshot.docChanges().forEach(function(change) {
                 const id = change.doc.id;
                 const found = list.findIndex(doc => doc.id === id);
@@ -29,7 +32,7 @@ function makeUpdater(store) {
 }
 
 export function getRestaurants(filters) {
-    const store = writable([]);
+    const store = writable(undefined);
     const updater = makeUpdater(store);
 
     if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
@@ -47,7 +50,7 @@ export function getRestaurants(filters) {
 }
 
 export function getReviews(doc) {
-    const store = writable([]);
+    const store = writable(undefined);
     const updater = makeUpdater(store);
 
     getReviewsOfRestaurant(doc, updater);
