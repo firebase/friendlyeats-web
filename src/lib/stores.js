@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import { getAllRestaurants, getFilteredRestaurants, getRestrantCount, getReviewsOfRestaurant } from "./firestore";
+import { allRestaurantsQuery, filteredRestaurantsQuery, getRestrantCount, restaurantReviewsQuery } from "./firestore";
 
 
 function makeUpdater(store) {
@@ -31,37 +31,40 @@ function makeUpdater(store) {
     };
 }
 
-function makeLiveResultStore() {
-    const store = writable(undefined);
-    return {
-        store: { subscribe: store.subscribe },
-        updater: makeUpdater(store),
-    };
+function generateSnapshotStore(query) {
+    const store = writable(undefined, () => {
+        // Got a first subscriber. Start listening
+        const updater = makeUpdater(store);
+        const finish = query.onSnapshot(updater);
+        return () => {
+            // No more subscriber. Stop listening
+            finish();
+        };
+    });
+
+    return { subscribe: store.subscribe };
 }
 
 export function getRestaurants(filters) {
-    const {store, updater} = makeLiveResultStore();
+    let query;
 
     if (filters.city || filters.category || filters.price || filters.sort !== 'Rating' ) {
-        getFilteredRestaurants({
+        query = filteredRestaurantsQuery({
             city: filters.city || 'Any',
             category: filters.category || 'Any',
             price: filters.price || 'Any',
             sort: filters.sort
-        }, updater);
+        });
     } else {
-        getAllRestaurants(updater);
+        query = allRestaurantsQuery();
     }
     
-    return store;
+    return generateSnapshotStore(query);
 }
 
 export function getReviews(doc) {
-    const {store, updater} = makeLiveResultStore();
-
-    getReviewsOfRestaurant(doc, updater);
-    
-    return store;
+    const query = restaurantReviewsQuery(doc);
+    return generateSnapshotStore(query)
 }
 
 export function restrantIsEmpty() {

@@ -19,12 +19,11 @@ export function addRestaurant(data) {
     return collection.add(data);
 }
   
-export function getAllRestaurants(update) {
+export function allRestaurantsQuery() {
     return firebase.firestore()
                             .collection('restaurants')
                             .orderBy('avgRating', 'desc')
-                            .limit(50)
-                            .onSnapshot(update);
+                            .limit(50);
 }
 
 export function getRestrantCount(update) {
@@ -40,11 +39,11 @@ export function getRestaurant(id) {
     return firebase.firestore().collection('restaurants').doc(id).get();
 }
 
-export function getReviewsOfRestaurant(doc, update) {
-    return doc.ref.collection('ratings').orderBy('timestamp', 'desc').onSnapshot(update);
+export function restaurantReviewsQuery(doc) {
+    return doc.ref.collection('ratings').orderBy('timestamp', 'desc');
 }
 
-export function getFilteredRestaurants(filters, update) {
+export function filteredRestaurantsQuery(filters) {
     var query = firebase.firestore().collection('restaurants');
     
     if (filters.category !== 'Any') {
@@ -65,7 +64,7 @@ export function getFilteredRestaurants(filters, update) {
         query = query.orderBy('numRatings', 'desc');
     }
     
-    query.onSnapshot(update);
+    return query;
 }
   
 export function addRating(restaurantID, rating) {
