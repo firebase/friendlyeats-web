@@ -56,7 +56,7 @@ export function getReviews(doc) {
 }
 
 export function restrantIsEmpty() {
-    const store = writable(true);
+    const store = writable(undefined);
     getRestrantCount(count => store.set(!count));
     return { subscribe: store.subscribe };
 }

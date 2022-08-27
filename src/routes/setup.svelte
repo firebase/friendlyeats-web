@@ -7,7 +7,7 @@ import { addMockRestaurants } from '../lib/mock';
 
 const isEmpty = restrantIsEmpty();
 isEmpty.subscribe(isEmpty => {
-    if (isEmpty) {
+    if (isEmpty !== undefined && !isEmpty) {
         router.goto('/');
     }
 });

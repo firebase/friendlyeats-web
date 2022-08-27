@@ -1,6 +1,8 @@
 <script>
 
 import { onMount } from 'svelte';
+import { restrantIsEmpty } from '../lib/stores';
+import { router } from 'tinro';
 import HeaderBase from '../components/header-base.svelte';
 import ListRestaurants from '../components/list-restaurants.svelte';
 import FilterDialog from '../components/filter-dialog.svelte';
@@ -26,6 +28,12 @@ onMount(() => {
     mdc.autoInit();
 });
 
+const isEmpty = restrantIsEmpty();
+isEmpty.subscribe(isEmpty => {
+    if (isEmpty) {
+        router.goto('/setup');
+    }
+});
 
 </script>
 
