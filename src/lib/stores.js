@@ -6,26 +6,31 @@ function makeUpdater(store) {
     return (snapshot) => {
         let list = get(store);
 
-        if (!snapshot.size) {
+        if (list === undefined) {
             list = [];
-        } else {
-            if (list === undefined) {
-                list = [];
-            }
-            snapshot.docChanges().forEach(function(change) {
-                const id = change.doc.id;
-                const found = list.findIndex(doc => doc.id === id);
-                if (change.type === 'removed') {
-                    list.splice(found, 1);
-                } else {
-                    if (found >= 0) {
-                        list[found] = change.doc;
-                    } else {
-                        list.push(change.doc);
-                    }
-                }
-            });
         }
+
+        snapshot.docChanges().forEach(({ type, doc, newIndex, oldIndex }) => {
+            switch (type) {
+                case 'added':
+                    if (newIndex >= list.length) {
+                        list.push(doc);
+                    } else {
+                        list.splice(newIndex, 0, doc);
+                    }
+                    break;
+
+                case 'modified':
+                    console.log({ type, doc, newIndex, oldIndex });
+                    list.splice(oldIndex, 1);
+                    list.splice(newIndex, 0, doc);
+                    break;
+
+                case 'removed':
+                    list.splice(oldIndex, 1);
+                    break;
+            }
+        });
 
         store.set(list);
     };
