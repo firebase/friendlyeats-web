@@ -14,37 +14,30 @@
  * limitations under the License.
  */
 
+export function restaurants() {
+    return firebase.firestore().collection('restaurants');
+}
+
 export function addRestaurant(data) {
-    var collection = firebase.firestore().collection('restaurants');
-    return collection.add(data);
+    return restaurants().add(data);
 }
   
 export function allRestaurantsQuery() {
-    return firebase.firestore()
-                            .collection('restaurants')
-                            .orderBy('avgRating', 'desc')
-                            .limit(50);
+    return restaurants().orderBy('avgRating', 'desc').limit(50);
 }
 
 export function getRestrantCount(update) {
-    return firebase.firestore()
-                            .collection('restaurants')
-                            .limit(1)
-                            .onSnapshot(snapshot => {
-                                update(snapshot.size);
-                            });
+    return restaurants().limit(1).onSnapshot(snapshot => {
+        update(snapshot.size);
+    });
 }
 
 export function getRestaurant(id) {
-    return firebase.firestore().collection('restaurants').doc(id).get();
-}
-
-export function restaurantReviewsQuery(doc) {
-    return doc.ref.collection('ratings').orderBy('timestamp', 'desc');
+    return restaurants().doc(id).get();
 }
 
 export function filteredRestaurantsQuery(filters) {
-    var query = firebase.firestore().collection('restaurants');
+    var query = restaurants();
     
     if (filters.category !== 'Any') {
         query = query.where('category', '==', filters.category);
@@ -66,26 +59,31 @@ export function filteredRestaurantsQuery(filters) {
     
     return query;
 }
-  
+
+export function restaurantRaitings(doc) {
+    return doc.ref.collection('ratings');
+}
+
+export function restaurantReviewsQuery(doc) {
+    return restaurantRaitings(doc).orderBy('timestamp', 'desc');
+}
+
 export function addRating(restaurantID, rating) {
-    var collection = firebase.firestore().collection('restaurants');
-    var document = collection.doc(restaurantID);
-    var newRatingDocument = document.collection('ratings').doc();
-    console.log(rating);
+    var restrantDoc = restaurants().doc(restaurantID);
+    const newDoc = restaurantRaitings(doc).doc();
 
-    return firebase.firestore().runTransaction(function(transaction) {
-        return transaction.get(document).then(function(doc) {
-            var data = doc.data();
+    firebase.firestore().runTransaction(async (transaction) => {
+        transaction.set(newDoc, rating);
+        const doc = await transaction.get(restrantDoc);
+        var data = doc.data();
 
-            var newAverage =
-                (data.numRatings * data.avgRating + rating.rating) /
-                (data.numRatings + 1);
+        var newAverage =
+            (data.numRatings * data.avgRating + rating.rating) /
+            (data.numRatings + 1);
 
-            transaction.update(document, {
-                numRatings: data.numRatings + 1,
-                avgRating: newAverage
-            });
-            return transaction.set(newRatingDocument, rating);
+        transaction.update(restrantDoc, {
+            numRatings: data.numRatings + 1,
+            avgRating: newAverage
         });
     });
 }

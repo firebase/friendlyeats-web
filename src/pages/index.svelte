@@ -9,7 +9,17 @@ import FilterDialog from '../components/filter-dialog.svelte';
 import Dialog from '../components/dialog.svelte';
 import Guy from '../components/guy.svelte';
 
-export let filters = {};
+const filters = {
+    city: '',
+    price: '',
+    category: '',
+    sort: 'Rating'
+};
+
+firebase.auth().signInAnonymously().then(() => {
+}).catch(function(err) {
+    console.log(err);
+});
 
 $: restaurants = getRestaurants(filters);
 
