@@ -1,7 +1,7 @@
 {
   "hosting": {
     "predeploy": "yarn build",
-    "public": "./public",
+    "public": "./static",
     "ignore": [
     ],
     "headers": [
@@ -18,7 +18,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/fallback.html"
       }
     ]
   },
