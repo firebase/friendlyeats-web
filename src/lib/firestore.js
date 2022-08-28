@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { db }  from './firebase';
-import { collection, runTransaction, where, orderBy, limit, query, onSnapshot } from 'firebase/firestore';
+import { collection, runTransaction, where, orderBy, limit, query, onSnapshot, doc, getDoc } from 'firebase/firestore';
 
 export function restaurants() {
     return collection(db, 'restaurants');
@@ -34,7 +34,7 @@ export function getRestrantCount(update) {
 }
 
 export function getRestaurant(id) {
-    return restaurants().doc(id).get();
+    return getDoc(doc(restaurants(), id));
 }
 
 export function filteredRestaurantsQuery(filters) {
@@ -62,11 +62,11 @@ export function filteredRestaurantsQuery(filters) {
 }
 
 export function restaurantRaitings(doc) {
-    return doc.ref.collection('ratings');
+    return collection(doc.ref, 'ratings');
 }
 
 export function restaurantReviewsQuery(doc) {
-    return restaurantRaitings(doc).orderBy('timestamp', 'desc');
+    return query(restaurantRaitings(doc), orderBy('timestamp', 'desc'));
 }
 
 export function addRating(restaurantID, rating) {
