@@ -2,3 +2,10 @@
 firebase-debug.log
 /node_modules/
 yarn-error.log
+.DS_Store
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
