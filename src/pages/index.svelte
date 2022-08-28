@@ -8,18 +8,17 @@ import HeaderBase from '../components/header-base.svelte';
 import FilterDialog from '../components/filter-dialog.svelte';
 import Dialog from '../components/dialog.svelte';
 import Guy from '../components/guy.svelte';
+import { auth } from '../lib/firebase';
+import { signInAnonymously } from "firebase/auth";
 
-const filters = {
+let filters = {
     city: '',
     price: '',
     category: '',
     sort: 'Rating'
 };
 
-firebase.auth().signInAnonymously().then(() => {
-}).catch(function(err) {
-    console.log(err);
-});
+signInAnonymously(auth).catch(err => console.log(err));
 
 $: restaurants = getRestaurants(filters);
 

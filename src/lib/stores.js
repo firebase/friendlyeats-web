@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store";
 import { allRestaurantsQuery, filteredRestaurantsQuery, getRestrantCount, restaurantReviewsQuery } from "./firestore";
+import { onSnapshot } from 'firebase/firestore';
 
 
 function makeUpdater(store) {
@@ -40,7 +41,7 @@ function generateSnapshotStore(query) {
     const store = writable(undefined, () => {
         // Got a first subscriber. Start listening
         const updater = makeUpdater(store);
-        const finish = query.onSnapshot(updater);
+        const finish = onSnapshot(query, updater);
         return () => {
             // No more subscriber. Stop listening
             finish();

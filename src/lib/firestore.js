@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { db }  from './firebase';
+import { collection, runTransaction, where, orderBy, limit, query, onSnapshot } from 'firebase/firestore';
 
 export function restaurants() {
-    return firebase.firestore().collection('restaurants');
+    return collection(db, 'restaurants');
 }
 
 export function addRestaurant(data) {
@@ -23,13 +25,12 @@ export function addRestaurant(data) {
 }
   
 export function allRestaurantsQuery() {
-    return restaurants().orderBy('avgRating', 'desc').limit(50);
+    return query(restaurants(), orderBy('avgRating', 'desc'), limit(50));
 }
 
 export function getRestrantCount(update) {
-    return restaurants().limit(1).onSnapshot(snapshot => {
-        update(snapshot.size);
-    });
+    const q = query(restaurants(), limit(1));
+    return onSnapshot(q, snapshot => update(snapshot.size));
 }
 
 export function getRestaurant(id) {
@@ -37,27 +38,27 @@ export function getRestaurant(id) {
 }
 
 export function filteredRestaurantsQuery(filters) {
-    var query = restaurants();
+    const conditions = [];
     
     if (filters.category !== 'Any') {
-        query = query.where('category', '==', filters.category);
+        conditions.push(where('category', '==', filters.category));
     }
     
     if (filters.city !== 'Any') {
-        query = query.where('city', '==', filters.city);
+        conditions.push(where('city', '==', filters.city));
     }
     
     if (filters.price !== 'Any') {
-        query = query.where('price', '==', filters.price.length);
+        conditions.push(where('price', '==', filters.price.length));
     }
     
     if (filters.sort === 'Rating') {
-        query = query.orderBy('avgRating', 'desc');
+        conditions.push(orderBy('avgRating', 'desc'));
     } else if (filters.sort === 'Reviews') {
-        query = query.orderBy('numRatings', 'desc');
+        conditions.push(orderBy('numRatings', 'desc'));
     }
     
-    return query;
+    return query(restaurants(), ...conditions);
 }
 
 export function restaurantRaitings(doc) {
@@ -72,7 +73,7 @@ export function addRating(restaurantID, rating) {
     var restrantDoc = restaurants().doc(restaurantID);
     const newDoc = restaurantRaitings(doc).doc();
 
-    firebase.firestore().runTransaction(async (transaction) => {
+    runTransaction(db, async (transaction) => {
         transaction.set(newDoc, rating);
         const doc = await transaction.get(restrantDoc);
         var data = doc.data();
