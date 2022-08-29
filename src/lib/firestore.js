@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 import { db }  from './firebase';
-import { collection, runTransaction, where, orderBy, limit, query, onSnapshot, doc, getDoc } from 'firebase/firestore';
+import { collection, runTransaction, where, orderBy, limit, query, onSnapshot, doc, getDoc, addDoc } from 'firebase/firestore';
 
 export function restaurants() {
     return collection(db, 'restaurants');
 }
 
 export function addRestaurant(data) {
-    return restaurants().add(data);
+    return addDoc(restaurants(), data);
 }
   
 export function allRestaurantsQuery() {
@@ -61,30 +61,30 @@ export function filteredRestaurantsQuery(filters) {
     return query(restaurants(), ...conditions);
 }
 
-export function restaurantRaitings(doc) {
-    return collection(doc.ref, 'ratings');
+export function restaurantRaitings(ref) {
+    return collection(ref, 'ratings');
 }
 
 export function restaurantReviewsQuery(doc) {
-    return query(restaurantRaitings(doc), orderBy('timestamp', 'desc'));
+    return query(restaurantRaitings(doc.ref), orderBy('timestamp', 'desc'));
 }
 
 export function addRating(restaurantID, rating) {
-    var restrantDoc = restaurants().doc(restaurantID);
-    const newDoc = restaurantRaitings(doc).doc();
+    var restrantRef = doc(restaurants(), restaurantID);
+    const newDoc = doc(restaurantRaitings(restrantRef));
 
     runTransaction(db, async (transaction) => {
-        transaction.set(newDoc, rating);
-        const doc = await transaction.get(restrantDoc);
+        const doc = await transaction.get(restrantRef);
         var data = doc.data();
 
         var newAverage =
             (data.numRatings * data.avgRating + rating.rating) /
             (data.numRatings + 1);
 
-        transaction.update(restrantDoc, {
+        transaction.update(restrantRef, {
             numRatings: data.numRatings + 1,
             avgRating: newAverage
         });
+        transaction.set(newDoc, rating);
     });
 }

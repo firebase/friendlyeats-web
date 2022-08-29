@@ -5,6 +5,7 @@ import { restrantIsEmpty } from '../lib/stores';
 import { router } from 'tinro';
 import { addMockRestaurants } from '../lib/mock';
 import Guy from '../components/guy.svelte';
+import { config } from '../lib/firebase';
 
 const isEmpty = restrantIsEmpty();
 isEmpty.subscribe(isEmpty => {
@@ -12,8 +13,6 @@ isEmpty.subscribe(isEmpty => {
         router.goto('/');
     }
 });
-
-const config = firebase.app().options;
 
 let adding = false;
 

@@ -4,7 +4,7 @@ import { getAuth } from "firebase/auth";
 
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const config = {
     apiKey: "AIzaSyDc3tDcHi7BPUuzIRDnSMTaDpeh6T6M_-0",
     authDomain: "friendlyeats-7ebaa.firebaseapp.com",
     projectId: "friendlyeats-7ebaa",
@@ -14,6 +14,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+export const app = initializeApp(config);
 export const db = getFirestore(app);
 export const auth = getAuth(app);

@@ -7,6 +7,7 @@ import RestaurantReviews from '../components/restaurant-reviews.svelte';
 import { getRestaurant, addRating } from '../lib/firestore';
 import AddReview from '../components/add-review.svelte';
 import Guy from '../components/guy.svelte';
+import { auth } from '../lib/firebase';
 
 const route = meta();
 const id = route.params['id'];
@@ -27,7 +28,7 @@ function onAccept(event) {
         ...values,
         userName: 'Anonymous (Web)',
         timestamp: new Date(),
-        userId: firebase.auth().currentUser.uid
+        userId: auth.currentUser.uid
     });
 }
 

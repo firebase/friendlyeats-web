@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-import { addRestaurant, addRating } from "./firestore";
+ import { auth } from "./firebase";
+ import { addRestaurant, addRating } from "./firestore";
 import { words, categories, cities, ratings } from "./data";
 
 function getRandomItem(arr) {
@@ -70,8 +71,8 @@ export function addMockRatings(restaurantID) {
         ];
         rating.userName = 'Bot (Web)';
         rating.timestamp = new Date();
-        rating.userId = firebase.auth().currentUser.uid;
-    ratingPromises.push(addRating(restaurantID, rating));
+        rating.userId = auth.currentUser.uid;
+        ratingPromises.push(addRating(restaurantID, rating));
     }
     return Promise.all(ratingPromises);
 }
