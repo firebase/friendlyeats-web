@@ -1,0 +1,37 @@
+[debug] [2022-08-29T17:45:24.888Z] ----------------------------------------------------------------------
+[debug] [2022-08-29T17:45:24.888Z] Command:       /opt/homebrew/Cellar/node/18.8.0/bin/node /opt/homebrew/bin/firebase emulators:start --only hosting
+[debug] [2022-08-29T17:45:24.889Z] CLI Version:   11.8.0
+[debug] [2022-08-29T17:45:24.889Z] Platform:      darwin
+[debug] [2022-08-29T17:45:24.889Z] Node Version:  v18.8.0
+[debug] [2022-08-29T17:45:24.890Z] Time:          Mon Aug 29 2022 13:45:24 GMT-0400 (Eastern Daylight Time)
+[debug] [2022-08-29T17:45:24.890Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-08-29T17:45:24.933Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-08-29T17:45:24.933Z] > authorizing via signed-in user (nathanielarfin@gmail.com)
+[info] i  emulators: Starting emulators: hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: hosting"}}
+[debug] [2022-08-29T17:45:24.942Z] [hub] writing locator at /var/folders/f3/n5tk3w792px0vctvqjytc6t00000gn/T/hub-friendly-eats-nja.json
+[warn] ⚠  hosting: Port 6000 is restricted by some web browsers, including Chrome. You may want to choose a different port such as 6001. {"metadata":{"emulator":{"name":"hosting"},"message":"Port 6000 is restricted by some web browsers, including Chrome. You may want to choose a different port such as 6001."}}
+[debug] [2022-08-29T17:45:24.950Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/friendly-eats-nja/sites 
+[debug] [2022-08-29T17:45:25.737Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/friendly-eats-nja/sites 200
+[debug] [2022-08-29T17:45:25.737Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/friendly-eats-nja/sites {"sites":[{"name":"projects/friendly-eats-nja/sites/friendly-eats-nja","defaultUrl":"https://friendly-eats-nja.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2022-08-29T17:45:25.738Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/friendly-eats-nja/webApps/-/config [none]
+[debug] [2022-08-29T17:45:26.176Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/friendly-eats-nja/webApps/-/config 200
+[debug] [2022-08-29T17:45:26.177Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/friendly-eats-nja/webApps/-/config {"projectId":"friendly-eats-nja","storageBucket":"friendly-eats-nja.appspot.com","locationId":"northamerica-northeast1","apiKey":"AIzaSyCNiPyPbIWTRgzYEl4vxWcxKJsu5PdUHH8","authDomain":"friendly-eats-nja.firebaseapp.com","messagingSenderId":"1092595843621"}
+[info] i  hosting: Serving hosting files from: ./ {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1m./\u001b[22m"}}
+[info] ✔  hosting: Local server: http://localhost:6000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:6000\u001b[22m\u001b[24m"}}
+[warn] ⚠  emulators: The Emulator UI is not starting, either because none of the emulated products have an interaction layer in Emulator UI or it cannot determine the Project ID. Pass the --project flag to specify a project. {"metadata":{"emulator":{"name":"hub"},"message":"The Emulator UI is not starting, either because none of the emulated products have an interaction layer in Emulator UI or it cannot determine the Project ID. Pass the --project flag to specify a project."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────┬────────────────┐
+│ Emulator │ Host:Port      │
+├──────────┼────────────────┤
+│ Hosting  │ localhost:6000 │
+└──────────┴────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

@@ -28,5 +28,16 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "firestore": {
+      "port": 8080
+    },
+    "hosting": {
+      "port": 6000
+    },
+    "ui": {
+      "enabled": true
+    }
   }
 }
