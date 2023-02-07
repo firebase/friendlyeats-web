@@ -1,0 +1,15 @@
+{
+  "name": "fireats",
+  "version": "0.0.0",
+  "description": "Starting point for the Cloud Firestore codelab",
+  "main": ".",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fmt": "prettier --write scripts/* styles/*"
+  },
+  "author": "",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "prettier": "^1.5.3"
+  }
+}
