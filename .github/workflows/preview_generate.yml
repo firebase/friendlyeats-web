@@ -14,7 +14,7 @@ jobs:
       - name: Generate preview
         working-directory: ./steps
         run: |
-          go get github.com/googlecodelabs/tools/claat
+          go install github.com/googlecodelabs/tools/claat@latest
           $HOME/go/bin/claat export index.lab.md
       - name: Save PR number
         run: |
