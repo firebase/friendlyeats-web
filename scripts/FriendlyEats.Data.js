@@ -13,40 +13,74 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
-FriendlyEats.prototype.addRestaurant = function(data) {
-  /*
-    TODO: Implement adding a document
-  */
-};
+import {
+  onSnapshot,
+  collection,
+  getFirestore,
+  query,
+  limit,
+  addDoc,
+  orderBy,
+  doc,
+  getDoc,
+  getDocs,
+  where,
+  runTransaction
+} from "firebase/firestore";
 
-FriendlyEats.prototype.getAllRestaurants = function(renderer) {
-  /*
-    TODO: Retrieve list of restaurants
-  */
-};
+export class Data {
+  constructor({ firebaseApp }) {
+    this.db = getFirestore(firebaseApp);
+  }
 
-FriendlyEats.prototype.getDocumentsInQuery = function(query, renderer) {
-  /*
-    TODO: Render all documents in the provided query
-  */
-};
+  addRestaurant(data) {
+    /*
+      TODO: Implement adding a document
+    */
+  }
 
-FriendlyEats.prototype.getRestaurant = function(id) {
-  /*
-    TODO: Retrieve a single restaurant
-  */
-};
+  getAllRestaurants(renderer) {
+    /*
+      TODO: Retrieve list of restaurants
+    */
+  }
 
-FriendlyEats.prototype.getFilteredRestaurants = function(filters, renderer) {
-  /*
-    TODO: Retrieve filtered list of restaurants
-  */
-};
+  getDocumentsInQuery(restaurantsQuery, renderer) {
+    /*
+      TODO: Render all documents in the provided query
+    */
+  }
 
-FriendlyEats.prototype.addRating = function(restaurantID, rating) {
-  /*
-    TODO: Retrieve add a rating to a restaurant
-  */
-};
+  async getRestaurant(id) {
+    /*
+      TODO: Retrieve a single restaurant
+    */
+  }
+
+  async getRestaurantRatings(doc) {
+    /*
+      TODO: Retrieve a restaurant's ratings
+    */
+  }
+
+  getFilteredRestaurants(filters, renderer) {
+    /*
+      TODO: Retrieve filtered list of restaurants
+    */
+  }
+
+  async addRating(restaurantID, rating) {
+    /*
+      TODO: Retrieve add a rating to a restaurant
+    */
+  }
+
+  checkForEmpty(callback) {
+    const restaurantsCol = collection(this.db, "restaurants");
+    const restaurantsQuery = query(restaurantsCol, limit(1));
+    onSnapshot(restaurantsQuery, snapshot => {
+      callback(snapshot);
+    });
+  }
+}

@@ -24,7 +24,7 @@
   <link rel="icon" href="images/favicon.ico">
 
   <!-- Web Application Manifest -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -219,6 +219,7 @@
     </li>
     <li id="show-page-sort" class="mdc-list-item" data-mdc-auto-init="MDCRipple">
       <i class="material-icons">sort</i>
+      <span data-fir-if-not="sort">Sort by</span>
       <b data-fir-content="sort"></b>
     </li>
   </ul>
@@ -349,16 +350,8 @@
   </aside>
 </div>
 
-<script src="/__/firebase/9.6.6/firebase-app-compat.js"></script>
-<script src="/__/firebase/9.6.6/firebase-auth-compat.js"></script>
-<script src="/__/firebase/9.6.6/firebase-firestore-compat.js"></script>
-<script src="/__/firebase/init.js"></script>
-
 <script src="//unpkg.com/navigo@6"></script>
 
-<script src="/scripts/FriendlyEats.js"></script>
-<script src="/scripts/FriendlyEats.View.js"></script>
-<script src="/scripts/FriendlyEats.Mock.js"></script>
-<script src="/scripts/FriendlyEats.Data.js"></script>
+<script type="module" src="/scripts/app.js"></script>
 </body>
 </html>

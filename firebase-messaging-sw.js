@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-importScripts('/__/firebase/9.2.0/firebase-app-compat.js');
-importScripts('/__/firebase/9.2.0/firebase-messaging-compat.js');
-importScripts('/__/firebase/init.js');
+importScripts('https://www.gstatic.com/firebasejs/9.7.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.7.0/firebase-messaging-compat.js');
+
+firebase.initializeApp({
+  /* Enter your config here */
+});
 
 firebase.messaging();
