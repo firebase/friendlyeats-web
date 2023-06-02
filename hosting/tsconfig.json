@@ -13,6 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "paths": {
+      "react": [ "./node_modules/@types/react" ]
+    },
+    "allowSyntheticDefaultImports" : true,
 
     /* Linting */
     "strict": true,

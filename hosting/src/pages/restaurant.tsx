@@ -100,7 +100,7 @@ const renderPrice = (price: number) => {
 const renderStars = (avgRating: number) => {
     const arr: JSX.Element[] = [];
     {
-        [...Array(5)].map((e, i) => {
+        [...Array(5)].map((_e, i) => {
             if (i < Math.floor(avgRating)) {
                 arr.push(
                     <li>

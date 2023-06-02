@@ -38,7 +38,7 @@ const RatingModal = ({ addReview }: any) => {
                                 </div>
                                 {/*body*/}
                                 <ul className="flex justify-start mx-auto py-10">
-                                    {[...Array(5)].map((star, index) => {
+                                    {[...Array(5)].map((_star, index) => {
                                         index += 1;
                                         return (
                                             <button
