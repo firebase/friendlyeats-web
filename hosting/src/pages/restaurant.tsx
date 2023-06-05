@@ -1,21 +1,28 @@
 import {
     useFirestoreCollectionData,
-    useFirestoreDocData,
     useFirestore,
 } from 'reactfire';
-import { doc, collection, runTransaction } from 'firebase/firestore';
+import { doc, collection, runTransaction, getDoc } from 'firebase/firestore';
 import { useOutletContext, useParams } from 'react-router-dom';
 import RatingModal from '../components/ratingModal';
 import { JSX } from 'react/jsx-runtime';
+import { useEffect, useState } from 'react';
 
 const Restaurant = () => {
-    const { id } = useParams();
     const uid = useOutletContext();
+    const { id } = useParams();
+    const [restaurant, setRestaurant] = useState<any>();
 
+    // Firestore
     const firestore = useFirestore();
-    const { data: restaurant } = useFirestoreDocData(
-        doc(collection(firestore, 'restaurants'), id)
-    );
+    const getRestaurant = () => {
+        getDoc(doc(collection(firestore, 'restaurants'), id)).then((docSnap: any) => {
+            if (docSnap.exists()) {
+                setRestaurant(docSnap.data());
+            }
+        });
+    };
+
     const { data: reviews } = useFirestoreCollectionData(
         collection(firestore, `restaurants/${id}/ratings`)
     );
@@ -43,6 +50,10 @@ const Restaurant = () => {
             });
         });
     };
+
+    useEffect(() => {
+        getRestaurant();
+    }, [uid]);
 
     return (
         <div className="bg-navy-20 min-h-screen">

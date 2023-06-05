@@ -5,7 +5,6 @@ import FilterModal from '../components/filterModal';
 import RestaurantCards from '../components/restaurantCards';
 
 const Home = () => {
-    const firestore = useFirestore();
     const [filters, setFilters] = useState({
         category: '',
         city: '',
@@ -13,8 +12,8 @@ const Home = () => {
         sort: 'Rating',
     });
 
-    const [displayCol, setDisplayCol] = useState(true);
-
+    // Read from Firestore
+    const firestore = useFirestore();
     const getFilteredRestaurants = () => {
         let q = query(collection(firestore, 'restaurants'));
         if (filters.category !== '') {
@@ -40,6 +39,7 @@ const Home = () => {
             idField: 'id',
         }
     );
+    
     useEffect(() => {
         console.log('fetching filters...');
     }, [filters]);
@@ -47,6 +47,8 @@ const Home = () => {
     const updateField = (type: string, value: string) => {
         setFilters({ ...filters, [type]: value });
     };
+
+    const [displayCol, setDisplayCol] = useState(true);
     return (
         <div className="bg-navy-50 min-h-screen h-full ">
             <div className="w-3/4 bg-navy-20 min-h-screen h-full mx-auto">

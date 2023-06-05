@@ -1,18 +1,15 @@
 import { Auth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useNavigate, Outlet } from 'react-router-dom';
-import { useAuth, useUser } from 'reactfire';
+import { useAuth, useUser, useFirestore } from 'reactfire';
 import FriendlyEatsLogo from '../assets/friendly-eats.svg';
 import MenuIcon from '../assets/menu.svg';
 import { useEffect } from 'react';
-import { useFirestore } from 'reactfire';
 import { collection, addDoc } from 'firebase/firestore';
 
 const Header = () => {
+    // Auth
     const auth = useAuth();
     const user = useUser();
-    const firestore = useFirestore();
-
-    const navigate = useNavigate();
 
     const signOut = (auth: Auth) => {
         auth.signOut().then(() => console.log('signed out'));
@@ -23,10 +20,15 @@ const Header = () => {
         await signInWithPopup(auth, provider);
     };
 
+    // Firestore 
+    const firestore = useFirestore();
+
     const addRestaurant = (data: any) => {
         const restaurantCollection = collection(firestore, 'restaurants');
         return addDoc(restaurantCollection, data);
     };
+
+    const navigate = useNavigate();
 
     const getRandomItem = (arr: any) => {
         return arr[Math.floor(Math.random() * arr.length)];
