@@ -19,15 +19,12 @@
     }
   ],
   "hosting": {
-    "public": "hosting",
+    "public": "hosting/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "us-central1"
-    }
+    ]
   },
   "storage": {
     "rules": "storage.rules"
