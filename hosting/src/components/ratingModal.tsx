@@ -11,11 +11,11 @@ const RatingModal = ({ addReview }: any) => {
     return (
         <>
             <div
-                className="flex flex-wrap cursor-pointer"
+                className="flex flex-wrap cursor-pointer mx-auto"
                 onClick={() => setShowModal(true)}
             >
                 <img
-                    className="h-16 absolute bg-amber-400 rounded-xl bottom-[-30px] right-20 shadow-lg"
+                    className="h-16 bg-amber-400 rounded-xl right-40 shadow-lg"
                     src={ReviewIcon}
                     alt={'Add review'}
                 />

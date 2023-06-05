@@ -22,7 +22,7 @@ function App() {
     const functionsInstance = getFunctions(app);
 
     if (process.env.NODE_ENV !== 'production') {
-    // Set up emulators
+        // Set up emulators
         connectStorageEmulator(storageInstance, '127.0.0.1', 9199);
         connectAuthEmulator(authInstance, 'http://127.0.0.1:9099', {
             disableWarnings: true,
