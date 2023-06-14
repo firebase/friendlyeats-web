@@ -25,7 +25,7 @@ const FilterModal = ({ filters, setFilters }: any) => {
                     <div className="flex-row ml-5">
                         <p className="font-light text-xl">Restaurants</p>
                         <p className="text-navy-500 font-semibold text-sm">
-              Sorted by {filters.sort}
+                            Sorted by {filters.sort}
                         </p>
                     </div>
                 </div>
@@ -45,7 +45,7 @@ const FilterModal = ({ filters, setFilters }: any) => {
                                         onClick={() => setShowModal(false)}
                                     >
                                         <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
+                                            ×
                                         </span>
                                     </button>
                                 </div>
@@ -83,7 +83,7 @@ const FilterModal = ({ filters, setFilters }: any) => {
                                         type="button"
                                         onClick={() => setShowModal(false)}
                                     >
-                    Cancel
+                                        Cancel
                                     </button>
                                     <button
                                         className="bg-amber-900 text-white active:bg-amber-900 font-light uppercase px-6 py-3 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -93,7 +93,7 @@ const FilterModal = ({ filters, setFilters }: any) => {
                                             setShowModal(false);
                                         }}
                                     >
-                    Apply
+                                        Apply
                                     </button>
                                 </div>
                             </div>

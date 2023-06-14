@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+
+  // Determine if the value of the field "key" is the same
+  // before and after the request.
+  function unchanged(key) {
+    return (key in resource.data) 
+      && (key in request.resource.data) 
+      && (resource.data[key] == request.resource.data[key]);
+  }
+
+  match /databases/{database}/documents {
+    // Restaurants:
+    //   - Authenticated user can read
+    //   - Authenticated user can create/update (for demo purposes only)
+    //   - Updates are allowed if no fields are added and name is unchanged
+    //   - Deletes are not allowed (default)
+    match /restaurants/{restaurantId} {
+      allow read;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null
+                    && unchanged("name");
+      
+        // Ratings:
+        //   - Authenticated user can read
+        //   - Authenticated user can create if userId matches
+        //   - Deletes and updates are not allowed (default)
+        match /ratings/{ratingId} {
+          allow read;
+          allow create: if request.auth != null;
+          allow update: if request.auth != null
+                        && request.resource.data.userId == request.auth.uid;
+      }
+    }
+  }
+}

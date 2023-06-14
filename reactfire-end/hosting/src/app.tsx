@@ -9,7 +9,6 @@ import {
     StorageProvider,
     AuthProvider,
     FunctionsProvider,
-    AppCheckProvider,
 } from 'reactfire';
 import Header from './components/header';
 import Home from './pages/home';
@@ -21,8 +20,7 @@ function App() {
     const storageInstance = getStorage(app);
     const authInstance = getAuth(app);
     const functionsInstance = getFunctions(app);
-
-    if (process.env.NODE_ENV !== 'production') {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // Set up emulators
         connectStorageEmulator(storageInstance, '127.0.0.1', 9199);
         connectAuthEmulator(authInstance, 'http://127.0.0.1:9099', {

@@ -32,7 +32,7 @@ const RatingModal = ({ addReview }: any) => {
                                         onClick={() => setShowModal(false)}
                                     >
                                         <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
+                                            ×
                                         </span>
                                     </button>
                                 </div>
@@ -92,7 +92,7 @@ const RatingModal = ({ addReview }: any) => {
                                         type="button"
                                         onClick={() => setShowModal(false)}
                                     >
-                    Cancel
+                                        Cancel
                                     </button>
                                     <button
                                         className="bg-amber-900 text-white active:bg-amber-900 font-light uppercase px-6 py-3 shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -102,7 +102,7 @@ const RatingModal = ({ addReview }: any) => {
                                             setShowModal(false);
                                         }}
                                     >
-                    Apply
+                                        Apply
                                     </button>
                                 </div>
                             </div>

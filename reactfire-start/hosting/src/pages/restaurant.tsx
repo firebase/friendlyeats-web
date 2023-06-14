@@ -3,7 +3,13 @@ import {
     useFirestore,
     useStorage,
 } from 'reactfire';
-import { doc, collection, runTransaction, getDoc, updateDoc } from 'firebase/firestore';
+import {
+    doc,
+    collection,
+    runTransaction,
+    getDoc,
+    updateDoc,
+} from 'firebase/firestore';
 import { useOutletContext, useParams } from 'react-router-dom';
 import RatingModal from '../components/ratingModal';
 import { JSX } from 'react/jsx-runtime';
@@ -20,63 +26,20 @@ const Restaurant = () => {
     // Firestore
     const firestore = useFirestore();
     const getRestaurant = () => {
-        getDoc(doc(collection(firestore, 'restaurants'), id)).then((docSnap: any) => {
-            if (docSnap.exists()) {
-                setRestaurant(docSnap.data());
-            }
-        });
+        // TODO: complete function
     };
 
-    const { data: reviews } = useFirestoreCollectionData(
-        collection(firestore, `restaurants/${id}/ratings`)
-    );
-    
+    const { data: reviews } = { data: [] };
+
     // Storage
     const storage = useStorage();
 
     const updateRestaurantImage = async (target: HTMLInputElement) => {
-        const image = target.files ? target.files[0] : null;
-        if (!image) {
-            return;
-        }
-        try {
-            const filePath = `images/${id}/${image.name}`;
-            const newImageRef = ref(storage, filePath);
-            await uploadBytesResumable(newImageRef, image);
-            const publicImageUrl = await getDownloadURL(newImageRef);
-            const restaurantRef = doc(collection(firestore, 'restaurants'), id);
-            console.log(publicImageUrl, '2');
-            restaurantRef ?
-                await updateDoc(restaurantRef,{
-                    photo: publicImageUrl
-                }): null;
-        } catch (error) {
-            console.error('There was an error uploading a file to Cloud Storage:', error);
-        }
+        // TODO: complete function
     };
 
-    const addReview = (review: any) => {
-        const docRef = doc(collection(firestore, 'restaurants'), id);
-        const newRatingDocument = doc(
-            collection(firestore, `restaurants/${id}/ratings`)
-        );
-
-        return runTransaction(firestore, (transaction) => {
-            return transaction.get(docRef).then((doc) => {
-                const data = doc.data();
-
-                const newAverage =
-          (data?.numRatings * data?.avgRating + review.rating) /
-          (data?.numRatings + 1);
-                transaction.update(docRef, {
-                    ...data,
-                    numRatings: data?.numRatings ? data?.numRatings + 1 : 1,
-                    avgRating: newAverage,
-                });
-                review.userId = uid;
-                return transaction.set(newRatingDocument, review);
-            });
-        });
+    const addReview = (review: any) => {    
+        // TODO: complete function
     };
 
     useEffect(() => {
@@ -101,10 +64,21 @@ const Restaurant = () => {
                         </p>
                         <p className="text-white px-8">{renderPrice(restaurant?.price)}</p>
                     </div>
-                    <div className='flex absolute bottom-[-30px] flex-row right-0 justify-end w-1/3'>
+                    <div className="flex absolute bottom-[-30px] flex-row right-0 justify-end w-1/3">
                         <RatingModal addReview={addReview} />
-                        <label onChange={event => updateRestaurantImage(event.target as HTMLInputElement)} htmlFor="upload-image" className=' bg-amber-800 w-16 h-16 rounded-full cursor-pointer shadow-lg mx-auto'>
-                            <input name="" type="file" id="upload-image" className='file-input hidden w-full h-full' />
+                        <label
+                            onChange={(event) =>
+                                updateRestaurantImage(event.target as HTMLInputElement)
+                            }
+                            htmlFor="upload-image"
+                            className=" bg-amber-800 w-16 h-16 rounded-full cursor-pointer shadow-lg mx-auto"
+                        >
+                            <input
+                                name=""
+                                type="file"
+                                id="upload-image"
+                                className="file-input hidden w-full h-full"
+                            />
                             <img className="w-16 h-16" src={AddIcon} alt="Upload image" />
                         </label>
                     </div>

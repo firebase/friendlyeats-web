@@ -8,24 +8,22 @@ import { collection, addDoc } from 'firebase/firestore';
 
 const Header = () => {
     // Auth
-    const auth = useAuth();
-    const user = useUser();
+    const auth = null;
+    const user = null;
 
     const signOut = (auth: Auth) => {
-        auth.signOut().then(() => console.log('signed out'));
+        // TODO: complete function
     };
 
     const signIn = async (auth: Auth) => {
-        const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
+        // TODO: complete function
     };
 
     // Firestore 
-    const firestore = useFirestore();
+    const firestore = null;
 
     const addRestaurant = (data: any) => {
-        const restaurantCollection = collection(firestore, 'restaurants');
-        return addDoc(restaurantCollection, data);
+        // TODO: complete function
     };
 
     const navigate = useNavigate();
@@ -47,8 +45,7 @@ const Header = () => {
             const photoID = Math.floor(Math.random() * 22) + 1;
             const photo =
         'https://storage.googleapis.com/firestorequickstarts.appspot.com/food_' +
-        photoID +
-        '.png';
+            photoID + '.png';
             const numRatings = 0;
             const avgRating = 0;
 
@@ -62,7 +59,7 @@ const Header = () => {
                 photo: photo,
             });
 
-            if (!promise) {
+            if (promise === null) {
                 alert('addRestaurant() is not implemented yet!');
                 return Promise.reject();
             } else {
@@ -72,10 +69,11 @@ const Header = () => {
     };
 
     useEffect(() => {
-        if (user && user.data) {
-            console.log(`${user.data?.displayName}`);
+        if (user && user?.data) {
+            console.log(`${user?.data?.displayName}`);
         }
     }, [user]);
+
     return (
         <header>
             <nav className="bg-navy-400 px-2 lg:px-4 py-2.5 h-18">
@@ -91,11 +89,11 @@ const Header = () => {
                             alt="FriendlyEats"
                         />
                         <span className="mr-3 self-center text-xl whitespace-nowrap font-light text-white">
-              Friendly Eats
+                            Friendly Eats
                         </span>
                     </a>
                     <div className="flex flex-wrap items-end">
-                        {user.data ? (
+                        {user?.data ? (
                             <div className="flex flex-wrap justify-between text-white">
                                 <img
                                     className="w-10 h-10 rounded-full"
@@ -129,7 +127,7 @@ const Header = () => {
                                                     navigate('/');
                                                 }}
                                             >
-                        Add Random Items
+                                                Add Random Items
                                             </a>
                                         </li>
                                         <li className="">
@@ -138,7 +136,7 @@ const Header = () => {
                                                 href="#"
                                                 onClick={() => signOut(auth)}
                                             >
-                        Logout
+                                                Logout
                                             </a>
                                         </li>
                                     </ul>
@@ -150,7 +148,7 @@ const Header = () => {
                                 className="text-white text-xl whitespace-nowrap font-light px-4 lg:px-5 py-2 lg:py-2.5 mr-6"
                                 onClick={() => signIn(auth)}
                             >
-                Log in
+                                Log in
                             </a>
                         )}
                     </div>
