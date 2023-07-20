@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@react-rxjs/core": "^0.10.4",
+    "@react-rxjs/utils": "^0.9.5",
+    "firebase": "^9.22.1",
+    "react-router-dom": "^6.11.2",
+    "reactfire": "^4.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}
