@@ -1,6 +1,6 @@
 ### Friendly Eats with Next.js + Firebase
 
-The codelab has the full full instructions, but as a quick start, you can do this.
+The codelab has the full instructions, but as a quick start, you can do this.
 
 #### Run the application
 
