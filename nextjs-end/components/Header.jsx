@@ -12,7 +12,7 @@ import { addFakeRestaurantsAndReviews } from "@/lib/firebase/firestore.js";
 // If the user logs in on the client, we send the user data to the server
 // Sending a user payload to this endpoint will create a persistent cookie
 async function handleUserSession(user = {}) {
-	return fetch("http://localhost:3000/api", {
+	return fetch("/api", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

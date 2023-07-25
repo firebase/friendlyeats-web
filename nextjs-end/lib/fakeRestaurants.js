@@ -72,7 +72,10 @@ export async function generateFakeRestaurantsAndReviews() {
 				0
 			),
 			price: randomNumberBetween(1, 4),
-			photo: `https://picsum.photos/200/300?random=${randomNumberBetween()}`,
+			photo: `https://storage.googleapis.com/firestorequickstarts.appspot.com/food_${randomNumberBetween(
+				1,
+				22
+			)}.png`,
 			timestamp: restaurantTimestamp,
 		};
 
