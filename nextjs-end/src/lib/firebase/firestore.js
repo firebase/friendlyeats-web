@@ -1,4 +1,4 @@
-import { generateFakeRestaurantsAndReviews } from "@/lib/fakeRestaurants.js";
+import { generateFakeRestaurantsAndReviews } from "@/src/lib/fakeRestaurants.js";
 
 import {
 	collection,
@@ -15,7 +15,7 @@ import {
 	addDoc,
 } from "firebase/firestore";
 
-import { db } from "@/lib/firebase/firebase";
+import { db } from "@/src/lib/firebase/firebase";
 
 export async function updateRestaurantImageReference(
 	restaurantId,

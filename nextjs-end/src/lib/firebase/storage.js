@@ -1,8 +1,8 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { storage } from "@/lib/firebase/firebase";
+import { storage } from "@/src/lib/firebase/firebase";
 
-import { updateRestaurantImageReference } from "@/lib/firebase/firestore";
+import { updateRestaurantImageReference } from "@/src/lib/firebase/firestore";
 
 export async function updateRestaurantImage(restaurantId, image) {
 	try {

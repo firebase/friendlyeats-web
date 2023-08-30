@@ -1,9 +1,14 @@
-import Restaurant from "@/components/Restaurant.jsx";
+import Restaurant from "@/src/components/Restaurant.jsx";
+import { useUser } from "@/src/lib/firebase/auth";
 import {
 	getRestaurantById,
 	getReviewsByRestaurantId,
-} from "@/lib/firebase/firestore.js";
-import getUser from "@/lib/getUser.js";
+} from "@/src/lib/firebase/firestore.js";
+import {
+	getAuthenticatedAppForUser
+} from "@/src/lib/firebase/firebase.js";
+
+
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +18,7 @@ export default async function Home({ params }) {
 	// we need for this page
 	const restaurant = await getRestaurantById(params.id);
 	const reviews = await getReviewsByRestaurantId(params.id);
+	const { currentUser } = await getAuthenticatedAppForUser()
 
 	return (
 		<main className="main__restaurant">
@@ -20,7 +26,7 @@ export default async function Home({ params }) {
 				id={params.id}
 				initialRestaurant={restaurant}
 				initialReviews={reviews}
-				initialUser={getUser()}
+				initialUserId={currentUser.uid}
 			/>
 		</main>
 	);

@@ -9,12 +9,22 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"firebase": "^10.0.0",
+		"@google-cloud/firestore": "^6.7.0",
+		"firebase": "^10.3.0",
+		"firebase-admin": "^11.10.1",
 		"next": "13.4.10",
+		"protobufjs": "^7.2.5",
 		"react": "18.2.0",
-		"react-dom": "18.2.0"
+		"react-dom": "18.2.0",
+		"request": "^2.88.2"
 	},
 	"devDependencies": {
 		"encoding": "^0.1.13"
+	},
+	"browser": {
+		"fs": false,
+		"os": false,
+		"path": false,
+		"child_process": false
 	}
 }
