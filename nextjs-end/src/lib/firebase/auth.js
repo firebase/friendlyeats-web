@@ -1,20 +1,14 @@
-// import { useState, useEffect } from "react";
-import {getAuthenticatedAppForUser} from "@/src/lib/firebase/firebase"
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  onAuthStateChanged,
-  getAuth,
 } from "firebase/auth";
-import { useRouter } from "next/navigation";
 
-// import { auth } from "@/src/lib/firebase/firebase";
-
-// const { app } = getAuthenticatedAppForUser();
-// const auth = getAuth(app);
+import { auth } from "@/src/lib/firebase/firebase";
 
 
-export async function signInWithGoogle(auth) {
+
+
+export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
   try {
@@ -24,7 +18,7 @@ export async function signInWithGoogle(auth) {
   }
 }
 
-export async function signOut(auth) {
+export async function signOut() {
   try {
     return auth.signOut();
   } catch (error) {

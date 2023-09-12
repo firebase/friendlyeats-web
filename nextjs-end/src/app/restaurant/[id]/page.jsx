@@ -26,7 +26,7 @@ export default async function Home({ params }) {
 				id={params.id}
 				initialRestaurant={restaurant}
 				initialReviews={reviews}
-				initialUserId={currentUser.uid}
+				initialUserId={currentUser?.uid || ""}
 			/>
 		</main>
 	);

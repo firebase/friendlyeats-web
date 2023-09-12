@@ -6,7 +6,6 @@ import {
 	signOut,
 } from "@/src/lib/firebase/auth.js";
 import {getUser} from '@/src/lib/getUser'
-import { auth } from '@/src/lib/firebase/firebase'
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 
 export default function Header() {
@@ -14,12 +13,12 @@ export default function Header() {
 
 	const handleSignOut = event => {
 		event.preventDefault();
-		signOut(auth);
+		signOut();
 	};
 
 	const handleSignIn = event => {
 		event.preventDefault();
-		signInWithGoogle(auth);
+		signInWithGoogle();
 	};
 
 	return (

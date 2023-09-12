@@ -101,7 +101,6 @@ export async function getRestaurants(filters = {}) {
 	let q = query(collection(db, "restaurants"));
 
 	q = applyQueryFilters(q, filters);
-
 	const results = await getDocs(q);
 	return results.docs.map(doc => {
 		return {
@@ -220,7 +219,6 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 
 export async function addFakeRestaurantsAndReviews() {
 	const data = await generateFakeRestaurantsAndReviews();
-
 	for (const { restaurantData, ratingsData } of data) {
 		try {
 			const docRef = await addDoc(

@@ -10,6 +10,7 @@ import {
   getReviewsSnapshotByRestaurantId,
 } from "@/src/lib/firebase/firestore.js";
 import { auth } from "@/src/lib/firebase/firebase.js";
+import {getUser} from '@/src/lib/getUser'
 import { updateRestaurantImage } from "@/src/lib/firebase/storage.js";
 import ReviewDialog from "@/src/components/ReviewDialog.jsx";
 import RestaurantDetails from "@/src/components/RestaurantDetails.jsx";
@@ -25,7 +26,7 @@ export default function Restaurant({
   const [isOpen, setIsOpen] = useState(false);
 
   // The only reason this component needs to know the user ID is to associate a review with the user, and to know whether to show the review dialog
-  const [userId, setUserId] = useState(initialUserId ?? "");
+  const userId = getUser()?.uid || initialUserId;
   const [review, setReview] = useState({
     rating: 0,
     text: "",
@@ -35,19 +36,6 @@ export default function Restaurant({
   const onChange = (value, name) => {
     setReview({ ...review, [name]: value });
   };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid);
-      } else {
-        setUserId("");
-      }
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   async function handleRestaurantImage(target) {
     const image = target.files ? target.files[0] : null;
