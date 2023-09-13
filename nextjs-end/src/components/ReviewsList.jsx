@@ -1,7 +1,7 @@
 // This component handles the list of reviews for a given restaurant
 
 import React from "react";
-import renderStars from "@/components/Stars.jsx";
+import renderStars from "@/src/components/Stars.jsx";
 
 const ReviewsList = ({ reviews, userId }) => {
 	return (

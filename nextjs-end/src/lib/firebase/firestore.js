@@ -1,4 +1,4 @@
-import { generateFakeRestaurantsAndReviews } from "@/lib/fakeRestaurants.js";
+import { generateFakeRestaurantsAndReviews } from "@/src/lib/fakeRestaurants.js";
 
 import {
 	collection,
@@ -15,7 +15,7 @@ import {
 	addDoc,
 } from "firebase/firestore";
 
-import { db } from "@/lib/firebase/firebase";
+import { db } from "@/src/lib/firebase/firebase";
 
 export async function updateRestaurantImageReference(
 	restaurantId,
@@ -101,7 +101,6 @@ export async function getRestaurants(filters = {}) {
 	let q = query(collection(db, "restaurants"));
 
 	q = applyQueryFilters(q, filters);
-
 	const results = await getDocs(q);
 	return results.docs.map(doc => {
 		return {
@@ -220,7 +219,6 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 
 export async function addFakeRestaurantsAndReviews() {
 	const data = await generateFakeRestaurantsAndReviews();
-
 	for (const { restaurantData, ratingsData } of data) {
 		try {
 			const docRef = await addDoc(

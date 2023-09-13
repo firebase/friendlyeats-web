@@ -1,6 +1,6 @@
 "use server";
 
-import { addReviewToRestaurant } from "@/lib/firebase/firestore.js";
+import { addReviewToRestaurant } from "@/src/lib/firebase/firestore.js";
 
 // This is a next.js server action, an alpha feature, so
 // use with caution
