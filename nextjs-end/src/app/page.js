@@ -15,7 +15,6 @@ export default async function Home({ searchParams }) {
 	const restaurants = await getRestaurants(searchParams);
 	return (
 		<main className="main__home">
-			{/* <span>dsfsfdsdsf</span> */}
 			<RestaurantListings
 				initialRestaurants={restaurants}
 				searchParams={searchParams}

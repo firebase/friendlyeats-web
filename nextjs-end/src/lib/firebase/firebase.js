@@ -23,10 +23,14 @@
 // });
 
 import { initializeApp, getApps } from "firebase/app";
-import { getAuth, connectAuthEmulator, signInWithCustomToken } from "firebase/auth";
+import {
+  getAuth,
+  connectAuthEmulator,
+  signInWithCustomToken,
+} from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -37,7 +41,8 @@ export const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-export const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+export const firebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
@@ -50,52 +55,45 @@ connectAuthEmulator(auth, "http://127.0.0.1:9099", {
 });
 
 export async function getAuthenticatedAppForUser(session = null) {
+
+
   if (typeof window !== "undefined") {
     // client
     console.log("client: ", firebaseApp);
 
-    return { app: firebaseApp, user: auth.currentUser };
+    return { app: firebaseApp, user: auth.currentUser.toJSON() };
   }
+// import {initializeApp as initializeAdminApp, getApps as getAdminApps} from "firebase-admin/app";
   const { initializeApp: initializeAdminApp, getApps: getAdminApps } = await import("firebase-admin/app");
-  
-  const { credential } = await import("firebase-admin");
+
   const { getAuth: getAdminAuth } = await import("firebase-admin/auth");
 
-  const ADMIN_APP_NAME = "hinamomori-0x";
-
+  const ADMIN_APP_NAME = "firebase-frameworks";
   const adminApp =
     getAdminApps().find((it) => it.name === ADMIN_APP_NAME) ||
-    initializeAdminApp(
-      {
-        credential: credential.cert({
-          clientEmail: process.env._FIREBASE_ADMIN_CLIENT_EMAIL,
-          privateKey: process.env._FIREBASE_ADMIN_PRIVATE_KEY,
-          projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        }),
-      },
-      ADMIN_APP_NAME
-    );
+    initializeAdminApp({}, ADMIN_APP_NAME);
 
   const adminAuth = getAdminAuth(adminApp);
-
   const noSessionReturn = { app: null, currentUser: null };
+
 
   if (!session) {
     // if no session cookie was passed, try to get from next/headers for app router
     session = await getAppRouterSession();
+
     if (!session) return noSessionReturn;
   }
 
   const decodedIdToken = await adminAuth.verifySessionCookie(session);
+
+  const app = initializeAuthenticatedApp(decodedIdToken.uid)
+	const auth = getAuth(app)
 
   // handle revoked tokens
   const isRevoked = !(await adminAuth
     .verifySessionCookie(session, true)
     .catch((e) => console.error(e.message)));
   if (isRevoked) return noSessionReturn;
-
-  const authenticatedApp = initializeAuthenticatedApp(decodedIdToken.uid);
-  const auth = getAuth(authenticatedApp);
 
   // authenticate with custom token
   if (auth.currentUser?.uid !== decodedIdToken.uid) {
@@ -108,8 +106,8 @@ export async function getAuthenticatedAppForUser(session = null) {
 
     await signInWithCustomToken(auth, customToken);
   }
-
-  return { authenticatedApp, currentUser: auth.currentUser };
+  console.log("server: ", app);
+  return { app, currentUser: auth.currentUser };
 }
 
 async function getAppRouterSession() {

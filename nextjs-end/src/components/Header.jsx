@@ -5,11 +5,12 @@ import {
 	signInWithGoogle,
 	signOut,
 } from "@/src/lib/firebase/auth.js";
-import {getUser} from '@/src/lib/getUser'
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 
-export default function Header() {
-	const user = getUser()
+
+export default function Header({initialUser}) {
+
+	const user = initialUser ;
 
 	const handleSignOut = event => {
 		event.preventDefault();
