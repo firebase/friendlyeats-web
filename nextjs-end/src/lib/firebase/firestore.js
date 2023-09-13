@@ -51,7 +51,7 @@ const updateWithRating = async (
 	});
 };
 
-export async function addReviewToRestaurant(restaurantId, review) {
+export async function addReviewToRestaurant(db, restaurantId, review) {
 	if (!restaurantId) {
 		throw new Error("No restaurant ID has been provided.");
 	}
