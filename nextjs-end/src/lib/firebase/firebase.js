@@ -63,12 +63,12 @@ export async function getAuthenticatedAppForUser(session = null) {
 
     if (!session) return noSessionReturn;
   }
-console.log("session", session);
+
   const decodedIdToken = await adminAuth.verifySessionCookie(session);
 
   const app = initializeAuthenticatedApp(decodedIdToken.uid)
 	const auth = getAuth(app)
-console.log("initializeAuthenticatedApp", app);
+
   // handle revoked tokens
   const isRevoked = !(await adminAuth
     .verifySessionCookie(session, true)
@@ -81,7 +81,7 @@ console.log("initializeAuthenticatedApp", app);
     const customToken = await adminAuth
       .createCustomToken(decodedIdToken.uid)
       .catch((e) => console.error(e.message));
-    console.log("customToken: ", customToken);
+
     if (!customToken) return noSessionReturn;
 
     await signInWithCustomToken(auth, customToken);
