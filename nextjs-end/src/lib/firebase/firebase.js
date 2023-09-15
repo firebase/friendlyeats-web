@@ -24,11 +24,11 @@ export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
 // For development purposes only
-connectFirestoreEmulator(db, "127.0.0.1", 8080);
-connectStorageEmulator(storage, "127.0.0.1", 9199);
-connectAuthEmulator(auth, "http://127.0.0.1:9099", {
-  disableWarnings: true,
-});
+// connectFirestoreEmulator(db, "127.0.0.1", 8080);
+// connectStorageEmulator(storage, "127.0.0.1", 9199);
+// connectAuthEmulator(auth, "http://127.0.0.1:9099", {
+//   disableWarnings: true,
+// });
 
 export async function getAuthenticatedAppForUser(session = null) {
 
@@ -39,15 +39,19 @@ export async function getAuthenticatedAppForUser(session = null) {
 
     return { app: firebaseApp, user: auth.currentUser.toJSON() };
   }
-// import {initializeApp as initializeAdminApp, getApps as getAdminApps} from "firebase-admin/app";
+
   const { initializeApp: initializeAdminApp, getApps: getAdminApps } = await import("firebase-admin/app");
 
   const { getAuth: getAdminAuth } = await import("firebase-admin/auth");
 
+  const { credential } = await import("firebase-admin");
+
   const ADMIN_APP_NAME = "firebase-frameworks";
   const adminApp =
     getAdminApps().find((it) => it.name === ADMIN_APP_NAME) ||
-    initializeAdminApp({}, ADMIN_APP_NAME);
+    initializeAdminApp({
+      credential: credential.applicationDefault(),
+  }, ADMIN_APP_NAME);
 
   const adminAuth = getAdminAuth(adminApp);
   const noSessionReturn = { app: null, currentUser: null };
