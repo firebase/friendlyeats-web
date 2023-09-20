@@ -1,20 +1,21 @@
-"use client";
-
+'use client'
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
 	signInWithGoogle,
 	signOut,
-	onAuthStateChanged,
-} from "@/lib/firebase/auth.js";
-import { addFakeRestaurantsAndReviews } from "@/lib/firebase/firestore.js";
+	onAuthStateChanged
+} from "@/src/lib/firebase/auth.js";
+import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
+import { useRouter } from "next/navigation";
 
-async function handleUserSession() {}
+function useUserSession(initialUser) {
+	return;
+}
 
-function useUserSession() {}
+export default function Header({initialUser}) {
 
-export default function Header({ initialUser }) {
-	const user = useUserSession(initialUser);
+	const user = useUserSession(initialUser) ;
 
 	const handleSignOut = event => {
 		event.preventDefault();

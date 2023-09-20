@@ -1,7 +1,7 @@
 // This component shows restaurant metadata, and offers some actions to the user like uploading a new restaurant image, and adding a review.
 
 import React from "react";
-import renderStars from "@/components/Stars.jsx";
+import renderStars from "@/src/components/Stars.jsx";
 
 const RestaurantDetails = ({
 	restaurant,
