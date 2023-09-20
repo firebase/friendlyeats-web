@@ -1,4 +1,4 @@
-import { generateFakeRestaurantsAndReviews } from "@/lib/fakeRestaurants.js";
+import { generateFakeRestaurantsAndReviews } from "@/src/lib/fakeRestaurants.js";
 
 import {
 	collection,
@@ -15,7 +15,7 @@ import {
 	addDoc,
 } from "firebase/firestore";
 
-import { db } from "@/lib/firebase/firebase";
+import { db } from "@/src/lib/firebase/firebase";
 
 export async function updateRestaurantImageReference(
 	restaurantId,
@@ -27,19 +27,30 @@ export async function updateRestaurantImageReference(
 	}
 }
 
-const updateWithRating = async () => {};
+const updateWithRating = async (
+	transaction,
+	docRef,
+	newRatingDocument,
+	review
+) => {
+	return;
+};
 
-// Replace this function
-export async function addReviewToRestaurant() {}
+export async function addReviewToRestaurant(db, restaurantId, review) {
+	return;
+}
 
-// Replace this function
-function applyQueryFilters() {}
+function applyQueryFilters(q, { category, city, price, sort }) {
+	return;
+}
 
-// Replace this function
-export async function getRestaurants() {}
+export async function getRestaurants(filters = {}) {
+	return [];
+}
 
-// Replace this function
-export function getRestaurantsSnapshot() {}
+export function getRestaurantsSnapshot(cb, filters = {}) {
+	return;
+}
 
 export async function getRestaurantById(restaurantId) {
 	if (!restaurantId) {
@@ -55,24 +66,7 @@ export async function getRestaurantById(restaurantId) {
 }
 
 export function getRestaurantSnapshotById(restaurantId, cb) {
-	if (!restaurantId) {
-		console.log("Error: Invalid ID received: ", restaurantId);
-		return;
-	}
-
-	if (typeof cb !== "function") {
-		console.log("Error: The callback parameter is not a function");
-		return;
-	}
-
-	const docRef = doc(db, "restaurants", restaurantId);
-	const unsubscribe = onSnapshot(docRef, docSnap => {
-		cb({
-			...docSnap.data(),
-			timestamp: docSnap.data().timestamp.toDate(),
-		});
-	});
-	return unsubscribe;
+	return;
 }
 
 export async function getReviewsByRestaurantId(restaurantId) {
@@ -123,7 +117,6 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 
 export async function addFakeRestaurantsAndReviews() {
 	const data = await generateFakeRestaurantsAndReviews();
-
 	for (const { restaurantData, ratingsData } of data) {
 		try {
 			const docRef = await addDoc(

@@ -2,7 +2,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import {
   getAuth,
-  connectAuthEmulator,
   signInWithCustomToken,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -22,7 +21,6 @@ export const firebaseApp =
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
-
 
 export async function getAuthenticatedAppForUser(session = null) {
 

@@ -6,9 +6,9 @@
 import Link from "next/link";
 import { React, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import renderStars from "@/components/Stars.jsx";
-import { getRestaurantsSnapshot } from "@/lib/firebase/firestore.js";
-import Filters from "@/components/Filters.jsx";
+import renderStars from "@/src/components/Stars.jsx";
+import { getRestaurantsSnapshot } from "@/src/lib/firebase/firestore.js";
+import Filters from "@/src/components/Filters.jsx";
 
 const RestaurantItem = ({ restaurant }) => (
 	<li key={restaurant.id}>
@@ -90,7 +90,7 @@ export default function RestaurantListings({
 		<article>
 			<Filters filters={filters} setFilters={setFilters} />
 			<ul className="restaurants">
-				{restaurants?.map(restaurant => (
+				{restaurants.map(restaurant => (
 					<RestaurantItem
 						key={restaurant.id}
 						restaurant={restaurant}
