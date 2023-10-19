@@ -517,3 +517,9 @@ FriendlyEats.prototype.replaceElement = function(parent, content) {
 FriendlyEats.prototype.rerender = function() {
   this.router.navigate(document.location.pathname + '?' + new Date().getTime());
 };
+
+FriendlyEats.prototype.initAppCheck = function() {
+  /*
+    TODO: Initialize and activate App Check
+  */
+};
