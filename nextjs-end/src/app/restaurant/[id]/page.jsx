@@ -1,14 +1,9 @@
 import Restaurant from "@/src/components/Restaurant.jsx";
-import { useUser } from "@/src/lib/firebase/auth";
 import {
 	getRestaurantById,
 	getReviewsByRestaurantId,
 } from "@/src/lib/firebase/firestore.js";
-import {
-	getAuthenticatedAppForUser
-} from "@/src/lib/firebase/firebase.js";
-
-
+import getAuthenticatedAppForUser from "@/src/lib/firebase/getAuthenticatedAppForUser.js";
 
 export const dynamic = "force-dynamic";
 

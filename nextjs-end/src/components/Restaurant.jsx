@@ -4,13 +4,11 @@
 // It receives data from src/app/restaurant/[id]/page.jsx
 
 import { React, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   getRestaurantSnapshotById,
   getReviewsSnapshotByRestaurantId,
 } from "@/src/lib/firebase/firestore.js";
-import { auth } from "@/src/lib/firebase/firebase.js";
-import {getUser} from '@/src/lib/getUser'
+import { getUser } from '@/src/lib/firebase/getUser'
 import { updateRestaurantImage } from "@/src/lib/firebase/storage.js";
 import ReviewDialog from "@/src/components/ReviewDialog.jsx";
 import RestaurantDetails from "@/src/components/RestaurantDetails.jsx";
