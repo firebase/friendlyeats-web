@@ -28,7 +28,7 @@ export async function GeminiSummary({ restaurantId }) {
     const text = response.text();
 
     return (
-      <div style={{ maxWidth: "50vw", height: "75px", paddingTop: "10px" }}>
+      <div className="restaurant__review_summary">
         <p>{text}</p>
         <p>✨ Summarized with Gemini</p>
       </div>
@@ -50,7 +50,7 @@ export async function GeminiSummary({ restaurantId }) {
 
 export function GeminiSummarySkeleton() {
   return (
-    <div style={{ maxWidth: "50vw", height: "75px", paddingTop: "10px" }}>
+    <div className="restaurant__review_summary">
       <p>✨ Summarizing reviews with Gemini...</p>
     </div>
   );
