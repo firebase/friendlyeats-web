@@ -9,6 +9,7 @@ const RestaurantDetails = ({
 	handleRestaurantImage,
 	setIsOpen,
 	isOpen,
+	children
 }) => {
 	return (
 		<section className="img__section">
@@ -54,6 +55,7 @@ const RestaurantDetails = ({
 						{restaurant.category} | {restaurant.city}
 					</p>
 					<p>{"$".repeat(restaurant.price)}</p>
+					{children}
 				</div>
 			</div>
 		</section>

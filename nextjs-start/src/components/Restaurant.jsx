@@ -3,35 +3,32 @@
 // This components shows one individual restaurant
 // It receives data from src/app/restaurant/[id]/page.jsx
 
-import { React, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { React, useState, useEffect, Suspense } from "react";
+import dynamic from 'next/dynamic'
 import {
   getRestaurantSnapshotById,
-  getReviewsSnapshotByRestaurantId,
 } from "@/src/lib/firebase/firestore.js";
-import { auth } from "@/src/lib/firebase/firebase.js";
-import {getUser} from '@/src/lib/getUser'
-import { updateRestaurantImage } from "@/src/lib/firebase/storage.js";
-import ReviewDialog from "@/src/components/ReviewDialog.jsx";
+import {useUser} from '@/src/lib/getUser'
 import RestaurantDetails from "@/src/components/RestaurantDetails.jsx";
-import ReviewsList from "@/src/components/ReviewsList.jsx";
+import { updateRestaurantImage } from "@/src/lib/firebase/storage.js";
+
+const ReviewDialog = dynamic(() => import('@/src/components/ReviewDialog.jsx'));
 
 export default function Restaurant({
   id,
   initialRestaurant,
-  initialReviews,
   initialUserId,
+  children
 }) {
-  const [restaurant, setRestaurant] = useState(initialRestaurant);
+  const [restaurantDetails, setRestaurantDetails] = useState(initialRestaurant);
   const [isOpen, setIsOpen] = useState(false);
 
   // The only reason this component needs to know the user ID is to associate a review with the user, and to know whether to show the review dialog
-  const userId = getUser()?.uid || initialUserId;
+  const userId = useUser()?.uid || initialUserId;
   const [review, setReview] = useState({
     rating: 0,
     text: "",
   });
-  const [reviews, setReviews] = useState(initialReviews);
 
   const onChange = (value, name) => {
     setReview({ ...review, [name]: value });
@@ -44,7 +41,7 @@ export default function Restaurant({
     }
 
     const imageURL = await updateRestaurantImage(id, image);
-    setRestaurant({ ...restaurant, photo: imageURL });
+    setRestaurantDetails({ ...restaurant, photo: imageURL });
   }
 
   const handleClose = () => {
@@ -54,40 +51,31 @@ export default function Restaurant({
 
   useEffect(() => {
     const unsubscribeFromRestaurant = getRestaurantSnapshotById(id, (data) => {
-      setRestaurant(data);
+      setRestaurantDetails(data);
     });
-
-    const unsubscribeFromReviewsSnapshot = getReviewsSnapshotByRestaurantId(
-      id,
-      (data) => {
-        setReviews(data);
-      }
-    );
 
     return () => {
       unsubscribeFromRestaurant();
-      unsubscribeFromReviewsSnapshot();
     };
   }, []);
 
   return (
-    <div>
+    <>
       <RestaurantDetails
-        restaurant={restaurant}
+        restaurant={restaurantDetails}
         userId={userId}
         handleRestaurantImage={handleRestaurantImage}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
-      />
-      <ReviewDialog
+      >{children}</RestaurantDetails>
+      {userId && <Suspense fallback={<p>Loading...</p>}><ReviewDialog
         isOpen={isOpen}
         handleClose={handleClose}
         review={review}
         onChange={onChange}
         userId={userId}
         id={id}
-      />
-      <ReviewsList reviews={reviews} userId={userId} />
-    </div>
+      /></Suspense>}
+    </>
   );
 }

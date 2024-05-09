@@ -4,22 +4,19 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
+		"build": "npm run build-service-worker && next build",
+		"build-service-worker": "npx esbuild auth-service-worker.js --bundle --outfile=public/auth-service-worker.js",
 		"start": "next start",
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"@google-cloud/firestore": "^6.7.0",
-		"firebase": "^10.3.1",
-		"firebase-admin": "^11.10.1",
-		"next": "13.4.10",
-		"protobufjs": "^7.2.5",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
-		"request": "^2.88.2"
-	},
-	"devDependencies": {
-		"encoding": "^0.1.13"
+		"@google/generative-ai": "^0.10.0",
+		"firebase": "^10.11.1",
+		"firebase-admin": "^12.1.0",
+		"next": "^14.2.3",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"server-only": "^0.0.1"
 	},
 	"browser": {
 		"fs": false,
@@ -28,5 +25,8 @@
 		"child_process": false,
 		"net": false,
 		"tls": false
+	},
+	"devDependencies": {
+		"esbuild": "^0.20.2"
 	}
 }

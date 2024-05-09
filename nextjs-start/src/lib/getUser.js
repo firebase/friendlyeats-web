@@ -1,33 +1,22 @@
-import { onAuthStateChanged } from 'firebase/auth'
-import { useEffect, useState } from 'react'
+"use client";
 
-import { auth } from '@/src/lib/firebase/firebase'
-import { useRouter } from 'next/navigation'
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 
-export function getUser() {
-	const [user, setUser] = useState()
-	const router = useRouter()
+import { auth } from "@/src/lib/firebase/clientApp.js";
+import { useRouter } from "next/navigation";
 
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-			setUser(authUser)
-		})
+export function useUser() {
+  const [user, setUser] = useState();
 
-		return () => unsubscribe()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      setUser(authUser);
+    });
 
-	useEffect(() => {
-		onAuthStateChanged(auth, (authUser) => {
-			if (user === undefined) return
+    return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-			// refresh when user changed to ease testing
-			if (user?.email !== authUser?.email) {
-				router.refresh()
-			}
-		})
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user])
-
-	return user
+  return user;
 }

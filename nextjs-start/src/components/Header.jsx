@@ -8,6 +8,7 @@ import {
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 import { useRouter } from "next/navigation";
+import { firebaseConfig } from "@/src/lib/firebase/config";
 
 function useUserSession(initialUser) {
 	return;
@@ -37,7 +38,7 @@ export default function Header({initialUser}) {
 				<>
 					<div className="profile">
 						<p>
-							<img src="/profile.svg" alt={user.email} />
+							<img className="profileImage" src={user.photoURL || "/profile.svg"} alt={user.email} />
 							{user.displayName}
 						</p>
 
@@ -65,9 +66,10 @@ export default function Header({initialUser}) {
 					</div>
 				</>
 			) : (
-				<a href="#" onClick={handleSignIn}>
+				<div className="profile"><a href="#" onClick={handleSignIn}>
+					<img src="/profile.svg" alt="A placeholder user image" />
 					Sign In with Google
-				</a>
+				</a></div>
 			)}
 		</header>
 	);

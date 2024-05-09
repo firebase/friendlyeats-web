@@ -1,6 +1,6 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-import { storage } from "@/src/lib/firebase/firebase";
+import { storage } from "@/src/lib/firebase/clientApp";
 
 import { updateRestaurantImageReference } from "@/src/lib/firebase/firestore";
 
