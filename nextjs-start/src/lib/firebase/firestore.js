@@ -13,9 +13,10 @@ import {
 	runTransaction,
 	where,
 	addDoc,
+	getFirestore,
 } from "firebase/firestore";
 
-import { db } from "@/src/lib/firebase/firebase";
+import { db } from "@/src/lib/firebase/clientApp";
 
 export async function updateRestaurantImageReference(
 	restaurantId,
@@ -44,7 +45,7 @@ function applyQueryFilters(q, { category, city, price, sort }) {
 	return;
 }
 
-export async function getRestaurants(filters = {}) {
+export async function getRestaurants(db = db, filters = {}) {
 	return [];
 }
 
@@ -52,7 +53,7 @@ export function getRestaurantsSnapshot(cb, filters = {}) {
 	return;
 }
 
-export async function getRestaurantById(restaurantId) {
+export async function getRestaurantById(db, restaurantId) {
 	if (!restaurantId) {
 		console.log("Error: Invalid ID received: ", restaurantId);
 		return;
@@ -69,7 +70,7 @@ export function getRestaurantSnapshotById(restaurantId, cb) {
 	return;
 }
 
-export async function getReviewsByRestaurantId(restaurantId) {
+export async function getReviewsByRestaurantId(db, restaurantId) {
 	if (!restaurantId) {
 		console.log("Error: Invalid restaurantId received: ", restaurantId);
 		return;

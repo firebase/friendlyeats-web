@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 * {
 	box-sizing: border-box;
 	padding: 0;
@@ -5,7 +7,7 @@
 }
 
 body {
-	font-family: ui-sans-serif, system-ui, -apple-system;
+	font-family: "Roboto", ui-sans-serif, system-ui, -apple-system;
 }
 
 ul {
@@ -21,18 +23,36 @@ dialog {
 		position: fixed;
 		width: 80vw;
 		height: 50vh;
+		min-height: 270px;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		z-index: 999;
+
+		border-width: 0px;
+		border-radius: 0.75rem;
+		box-shadow: -7px 12px 14px 6px rgb(0 0 0 / 0.2);
 
 		& article {
 			background-color: unset;
 		}
 	}
 
+	& form {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 100%;
+	}
+
 	& footer {
-		padding: 20px;
+		padding-right: 20px;
+		padding-right: 20px;
+	}
+
+	&::backdrop {
+		background-color: #F6F7F9;
+	  	opacity: 0.8;
 	}
 }
 
@@ -55,11 +75,13 @@ footer {
 	& .button--cancel {
 		color: rgb(178, 193, 212);
 		background-color: white;
+		border-radius: 3px;
 	}
 
 	& .button--confirm {
 		background-color: rgb(255 111 0);
 		color: white;
+		border-radius: 3px;
 	}
 
 	& menu {
@@ -91,11 +113,18 @@ header {
 		text-decoration: none;
 		color: white;
 	}
+	.profileImage {
+		border-radius: 100%;
+		border-color: white;
+		border-width: 2px;
+		border-style: solid;
+		margin-right: 10px;
+	}
 }
 
 .logo {
 	display: flex;
-	align-items: end;
+	align-items: center;
 
 	& img {
 		margin-inline-end: 10px;
@@ -104,6 +133,7 @@ header {
 	color: white;
 	text-decoration: none;
 	font-size: 1.25rem;
+	font-weight: 500;
 }
 
 .menu {
@@ -149,6 +179,11 @@ header {
 	justify-content: center; */
 
 	& p {
+		display: flex;
+		align-items: center;
+	}
+
+	& a {
 		display: flex;
 		align-items: center;
 	}
@@ -248,6 +283,12 @@ a {
 	& span {
 		color: rgb(156 163 175);
 	}
+}
+
+.restaurant__review_summary {
+	max-width: "50vw";
+	height: "75px";
+	padding-top: "10px";
 }
 
 .img__section {
