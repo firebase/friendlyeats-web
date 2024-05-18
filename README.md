@@ -9,7 +9,7 @@ This project is the starting point for the [Cloud Firestore Web Codelab][codelab
 which will show you how to build the applications step-by-step. If you'd like to
 simply run the finished result, see the [quickstart app][quickstart].
 
-<img src="docs/finished_image.png" />
+<img src="vanilla-js/docs/finished_image.png" />
 
 ## Setup
 
