@@ -21,7 +21,7 @@ const RestaurantItem = ({ restaurant }) => (
 const ActiveResturant = ({ restaurant }) => (
 	<div>
 		<ImageCover photo={restaurant.photo} name={restaurant.name} />
-		<ResturantDetails restaurant={restaurant} />
+		<RestaurantDetails restaurant={restaurant} />
 	</div>
 );
 
@@ -31,7 +31,7 @@ const ImageCover = ({ photo, name }) => (
 	</div>
 );
 
-const ResturantDetails = ({ restaurant }) => (
+const RestaurantDetails = ({ restaurant }) => (
 	<div className="restaurant__details">
 		<h2>{restaurant.name}</h2>
 		<RestaurantRating restaurant={restaurant} />
