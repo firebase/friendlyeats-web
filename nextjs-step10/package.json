@@ -1,0 +1,32 @@
+{
+	"name": "my-app",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "npm run build-service-worker && next build",
+		"build-service-worker": "npx esbuild auth-service-worker.js --bundle --outfile=public/auth-service-worker.js",
+		"start": "next start",
+		"lint": "next lint"
+	},
+	"dependencies": {
+		"@google/generative-ai": "^0.10.0",
+		"firebase": "^10.11.1",
+		"firebase-admin": "^12.1.0",
+		"next": "^14.2.3",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"server-only": "^0.0.1"
+	},
+	"browser": {
+		"fs": false,
+		"os": false,
+		"path": false,
+		"child_process": false,
+		"net": false,
+		"tls": false
+	},
+	"devDependencies": {
+		"esbuild": "^0.20.2"
+	}
+}
