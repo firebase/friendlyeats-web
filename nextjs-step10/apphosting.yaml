@@ -1,3 +1,6 @@
+runConfig:
+  minInstances: 0
+  maxInstances: 2
 env:
   # Get these values from the Firebase console
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
