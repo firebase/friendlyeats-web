@@ -1,16 +1,17 @@
 {
-	"name": "my-app",
+	"name": "nextjs-firebase",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "npm run build-service-worker && next dev",
 		"build": "npm run build-service-worker && next build",
-		"build-service-worker": "npx esbuild auth-service-worker.js --bundle --outfile=public/auth-service-worker.js",
+		"build-service-worker": "node esbuild.config.js",
 		"start": "next start",
 		"lint": "next lint"
 	},
 	"dependencies": {
 		"@google/generative-ai": "^0.10.0",
+		"dotenv": "^16.4.5",
 		"firebase": "^10.11.1",
 		"firebase-admin": "^12.1.0",
 		"next": "^14.2.3",

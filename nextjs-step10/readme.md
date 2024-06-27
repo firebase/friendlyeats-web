@@ -1,27 +1,10 @@
-### Friendly Eats with Next.js + Firebase
+### Friendly Eats with Next.js + Firebase App Hosting
 
-The codelab has the full instructions, but as a quick start, you can do this.
+This is a version of Friendly Eats optimized to work with Firebase App Hosting.
 
-#### Run the application
+https://firebase.google.com/codelabs/firebase-nextjs-dev-events
 
-1. In your terminal, run:
+#### Populating sample restaurants
 
-```sh
-firebase emulators:start --project demo-codelab-nextjs
-```
-
-2. Copy the file `lib/firebase/config-copy.js` to `lib/firebase/config.js` and fill in the values from the Firebase console.
-
-3. In a new terminal tab/window, run:
-
-```sh
-npm i
-npm run dev
-```
-
-4. In your browser, open the URL: `http://localhost:3000`
-
-#### Use the application
-
-1. While on `http://localhost:3000/` within your browser, click the "Sign in" button in the top right corner and sign in.
+1. Click the "Sign in" button in the top right corner and sign in.
 2. In the dropdown menu in the top right menu, select "Add sample restaurants".
