@@ -8,7 +8,7 @@
   ];
   idx.workspace = {
       # Runs when a workspace is first created with this `dev.nix` file
-      onCreate = {
+      onStart = {
         npm-install = "npm ci --no-audit --prefer-offline --no-progress --timing";
       };
       # To run something each time the workspace is (re)started, use the `onStart` hook
@@ -18,7 +18,7 @@
 
   ];
   idx.previews = {
-      enable = true;
+      enable = false;
       previews = {
         web = {
           command = ["npm" "run" "dev" "--" "--port" "$PORT" "--hostname" "0.0.0.0"];
