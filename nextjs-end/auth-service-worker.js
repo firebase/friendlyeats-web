@@ -48,7 +48,9 @@ let getAuthIdToken = DEFAULT_GET_AUTH_ID_TOKEN;
 self.addEventListener("fetch", (event) => {
   const { origin, pathname } = new URL(event.request.url);
   if (origin !== self.location.origin) return;
-  if (pathname.includes(".")) return;
+  if (pathname.startsWith('/_next/')) return;
+  // Ignore resources with an extension—this skips css, images, fonts, json, etc.
+  if (!pathname.startsWith("/api/") && pathname.includes(".")) return;
   event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
 
@@ -59,5 +61,8 @@ async function fetchWithFirebaseHeaders(request) {
     headers.append("Authorization", `Bearer ${authIdToken}`);
     request = new Request(request, { headers });
   }
-  return await fetch(request);
+  return await fetch(request).catch((reason) => {
+    console.error(reason);
+    return new Response("Fail.", { status: 500, headers: { "content-type": "text/html" } });
+  });
 }
