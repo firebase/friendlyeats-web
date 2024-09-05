@@ -27,7 +27,7 @@ function useUserSession(initialUser) {
 		
 		  navigator.serviceWorker
 			.register(serviceWorkerUrl)
-			.then((registration) => {
+			.then(async (registration) => {
 				setServiceWorker(registration.active);
 				console.log("scope is: ", registration.scope)
 			});
@@ -41,16 +41,19 @@ function useUserSession(initialUser) {
 	}, []);
 
 	useEffect(() => {
-		// refresh when user changed to ease testing
-		return onIdTokenChanged(async (authUser) => {
-			if (user?.email === authUser?.email) return;
-			// Send the new ID_TOKEN to the worker so we don't have a race condition
-			if (serviceWorker) {
-				const idToken = authUser && await getIdToken(authUser);
-				serviceWorker.postMessage({ type: 'FIREBASE_ID_TOKEN', idToken });
-			}
-			router.refresh();
-		})
+		if (serviceWorker) {
+			// listen to an onAuthStateChanged event from the service worker when
+			// refreshing the router, this is preferred over onAuthStateChanged as
+			// that can introduce race conditions as the client & service worker state
+			// can be out of sync
+			return navigator.serviceWorker.addEventListener("message", (event) => {
+				if (event.source !== serviceWorker) return;
+				if (event.data.type !== "onAuthStateChanged") return;
+				event.preventDefault();
+				if (user?.uid === event.data?.uid) return;
+				router.refresh();
+			});
+		}
 	}, [user, serviceWorker]);
 
 	return user;

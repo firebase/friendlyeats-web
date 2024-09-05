@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, getIdToken, onIdTokenChanged } from "firebase/auth";
+import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 
 // extract firebase config from query string
 const serializedFirebaseConfig = new URLSearchParams(self.location.search).get('firebaseConfig');
@@ -21,36 +21,31 @@ self.addEventListener("activate", () => {
   self.clients.claim();
 });
 
-// Allow the client to send a temporary override to the idToken, this allows for
-// router.refresh() without worrying about the client and service worker having
-// race conditions.
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "FIREBASE_ID_TOKEN") {
-    getAuthIdToken = () => Promise.resolve(event.data.idToken);
-  }
-});
-
-// Once the idTokenChanged event fires, change back to the original method
+// Notify clients of onAuthStateChanged events, so they can coordinate
+// any actions which may normally be prone to race conditions, such as
+// router.refresh();
 auth.authStateReady().then(() => {
-  onIdTokenChanged(auth, () => {
-    getAuthIdToken = DEFAULT_GET_AUTH_ID_TOKEN;
+  onAuthStateChanged(auth, async (user) => {
+    const uid = user?.uid;
+    const clients = await self.clients.matchAll();
+    for (const client of clients) {
+      client.postMessage({ type: "onAuthStateChanged", uid });
+    }
   });
 });
 
-const DEFAULT_GET_AUTH_ID_TOKEN = async () => {
+async function getAuthIdToken() {
   await auth.authStateReady();
   if (!auth.currentUser) return;
   return await getIdToken(auth.currentUser);
 };
 
-let getAuthIdToken = DEFAULT_GET_AUTH_ID_TOKEN;
-
 self.addEventListener("fetch", (event) => {
   const { origin, pathname } = new URL(event.request.url);
   if (origin !== self.location.origin) return;
   if (pathname.startsWith('/_next/')) return;
-  // Ignore resources with an extension—this skips css, images, fonts, json, etc.
-  if (!pathname.startsWith("/api/") && pathname.includes(".")) return;
+  // Don't add haeders to GET requests with an extension—this skips css, images, fonts, json, etc.
+  if (event.request.method === "GET" && !pathname.startsWith("/api/") && pathname.includes(".")) return;
   event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
 
