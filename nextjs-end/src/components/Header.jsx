@@ -4,15 +4,18 @@ import Link from "next/link";
 import {
 	signInWithGoogle,
 	signOut,
-	onAuthStateChanged
+	onAuthStateChanged,
+	onIdTokenChanged,
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 import { useRouter } from "next/navigation";
 import { firebaseConfig } from "@/src/lib/firebase/config";
+import { getIdToken } from "firebase/auth";
 
 function useUserSession(initialUser) {
 	// The initialUser comes from the server via a server component
 	const [user, setUser] = useState(initialUser);
+	const [serviceWorker, setServiceWorker] = useState(undefined);
 	const router = useRouter();
 
 	// Register the service worker that sends auth state back to server
@@ -24,30 +27,31 @@ function useUserSession(initialUser) {
 		
 		  navigator.serviceWorker
 			.register(serviceWorkerUrl)
-			.then((registration) => console.log("scope is: ", registration.scope));
+			.then((registration) => {
+				setServiceWorker(registration.active);
+				console.log("scope is: ", registration.scope)
+			});
 		}
-	  }, []);
-
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged((authUser) => {
-			setUser(authUser)
-		})
-
-		return () => unsubscribe()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
-		onAuthStateChanged((authUser) => {
-			if (user === undefined) return
+		return onAuthStateChanged((authUser) => {
+			setUser(authUser)
+		});
+	}, []);
 
-			// refresh when user changed to ease testing
-			if (user?.email !== authUser?.email) {
-				router.refresh()
+	useEffect(() => {
+		// refresh when user changed to ease testing
+		return onIdTokenChanged(async (authUser) => {
+			if (user?.email === authUser?.email) return;
+			// Send the new ID_TOKEN to the worker so we don't have a race condition
+			if (serviceWorker) {
+				const idToken = authUser && await getIdToken(authUser);
+				serviceWorker.postMessage({ type: 'FIREBASE_ID_TOKEN', idToken });
 			}
+			router.refresh();
 		})
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user])
+	}, [user, serviceWorker]);
 
 	return user;
 }

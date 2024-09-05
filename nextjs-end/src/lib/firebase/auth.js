@@ -2,9 +2,16 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged as _onAuthStateChanged,
+  onIdTokenChanged as _onIdTokenChanged,
 } from "firebase/auth";
 
 import { auth } from "@/src/lib/firebase/clientApp";
+
+export { getIdToken } from "firebase/auth";
+
+export function onIdTokenChanged(cb) {
+	return _onIdTokenChanged(auth, cb);
+}
 
 export function onAuthStateChanged(cb) {
 	return _onAuthStateChanged(auth, cb);

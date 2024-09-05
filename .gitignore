@@ -1,4 +1,10 @@
 **/.firebaserc
-**/node_modules/
-**/*-debug.log
 **/.DS_Store
+
+**/node_modules/
+**/package-lock.json
+**/pnpm-lock.yaml
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/yarn.lock
