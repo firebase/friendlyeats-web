@@ -1,20 +1,21 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, getIdToken } from "firebase/auth";
-import { getInstallations, getToken } from "firebase/installations";
 
-// this is set during install
-let firebaseConfig;
+// extract firebase config from query string
+const serializedFirebaseConfig = new URLSearchParams(self.location.search).get('firebaseConfig');
+if (!serializedFirebaseConfig) {
+  throw new Error('Firebase Config object not found in service worker query string.');
+}
 
-self.addEventListener('install', event => {
-  // extract firebase config from query string
-  const serializedFirebaseConfig = new URL(location).searchParams.get('firebaseConfig');
-  
-  if (!serializedFirebaseConfig) {
-    throw new Error('Firebase Config object not found in service worker query string.');
-  }
-  
-  firebaseConfig = JSON.parse(serializedFirebaseConfig);
+const firebaseConfig = JSON.parse(serializedFirebaseConfig);
+
+self.addEventListener("install", () => {
   console.log("Service worker installed with Firebase config", firebaseConfig);
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", () => {
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
