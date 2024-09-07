@@ -5,17 +5,14 @@ import {
 	signInWithGoogle,
 	signOut,
 	onAuthStateChanged,
-	onIdTokenChanged,
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 import { useRouter } from "next/navigation";
 import { firebaseConfig } from "@/src/lib/firebase/config";
-import { getIdToken } from "firebase/auth";
 
 function useUserSession(initialUser) {
 	// The initialUser comes from the server via a server component
 	const [user, setUser] = useState(initialUser);
-	const [serviceWorker, setServiceWorker] = useState(undefined);
 	const router = useRouter();
 
 	// Register the service worker that sends auth state back to server
@@ -25,36 +22,24 @@ function useUserSession(initialUser) {
 			const serializedFirebaseConfig = encodeURIComponent(JSON.stringify(firebaseConfig));
 			const serviceWorkerUrl = `/auth-service-worker.js?firebaseConfig=${serializedFirebaseConfig}`
 		
-		  navigator.serviceWorker
-			.register(serviceWorkerUrl)
-			.then(async (registration) => {
-				setServiceWorker(registration.active);
-				console.log("scope is: ", registration.scope)
-			});
+		  	navigator
+				.serviceWorker
+				.register(serviceWorkerUrl, { scope: "/", updateViaCache: "none" })
+				.then((registration) => {
+					console.log("scope is: ", registration.scope);
+					registration.update();
+				});
 		}
 	}, []);
 
 	useEffect(() => {
-		return onAuthStateChanged((authUser) => {
-			setUser(authUser)
+		return onAuthStateChanged(async (authUser) => {
+			if (user?.uid === authUser?.uid) return;
+			await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(() => undefined);
+			setUser(authUser);
+			router.refresh();
 		});
-	}, []);
-
-	useEffect(() => {
-		if (serviceWorker) {
-			// listen to an onAuthStateChanged event from the service worker when
-			// refreshing the router, this is preferred over onAuthStateChanged as
-			// that can introduce race conditions as the client & service worker state
-			// can be out of sync
-			return navigator.serviceWorker.addEventListener("message", (event) => {
-				if (event.source !== serviceWorker) return;
-				if (event.data.type !== "onAuthStateChanged") return;
-				event.preventDefault();
-				if (user?.uid === event.data?.uid) return;
-				router.refresh();
-			});
-		}
-	}, [user, serviceWorker]);
+	}, [user]);
 
 	return user;
 }

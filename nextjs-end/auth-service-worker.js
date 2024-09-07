@@ -21,19 +21,6 @@ self.addEventListener("activate", () => {
   self.clients.claim();
 });
 
-// Notify clients of onAuthStateChanged events, so they can coordinate
-// any actions which may normally be prone to race conditions, such as
-// router.refresh();
-auth.authStateReady().then(() => {
-  onAuthStateChanged(auth, async (user) => {
-    const uid = user?.uid;
-    const clients = await self.clients.matchAll();
-    for (const client of clients) {
-      client.postMessage({ type: "onAuthStateChanged", uid });
-    }
-  });
-});
-
 async function getAuthIdToken() {
   await auth.authStateReady();
   if (!auth.currentUser) return;
@@ -43,11 +30,33 @@ async function getAuthIdToken() {
 self.addEventListener("fetch", (event) => {
   const { origin, pathname } = new URL(event.request.url);
   if (origin !== self.location.origin) return;
+  // Use a magic url to ensure that auth state is in sync between
+  // the client and the sw, this helps with actions such as router.refresh();
+  if (pathname.startsWith('/__/auth/wait/')) {
+    const uid = pathname.split('/').at(-1);
+    event.respondWith(waitForMatchingUid(uid));
+    return;
+  }
   if (pathname.startsWith('/_next/')) return;
-  // Don't add haeders to GET requests with an extension—this skips css, images, fonts, json, etc.
+  // Don't add headers to non-get requests or those with an extension—this
+  // helps with css, images, fonts, json, etc.
   if (event.request.method === "GET" && !pathname.startsWith("/api/") && pathname.includes(".")) return;
   event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
+
+async function waitForMatchingUid(_uid) {
+  const uid = _uid === "undefined" ? undefined : _uid;
+  await auth.authStateReady();
+  await new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user?.uid === uid) {
+              unsubscribe();
+              resolve();
+          }
+      });
+  });
+  return new Response(undefined, { status: 200, headers: { "cache-control": "no-store" } });
+}
 
 async function fetchWithFirebaseHeaders(request) {
   const authIdToken = await getAuthIdToken();
