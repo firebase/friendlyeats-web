@@ -17,8 +17,8 @@ self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
-self.addEventListener("activate", () => {
-  self.clients.claim();
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
 });
 
 async function getAuthIdToken() {
@@ -40,7 +40,7 @@ self.addEventListener("fetch", (event) => {
   if (pathname.startsWith('/_next/')) return;
   // Don't add headers to non-get requests or those with an extension—this
   // helps with css, images, fonts, json, etc.
-  if (event.request.method === "GET" && !pathname.startsWith("/api/") && pathname.includes(".")) return;
+  if (event.request.method === "GET" && pathname.includes(".")) return;
   event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
 

@@ -35,7 +35,10 @@ function useUserSession(initialUser) {
 	useEffect(() => {
 		return onAuthStateChanged(async (authUser) => {
 			if (user?.uid === authUser?.uid) return;
-			await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(() => undefined);
+			if ("serviceWorker" in navigator) {
+				await navigator.serviceWorker.ready;
+				await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(() => undefined);
+			}
 			setUser(authUser);
 			router.refresh();
 		});
