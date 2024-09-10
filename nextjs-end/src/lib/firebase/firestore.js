@@ -13,7 +13,6 @@ import {
 	runTransaction,
 	where,
 	addDoc,
-	getFirestore,
 } from "firebase/firestore";
 
 import { db } from "@/src/lib/firebase/clientApp";
@@ -122,7 +121,7 @@ export function getRestaurantsSnapshot(cb, filters = {}) {
 	let q = query(collection(db, "restaurants"));
 	q = applyQueryFilters(q, filters);
 
-	const unsubscribe = onSnapshot(q, querySnapshot => {
+	return onSnapshot(q, querySnapshot => {
 		const results = querySnapshot.docs.map(doc => {
 			return {
 				id: doc.id,
@@ -134,8 +133,6 @@ export function getRestaurantsSnapshot(cb, filters = {}) {
 
 		cb(results);
 	});
-
-	return unsubscribe;
 }
 
 export async function getRestaurantById(db, restaurantId) {
@@ -163,13 +160,12 @@ export function getRestaurantSnapshotById(restaurantId, cb) {
 	}
 
 	const docRef = doc(db, "restaurants", restaurantId);
-	const unsubscribe = onSnapshot(docRef, docSnap => {
+	return onSnapshot(docRef, docSnap => {
 		cb({
 			...docSnap.data(),
 			timestamp: docSnap.data().timestamp.toDate(),
 		});
 	});
-	return unsubscribe;
 }
 
 export async function getReviewsByRestaurantId(db, restaurantId) {
@@ -204,7 +200,7 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 		collection(db, "restaurants", restaurantId, "ratings"),
 		orderBy("timestamp", "desc")
 	);
-	const unsubscribe = onSnapshot(q, querySnapshot => {
+	return onSnapshot(q, querySnapshot => {
 		const results = querySnapshot.docs.map(doc => {
 			return {
 				id: doc.id,
@@ -215,7 +211,6 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 		});
 		cb(results);
 	});
-	return unsubscribe;
 }
 
 export async function addFakeRestaurantsAndReviews() {

@@ -1,5 +1,5 @@
 {
-  "extends": ["next"],
+  "extends": ["eslint:recommended", "next"],
   "rules": {
     "indent": "off",
     "quotes": "off",

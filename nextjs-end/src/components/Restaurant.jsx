@@ -50,13 +50,9 @@ export default function Restaurant({
   };
 
   useEffect(() => {
-    const unsubscribeFromRestaurant = getRestaurantSnapshotById(id, (data) => {
+    return getRestaurantSnapshotById(id, (data) => {
       setRestaurantDetails(data);
     });
-
-    return () => {
-      unsubscribeFromRestaurant();
-    };
   }, [id]);
 
   return (

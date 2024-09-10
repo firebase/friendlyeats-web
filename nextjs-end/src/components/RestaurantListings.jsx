@@ -77,13 +77,9 @@ export default function RestaurantListings({
 	}, [router, filters]);
 
 	useEffect(() => {
-		const unsubscribe = getRestaurantsSnapshot(data => {
+		return getRestaurantsSnapshot(data => {
 			setRestaurants(data);
 		}, filters);
-
-		return () => {
-			unsubscribe();
-		};
 	}, [filters]);
 
 	return (
