@@ -1,4 +1,4 @@
-import { generateFakeRestaurantsAndReviews } from '@/src/lib/fakeRestaurants.js';
+import { generateFakeRestaurantsAndReviews } from "@/src/lib/fakeRestaurants.js";
 
 import {
   collection,
@@ -13,15 +13,15 @@ import {
   runTransaction,
   where,
   addDoc,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
-import { db } from '@/src/lib/firebase/clientApp';
+import { db } from "@/src/lib/firebase/clientApp";
 
 export async function updateRestaurantImageReference(
   restaurantId,
   publicImageUrl,
 ) {
-  const restaurantRef = doc(collection(db, 'restaurants'), restaurantId);
+  const restaurantRef = doc(collection(db, "restaurants"), restaurantId);
   if (restaurantRef) {
     await updateDoc(restaurantRef, { photo: publicImageUrl });
   }
@@ -53,15 +53,15 @@ const updateWithRating = async (
 
 export async function addReviewToRestaurant(db, restaurantId, review) {
   if (!restaurantId) {
-    throw new Error('No restaurant ID has been provided.');
+    throw new Error("No restaurant ID has been provided.");
   }
 
   if (!review) {
-    throw new Error('A valid review has not been provided.');
+    throw new Error("A valid review has not been provided.");
   }
 
   try {
-    const docRef = doc(collection(db, 'restaurants'), restaurantId);
+    const docRef = doc(collection(db, "restaurants"), restaurantId);
     const newRatingDocument = doc(
       collection(db, `restaurants/${restaurantId}/ratings`),
     );
@@ -72,7 +72,7 @@ export async function addReviewToRestaurant(db, restaurantId, review) {
     );
   } catch (error) {
     console.error(
-      'There was an error adding the rating to the restaurant',
+      "There was an error adding the rating to the restaurant",
       error,
     );
     throw error;
@@ -81,24 +81,24 @@ export async function addReviewToRestaurant(db, restaurantId, review) {
 
 function applyQueryFilters(q, { category, city, price, sort }) {
   if (category) {
-    q = query(q, where('category', '==', category));
+    q = query(q, where("category", "==", category));
   }
   if (city) {
-    q = query(q, where('city', '==', city));
+    q = query(q, where("city", "==", city));
   }
   if (price) {
-    q = query(q, where('price', '==', price.length));
+    q = query(q, where("price", "==", price.length));
   }
-  if (sort === 'Rating' || !sort) {
-    q = query(q, orderBy('avgRating', 'desc'));
-  } else if (sort === 'Review') {
-    q = query(q, orderBy('numRatings', 'desc'));
+  if (sort === "Rating" || !sort) {
+    q = query(q, orderBy("avgRating", "desc"));
+  } else if (sort === "Review") {
+    q = query(q, orderBy("numRatings", "desc"));
   }
   return q;
 }
 
 export async function getRestaurants(db = db, filters = {}) {
-  let q = query(collection(db, 'restaurants'));
+  let q = query(collection(db, "restaurants"));
 
   q = applyQueryFilters(q, filters);
   const results = await getDocs(q);
@@ -113,12 +113,12 @@ export async function getRestaurants(db = db, filters = {}) {
 }
 
 export function getRestaurantsSnapshot(cb, filters = {}) {
-  if (typeof cb !== 'function') {
-    console.log('Error: The callback parameter is not a function');
+  if (typeof cb !== "function") {
+    console.log("Error: The callback parameter is not a function");
     return;
   }
 
-  let q = query(collection(db, 'restaurants'));
+  let q = query(collection(db, "restaurants"));
   q = applyQueryFilters(q, filters);
 
   return onSnapshot(q, (querySnapshot) => {
@@ -137,10 +137,10 @@ export function getRestaurantsSnapshot(cb, filters = {}) {
 
 export async function getRestaurantById(db, restaurantId) {
   if (!restaurantId) {
-    console.log('Error: Invalid ID received: ', restaurantId);
+    console.log("Error: Invalid ID received: ", restaurantId);
     return;
   }
-  const docRef = doc(db, 'restaurants', restaurantId);
+  const docRef = doc(db, "restaurants", restaurantId);
   const docSnap = await getDoc(docRef);
   return {
     ...docSnap.data(),
@@ -150,16 +150,16 @@ export async function getRestaurantById(db, restaurantId) {
 
 export function getRestaurantSnapshotById(restaurantId, cb) {
   if (!restaurantId) {
-    console.log('Error: Invalid ID received: ', restaurantId);
+    console.log("Error: Invalid ID received: ", restaurantId);
     return;
   }
 
-  if (typeof cb !== 'function') {
-    console.log('Error: The callback parameter is not a function');
+  if (typeof cb !== "function") {
+    console.log("Error: The callback parameter is not a function");
     return;
   }
 
-  const docRef = doc(db, 'restaurants', restaurantId);
+  const docRef = doc(db, "restaurants", restaurantId);
   return onSnapshot(docRef, (docSnap) => {
     cb({
       ...docSnap.data(),
@@ -170,13 +170,13 @@ export function getRestaurantSnapshotById(restaurantId, cb) {
 
 export async function getReviewsByRestaurantId(db, restaurantId) {
   if (!restaurantId) {
-    console.log('Error: Invalid restaurantId received: ', restaurantId);
+    console.log("Error: Invalid restaurantId received: ", restaurantId);
     return;
   }
 
   const q = query(
-    collection(db, 'restaurants', restaurantId, 'ratings'),
-    orderBy('timestamp', 'desc'),
+    collection(db, "restaurants", restaurantId, "ratings"),
+    orderBy("timestamp", "desc"),
   );
 
   const results = await getDocs(q);
@@ -192,13 +192,13 @@ export async function getReviewsByRestaurantId(db, restaurantId) {
 
 export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
   if (!restaurantId) {
-    console.log('Error: Invalid restaurantId received: ', restaurantId);
+    console.log("Error: Invalid restaurantId received: ", restaurantId);
     return;
   }
 
   const q = query(
-    collection(db, 'restaurants', restaurantId, 'ratings'),
-    orderBy('timestamp', 'desc'),
+    collection(db, "restaurants", restaurantId, "ratings"),
+    orderBy("timestamp", "desc"),
   );
   return onSnapshot(q, (querySnapshot) => {
     const results = querySnapshot.docs.map((doc) => {
@@ -218,19 +218,19 @@ export async function addFakeRestaurantsAndReviews() {
   for (const { restaurantData, ratingsData } of data) {
     try {
       const docRef = await addDoc(
-        collection(db, 'restaurants'),
+        collection(db, "restaurants"),
         restaurantData,
       );
 
       for (const ratingData of ratingsData) {
         await addDoc(
-          collection(db, 'restaurants', docRef.id, 'ratings'),
+          collection(db, "restaurants", docRef.id, "ratings"),
           ratingData,
         );
       }
     } catch (e) {
-      console.log('There was an error adding the document');
-      console.error('Error adding document: ', e);
+      console.log("There was an error adding the document");
+      console.error("Error adding document: ", e);
     }
   }
 }

@@ -1,18 +1,18 @@
-import Restaurant from '@/src/components/Restaurant.jsx';
-import { Suspense } from 'react';
-import { getRestaurantById } from '@/src/lib/firebase/firestore.js';
+import Restaurant from "@/src/components/Restaurant.jsx";
+import { Suspense } from "react";
+import { getRestaurantById } from "@/src/lib/firebase/firestore.js";
 import {
   getAuthenticatedAppForUser,
   getAuthenticatedAppForUser as getUser,
-} from '@/src/lib/firebase/serverApp.js';
+} from "@/src/lib/firebase/serverApp.js";
 import ReviewsList, {
   ReviewsListSkeleton,
-} from '@/src/components/Reviews/ReviewsList';
+} from "@/src/components/Reviews/ReviewsList";
 import {
   GeminiSummary,
   GeminiSummarySkeleton,
-} from '@/src/components/Reviews/ReviewSummary';
-import { getFirestore } from 'firebase/firestore';
+} from "@/src/components/Reviews/ReviewSummary";
+import { getFirestore } from "firebase/firestore";
 
 export default async function Home({ params }) {
   const { currentUser } = await getUser();
@@ -23,11 +23,11 @@ export default async function Home({ params }) {
   );
 
   return (
-    <main className='main__restaurant'>
+    <main className="main__restaurant">
       <Restaurant
         id={params.id}
         initialRestaurant={restaurant}
-        initialUserId={currentUser?.uid || ''}
+        initialUserId={currentUser?.uid || ""}
       >
         <Suspense fallback={<GeminiSummarySkeleton />}>
           <GeminiSummary restaurantId={params.id} />
@@ -36,7 +36,7 @@ export default async function Home({ params }) {
       <Suspense
         fallback={<ReviewsListSkeleton numReviews={restaurant.numRatings} />}
       >
-        <ReviewsList restaurantId={params.id} userId={currentUser?.uid || ''} />
+        <ReviewsList restaurantId={params.id} userId={currentUser?.uid || ""} />
       </Suspense>
     </main>
   );

@@ -1,6 +1,6 @@
 // The filters shown on the restaurant listings page
 
-import Tag from '@/src/components/Tag.jsx';
+import Tag from "@/src/components/Tag.jsx";
 
 function FilterSelect({ label, options, value, onChange, name, icon }) {
   return (
@@ -11,7 +11,7 @@ function FilterSelect({ label, options, value, onChange, name, icon }) {
         <select value={value} onChange={onChange} name={name}>
           {options.map((option, index) => (
             <option value={option} key={index}>
-              {option === '' ? 'All' : option}
+              {option === "" ? "All" : option}
             </option>
           ))}
         </select>
@@ -33,104 +33,104 @@ export default function Filters({ filters, setFilters }) {
   };
 
   return (
-    <section className='filter'>
-      <details className='filter-menu'>
+    <section className="filter">
+      <details className="filter-menu">
         <summary>
-          <img src='/filter.svg' alt='filter' />
+          <img src="/filter.svg" alt="filter" />
           <div>
             <p>Restaurants</p>
-            <p>Sorted by {filters.sort || 'Rating'}</p>
+            <p>Sorted by {filters.sort || "Rating"}</p>
           </div>
         </summary>
 
         <form
-          method='GET'
+          method="GET"
           onSubmit={(event) => {
             event.preventDefault();
-            event.target.parentNode.removeAttribute('open');
+            event.target.parentNode.removeAttribute("open");
           }}
         >
           <FilterSelect
-            label='Category'
+            label="Category"
             options={[
-              '',
-              'Italian',
-              'Chinese',
-              'Japanese',
-              'Mexican',
-              'Indian',
-              'Mediterranean',
-              'Caribbean',
-              'Cajun',
-              'German',
-              'Russian',
-              'Cuban',
-              'Organic',
-              'Tapas',
+              "",
+              "Italian",
+              "Chinese",
+              "Japanese",
+              "Mexican",
+              "Indian",
+              "Mediterranean",
+              "Caribbean",
+              "Cajun",
+              "German",
+              "Russian",
+              "Cuban",
+              "Organic",
+              "Tapas",
             ]}
             value={filters.category}
-            onChange={(event) => handleSelectionChange(event, 'category')}
-            name='category'
-            icon='/food.svg'
+            onChange={(event) => handleSelectionChange(event, "category")}
+            name="category"
+            icon="/food.svg"
           />
 
           <FilterSelect
-            label='City'
+            label="City"
             options={[
-              '',
-              'New York',
-              'Los Angeles',
-              'London',
-              'Paris',
-              'Tokyo',
-              'Mumbai',
-              'Dubai',
-              'Amsterdam',
-              'Seoul',
-              'Singapore',
-              'Istanbul',
+              "",
+              "New York",
+              "Los Angeles",
+              "London",
+              "Paris",
+              "Tokyo",
+              "Mumbai",
+              "Dubai",
+              "Amsterdam",
+              "Seoul",
+              "Singapore",
+              "Istanbul",
             ]}
             value={filters.city}
-            onChange={(event) => handleSelectionChange(event, 'city')}
-            name='city'
-            icon='/location.svg'
+            onChange={(event) => handleSelectionChange(event, "city")}
+            name="city"
+            icon="/location.svg"
           />
 
           <FilterSelect
-            label='Price'
-            options={['', '$', '$$', '$$$', '$$$$']}
+            label="Price"
+            options={["", "$", "$$", "$$$", "$$$$"]}
             value={filters.price}
-            onChange={(event) => handleSelectionChange(event, 'price')}
-            name='price'
-            icon='/price.svg'
+            onChange={(event) => handleSelectionChange(event, "price")}
+            name="price"
+            icon="/price.svg"
           />
 
           <FilterSelect
-            label='Sort'
-            options={['Rating', 'Review']}
+            label="Sort"
+            options={["Rating", "Review"]}
             value={filters.sort}
-            onChange={(event) => handleSelectionChange(event, 'sort')}
-            name='sort'
-            icon='/sortBy.svg'
+            onChange={(event) => handleSelectionChange(event, "sort")}
+            name="sort"
+            icon="/sortBy.svg"
           />
 
           <footer>
             <menu>
               <button
-                className='button--cancel'
-                type='reset'
+                className="button--cancel"
+                type="reset"
                 onClick={() => {
                   setFilters({
-                    city: '',
-                    category: '',
-                    price: '',
-                    sort: '',
+                    city: "",
+                    category: "",
+                    price: "",
+                    sort: "",
                   });
                 }}
               >
                 Reset
               </button>
-              <button type='submit' className='button--confirm'>
+              <button type="submit" className="button--confirm">
                 Submit
               </button>
             </menu>
@@ -138,12 +138,12 @@ export default function Filters({ filters, setFilters }) {
         </form>
       </details>
 
-      <div className='tags'>
+      <div className="tags">
         {Object.entries(filters).map(([type, value]) => {
           // The main filter bar already specifies what
           // sorting is being used. So skip showing the
           // sorting as a 'tag'
-          if (type == 'sort' || value == '') {
+          if (type == "sort" || value == "") {
             return null;
           }
           return (

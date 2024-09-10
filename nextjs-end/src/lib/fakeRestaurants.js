@@ -2,10 +2,10 @@ import {
   randomNumberBetween,
   getRandomDateAfter,
   getRandomDateBefore,
-} from '@/src/lib/utils.js';
-import { randomData } from '@/src/lib/randomData.js';
+} from "@/src/lib/utils.js";
+import { randomData } from "@/src/lib/randomData.js";
 
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from "firebase/firestore";
 
 export async function generateFakeRestaurantsAndReviews() {
   const restaurantsToAdd = 5;

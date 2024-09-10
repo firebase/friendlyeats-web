@@ -4,12 +4,12 @@
 
 export default function Tag({ type, value, updateField }) {
   return (
-    <span className=''>
+    <span className="">
       {value}
       <button
-        type='button'
-        aria-label='Remove'
-        onClick={() => updateField(type, '')}
+        type="button"
+        aria-label="Remove"
+        onClick={() => updateField(type, "")}
       >
         X
       </button>

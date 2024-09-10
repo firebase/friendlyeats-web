@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { getReviewsSnapshotByRestaurantId } from '@/src/lib/firebase/firestore.js';
-import { Review } from '@/src/components/Reviews/Review';
+import React, { useState, useEffect } from "react";
+import { getReviewsSnapshotByRestaurantId } from "@/src/lib/firebase/firestore.js";
+import { Review } from "@/src/components/Reviews/Review";
 
 export default function ReviewsListClient({
   initialReviews,
@@ -18,7 +18,7 @@ export default function ReviewsListClient({
   }, [restaurantId]);
   return (
     <article>
-      <ul className='reviews'>
+      <ul className="reviews">
         {reviews.length > 0 ? (
           <ul>
             {reviews.map((review) => (
@@ -32,8 +32,8 @@ export default function ReviewsListClient({
           </ul>
         ) : (
           <p>
-            This restaurant has not been reviewed yet,{' '}
-            {!userId ? 'first login and then' : ''} add your own review!
+            This restaurant has not been reviewed yet,{" "}
+            {!userId ? "first login and then" : ""} add your own review!
           </p>
         )}
       </ul>

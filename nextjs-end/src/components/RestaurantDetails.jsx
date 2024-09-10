@@ -1,7 +1,7 @@
 // This component shows restaurant metadata, and offers some actions to the user like uploading a new restaurant image, and adding a review.
 
-import React from 'react';
-import renderStars from '@/src/components/Stars.jsx';
+import React from "react";
+import renderStars from "@/src/components/Stars.jsx";
 
 const RestaurantDetails = ({
   restaurant,
@@ -12,41 +12,41 @@ const RestaurantDetails = ({
   children,
 }) => {
   return (
-    <section className='img__section'>
+    <section className="img__section">
       <img src={restaurant.photo} alt={restaurant.name} />
 
-      <div className='actions'>
+      <div className="actions">
         {userId && (
           <img
-            alt='review'
-            className='review'
+            alt="review"
+            className="review"
             onClick={() => {
               setIsOpen(!isOpen);
             }}
-            src='/review.svg'
+            src="/review.svg"
           />
         )}
         <label
           onChange={(event) => handleRestaurantImage(event.target)}
-          htmlFor='upload-image'
-          className='add'
+          htmlFor="upload-image"
+          className="add"
         >
           <input
-            name=''
-            type='file'
-            id='upload-image'
-            className='file-input hidden w-full h-full'
+            name=""
+            type="file"
+            id="upload-image"
+            className="file-input hidden w-full h-full"
           />
 
-          <img className='add-image' src='/add.svg' alt='Add image' />
+          <img className="add-image" src="/add.svg" alt="Add image" />
         </label>
       </div>
 
-      <div className='details__container'>
-        <div className='details'>
+      <div className="details__container">
+        <div className="details">
           <h2>{restaurant.name}</h2>
 
-          <div className='restaurant__rating'>
+          <div className="restaurant__rating">
             <ul>{renderStars(restaurant.avgRating)}</ul>
 
             <span>({restaurant.numRatings})</span>
@@ -55,7 +55,7 @@ const RestaurantDetails = ({
           <p>
             {restaurant.category} | {restaurant.city}
           </p>
-          <p>{'$'.repeat(restaurant.price)}</p>
+          <p>{"$".repeat(restaurant.price)}</p>
           {children}
         </div>
       </div>

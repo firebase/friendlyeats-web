@@ -1,14 +1,14 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   signInWithGoogle,
   signOut,
   onAuthStateChanged,
-} from '@/src/lib/firebase/auth.js';
-import { addFakeRestaurantsAndReviews } from '@/src/lib/firebase/firestore.js';
-import { useRouter } from 'next/navigation';
-import { firebaseConfig } from '@/src/lib/firebase/config';
+} from "@/src/lib/firebase/auth.js";
+import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
+import { useRouter } from "next/navigation";
+import { firebaseConfig } from "@/src/lib/firebase/config";
 
 function useUserSession(initialUser) {
   // The initialUser comes from the server via a server component
@@ -18,16 +18,16 @@ function useUserSession(initialUser) {
   // Register the service worker that sends auth state back to server
   // The service worker is built with npm run build-service-worker
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       const serializedFirebaseConfig = encodeURIComponent(
         JSON.stringify(firebaseConfig),
       );
       const serviceWorkerUrl = `/auth-service-worker.js?firebaseConfig=${serializedFirebaseConfig}`;
 
       navigator.serviceWorker
-        .register(serviceWorkerUrl, { scope: '/', updateViaCache: 'none' })
+        .register(serviceWorkerUrl, { scope: "/", updateViaCache: "none" })
         .then((registration) => {
-          console.log('scope is: ', registration.scope);
+          console.log("scope is: ", registration.scope);
           registration.update();
         });
     }
@@ -38,9 +38,9 @@ function useUserSession(initialUser) {
       if (user?.uid === authUser?.uid) {
         return;
       }
-      if ('serviceWorker' in navigator) {
+      if ("serviceWorker" in navigator) {
         await navigator.serviceWorker.ready;
-        await fetch(`/__/auth/wait/${authUser?.uid}`, { method: 'HEAD' }).catch(
+        await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(
           () => undefined,
         );
       }
@@ -67,35 +67,35 @@ export default function Header({ initialUser }) {
 
   return (
     <header>
-      <Link href='/' className='logo'>
-        <img src='/friendly-eats.svg' alt='FriendlyEats' />
+      <Link href="/" className="logo">
+        <img src="/friendly-eats.svg" alt="FriendlyEats" />
         Friendly Eats
       </Link>
       {user ? (
         <>
-          <div className='profile'>
+          <div className="profile">
             <p>
               <img
-                className='profileImage'
-                src={user.photoURL || '/profile.svg'}
+                className="profileImage"
+                src={user.photoURL || "/profile.svg"}
                 alt={user.email}
               />
               {user.displayName}
             </p>
 
-            <div className='menu'>
+            <div className="menu">
               ...
               <ul>
                 <li>{user.displayName}</li>
 
                 <li>
-                  <a href='#' onClick={addFakeRestaurantsAndReviews}>
+                  <a href="#" onClick={addFakeRestaurantsAndReviews}>
                     Add sample restaurants
                   </a>
                 </li>
 
                 <li>
-                  <a href='#' onClick={handleSignOut}>
+                  <a href="#" onClick={handleSignOut}>
                     Sign Out
                   </a>
                 </li>
@@ -104,9 +104,9 @@ export default function Header({ initialUser }) {
           </div>
         </>
       ) : (
-        <div className='profile'>
-          <a href='#' onClick={handleSignIn}>
-            <img src='/profile.svg' alt='A placeholder user image' />
+        <div className="profile">
+          <a href="#" onClick={handleSignIn}>
+            <img src="/profile.svg" alt="A placeholder user image" />
             Sign In with Google
           </a>
         </div>

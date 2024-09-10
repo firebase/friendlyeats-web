@@ -1,7 +1,7 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-import { getReviewsByRestaurantId } from '@/src/lib/firebase/firestore.js';
-import { getAuthenticatedAppForUser } from '@/src/lib/firebase/serverApp';
-import { getFirestore } from 'firebase/firestore';
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
+import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
+import { getFirestore } from "firebase/firestore";
 
 export async function GeminiSummary({ restaurantId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
@@ -11,9 +11,9 @@ export async function GeminiSummary({ restaurantId }) {
   );
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-  const reviewSeparator = '@';
+  const reviewSeparator = "@";
   const prompt = `
     Based on the following restaurant reviews, 
     where each review is separated by a '${reviewSeparator}' character, 
@@ -28,14 +28,14 @@ export async function GeminiSummary({ restaurantId }) {
     const text = response.text();
 
     return (
-      <div className='restaurant__review_summary'>
+      <div className="restaurant__review_summary">
         <p>{text}</p>
         <p>✨ Summarized with Gemini</p>
       </div>
     );
   } catch (e) {
     console.error(e);
-    if (e.message.includes('403 Forbidden')) {
+    if (e.message.includes("403 Forbidden")) {
       return (
         <p>
           This service account doesn&apos;t have permission to talk to Gemini
@@ -50,7 +50,7 @@ export async function GeminiSummary({ restaurantId }) {
 
 export function GeminiSummarySkeleton() {
   return (
-    <div className='restaurant__review_summary'>
+    <div className="restaurant__review_summary">
       <p>✨ Summarizing reviews with Gemini...</p>
     </div>
   );

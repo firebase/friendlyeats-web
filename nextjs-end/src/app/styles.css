@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 * {
   box-sizing: border-box;
@@ -8,7 +8,7 @@
 
 body {
   font-family:
-    'Roboto',
+    "Roboto",
     ui-sans-serif,
     system-ui,
     -apple-system;
@@ -289,9 +289,9 @@ a {
 }
 
 .restaurant__review_summary {
-  max-width: '50vw';
-  height: '75px';
-  padding-top: '10px';
+  max-width: "50vw";
+  height: "75px";
+  padding-top: "10px";
 }
 
 .img__section {
@@ -419,7 +419,7 @@ a {
 }
 
 .radio-label:before {
-  content: '★';
+  content: "★";
   display: inline-block;
   font-size: 32px;
 }
@@ -454,7 +454,7 @@ a {
 
 .average-rating::before {
   --percent: calc(4.3 / 5 * 100%);
-  content: '★★★★★';
+  content: "★★★★★";
   position: absolute;
   top: 0;
   left: 0;
