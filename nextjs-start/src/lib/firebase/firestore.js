@@ -102,7 +102,7 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 		collection(db, "restaurants", restaurantId, "ratings"),
 		orderBy("timestamp", "desc")
 	);
-	const unsubscribe = onSnapshot(q, querySnapshot => {
+	return onSnapshot(q, querySnapshot => {
 		const results = querySnapshot.docs.map(doc => {
 			return {
 				id: doc.id,
@@ -113,7 +113,6 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 		});
 		cb(results);
 	});
-	return unsubscribe;
 }
 
 export async function addFakeRestaurantsAndReviews() {

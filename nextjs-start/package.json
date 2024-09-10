@@ -3,9 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
-		"build": "npm run build-service-worker && next build",
-		"build-service-worker": "npx esbuild auth-service-worker.js --bundle --outfile=public/auth-service-worker.js",
+		"dev": "concurrently -r -k \"npm:dev:next\" \"npm:dev:sw\"",
+		"dev:next": "next dev",
+		"dev:sw": "npm run build:sw -- --watch",
+		"build": "next build",
+		"build:sw": "esbuild auth-service-worker.js --bundle --minify --main-fields=webworker,browser,module,main --outfile=public/auth-service-worker.js",
+		"prebuild": "npm run build:sw",
 		"start": "next start",
 		"lint": "next lint"
 	},
@@ -27,6 +30,10 @@
 		"tls": false
 	},
 	"devDependencies": {
-		"esbuild": "^0.20.2"
+		"@next/eslint-plugin-next": "^14.2.9",
+		"concurrently": "^9.0.0",
+		"esbuild": "^0.20.2",
+		"eslint": "^8.0.0",
+		"eslint-config-next": "^14.2.9"
 	}
 }

@@ -4,11 +4,11 @@
 // It receives data from src/app/restaurant/[id]/page.jsx
 
 import { React, useState, useEffect, Suspense } from "react";
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 import {
   getRestaurantSnapshotById,
 } from "@/src/lib/firebase/firestore.js";
-import {useUser} from '@/src/lib/getUser'
+import {useUser} from '@/src/lib/getUser';
 import RestaurantDetails from "@/src/components/RestaurantDetails.jsx";
 import { updateRestaurantImage } from "@/src/lib/firebase/storage.js";
 
@@ -41,7 +41,7 @@ export default function Restaurant({
     }
 
     const imageURL = await updateRestaurantImage(id, image);
-    setRestaurantDetails({ ...restaurant, photo: imageURL });
+    setRestaurantDetails({ ...restaurantDetails, photo: imageURL });
   }
 
   const handleClose = () => {
@@ -50,14 +50,10 @@ export default function Restaurant({
   };
 
   useEffect(() => {
-    const unsubscribeFromRestaurant = getRestaurantSnapshotById(id, (data) => {
+    return getRestaurantSnapshotById(id, (data) => {
       setRestaurantDetails(data);
     });
-
-    return () => {
-      unsubscribeFromRestaurant();
-    };
-  }, []);
+  }, [id]);
 
   return (
     <>

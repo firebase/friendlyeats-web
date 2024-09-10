@@ -1,0 +1,10 @@
+{
+  "extends": ["eslint:recommended", "next"],
+  "rules": {
+    "indent": "off",
+    "quotes": "off",
+    "no-mixed-spaces-and-tabs": "off",
+    "@next/next/no-img-element": "off",
+    "no-unused-vars": "off"
+  }
+}

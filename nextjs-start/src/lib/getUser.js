@@ -10,12 +10,9 @@ export function useUser() {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+    return onAuthStateChanged(auth, (authUser) => {
       setUser(authUser);
     });
-
-    return () => unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return user;

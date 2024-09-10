@@ -18,6 +18,7 @@ const RestaurantDetails = ({
 			<div className="actions">
 				{userId && (
 					<img
+						alt="review"
 						className="review"
 						onClick={() => {
 							setIsOpen(!isOpen);
