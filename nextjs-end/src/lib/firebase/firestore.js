@@ -19,7 +19,7 @@ import { db } from "@/src/lib/firebase/clientApp";
 
 export async function updateRestaurantImageReference(
   restaurantId,
-  publicImageUrl,
+  publicImageUrl
 ) {
   const restaurantRef = doc(collection(db, "restaurants"), restaurantId);
   if (restaurantRef) {
@@ -31,7 +31,7 @@ const updateWithRating = async (
   transaction,
   docRef,
   newRatingDocument,
-  review,
+  review
 ) => {
   const restaurant = await transaction.get(docRef);
   const data = restaurant.data();
@@ -63,17 +63,17 @@ export async function addReviewToRestaurant(db, restaurantId, review) {
   try {
     const docRef = doc(collection(db, "restaurants"), restaurantId);
     const newRatingDocument = doc(
-      collection(db, `restaurants/${restaurantId}/ratings`),
+      collection(db, `restaurants/${restaurantId}/ratings`)
     );
 
     // corrected line
     await runTransaction(db, (transaction) =>
-      updateWithRating(transaction, docRef, newRatingDocument, review),
+      updateWithRating(transaction, docRef, newRatingDocument, review)
     );
   } catch (error) {
     console.error(
       "There was an error adding the rating to the restaurant",
-      error,
+      error
     );
     throw error;
   }
@@ -176,7 +176,7 @@ export async function getReviewsByRestaurantId(db, restaurantId) {
 
   const q = query(
     collection(db, "restaurants", restaurantId, "ratings"),
-    orderBy("timestamp", "desc"),
+    orderBy("timestamp", "desc")
   );
 
   const results = await getDocs(q);
@@ -198,7 +198,7 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
 
   const q = query(
     collection(db, "restaurants", restaurantId, "ratings"),
-    orderBy("timestamp", "desc"),
+    orderBy("timestamp", "desc")
   );
   return onSnapshot(q, (querySnapshot) => {
     const results = querySnapshot.docs.map((doc) => {
@@ -219,13 +219,13 @@ export async function addFakeRestaurantsAndReviews() {
     try {
       const docRef = await addDoc(
         collection(db, "restaurants"),
-        restaurantData,
+        restaurantData
       );
 
       for (const ratingData of ratingsData) {
         await addDoc(
           collection(db, "restaurants", docRef.id, "ratings"),
-          ratingData,
+          ratingData
         );
       }
     } catch (e) {

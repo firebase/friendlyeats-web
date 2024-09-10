@@ -17,7 +17,7 @@ export default async function Home({ searchParams }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const restaurants = await getRestaurants(
     getFirestore(firebaseServerApp),
-    searchParams,
+    searchParams
   );
   return (
     <main className="main__home">

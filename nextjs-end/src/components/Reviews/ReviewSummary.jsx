@@ -7,7 +7,7 @@ export async function GeminiSummary({ restaurantId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const reviews = await getReviewsByRestaurantId(
     getFirestore(firebaseServerApp),
-    restaurantId,
+    restaurantId
   );
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);

@@ -20,7 +20,7 @@ function useUserSession(initialUser) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       const serializedFirebaseConfig = encodeURIComponent(
-        JSON.stringify(firebaseConfig),
+        JSON.stringify(firebaseConfig)
       );
       const serviceWorkerUrl = `/auth-service-worker.js?firebaseConfig=${serializedFirebaseConfig}`;
 
@@ -34,19 +34,19 @@ function useUserSession(initialUser) {
   }, []);
 
   useEffect(() => {
-    return onAuthStateChanged(async (authUser) => {
-      if (user?.uid === authUser?.uid) {
-        return;
-      }
-      if ("serviceWorker" in navigator) {
+    if ("serviceWorker" in navigator) {
+      return onAuthStateChanged(async (authUser) => {
+        if (user?.uid === authUser?.uid) {
+          return;
+        }
         await navigator.serviceWorker.ready;
         await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(
-          () => undefined,
+          () => undefined
         );
-      }
-      setUser(authUser);
-      router.refresh();
-    });
+        setUser(authUser);
+        router.refresh();
+      });
+    }
   }, [user, router]);
 
   return user;

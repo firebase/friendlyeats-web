@@ -19,7 +19,7 @@ export default async function Home({ params }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const restaurant = await getRestaurantById(
     getFirestore(firebaseServerApp),
-    params.id,
+    params.id
   );
 
   return (

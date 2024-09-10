@@ -3,11 +3,11 @@ import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 
 // extract firebase config from query string
 const serializedFirebaseConfig = new URLSearchParams(self.location.search).get(
-  "firebaseConfig",
+  "firebaseConfig"
 );
 if (!serializedFirebaseConfig) {
   throw new Error(
-    "Firebase Config object not found in service worker query string.",
+    "Firebase Config object not found in service worker query string."
   );
 }
 

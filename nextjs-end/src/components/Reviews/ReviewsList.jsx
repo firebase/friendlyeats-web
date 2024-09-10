@@ -11,7 +11,7 @@ export default async function ReviewsList({ restaurantId, userId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const reviews = await getReviewsByRestaurantId(
     getFirestore(firebaseServerApp),
-    restaurantId,
+    restaurantId
   );
 
   return (
