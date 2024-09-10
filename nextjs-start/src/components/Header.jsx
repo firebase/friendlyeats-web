@@ -5,12 +5,10 @@ import {
 	signInWithGoogle,
 	signOut,
 	onAuthStateChanged,
-	onIdTokenChanged,
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
 import { useRouter } from "next/navigation";
 import { firebaseConfig } from "@/src/lib/firebase/config";
-import { getIdToken } from "firebase/auth";
 
 function useUserSession(initialUser) {
 	return;
