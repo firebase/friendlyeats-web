@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
@@ -20,7 +20,7 @@ function useUserSession(initialUser) {
 	useEffect(() => {
 		if ("serviceWorker" in navigator) {
 			const serializedFirebaseConfig = encodeURIComponent(JSON.stringify(firebaseConfig));
-			const serviceWorkerUrl = `/auth-service-worker.js?firebaseConfig=${serializedFirebaseConfig}`
+			const serviceWorkerUrl = `/auth-service-worker.js?firebaseConfig=${serializedFirebaseConfig}`;
 		
 		  	navigator
 				.serviceWorker
@@ -34,7 +34,7 @@ function useUserSession(initialUser) {
 
 	useEffect(() => {
 		return onAuthStateChanged(async (authUser) => {
-			if (user?.uid === authUser?.uid) return;
+			if (user?.uid === authUser?.uid) {return;}
 			if ("serviceWorker" in navigator) {
 				await navigator.serviceWorker.ready;
 				await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(() => undefined);
@@ -42,7 +42,7 @@ function useUserSession(initialUser) {
 			setUser(authUser);
 			router.refresh();
 		});
-	}, [user]);
+	}, [user, router]);
 
 	return user;
 }

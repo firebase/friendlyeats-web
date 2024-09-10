@@ -38,7 +38,7 @@ export async function GeminiSummary({ restaurantId }) {
     if (e.message.includes("403 Forbidden")) {
       return (
         <p>
-          This service account doesn't have permission to talk to Gemini via
+          This service account doesn&apos;t have permission to talk to Gemini via
           Vertex
         </p>
       );

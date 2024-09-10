@@ -24,14 +24,14 @@ const ReviewDialog = ({
 			dialog.current.close();
 		}
 		
-	}, [isOpen, dialog.current]);
+	}, [isOpen, dialog]);
 
 	const handleClick = (e) => {
 		// close if clicked outside the modal
 		if (e.target === dialog.current) {
 			handleClose();
 		}
-	}
+	};
 
 	return (
 		<dialog ref={dialog} onMouseDown={handleClick}>
