@@ -21,12 +21,6 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-async function getAuthIdToken() {
-  await auth.authStateReady();
-  if (!auth.currentUser) return;
-  return await getIdToken(auth.currentUser);
-};
-
 self.addEventListener("fetch", (event) => {
   const { origin, pathname } = new URL(event.request.url);
   if (origin !== self.location.origin) return;
@@ -44,6 +38,19 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
 
+async function fetchWithFirebaseHeaders(request) {
+  const authIdToken = await getAuthIdToken();
+  if (authIdToken) {
+    const headers = new Headers(request.headers);
+    headers.append("Authorization", `Bearer ${authIdToken}`);
+    request = new Request(request, { headers });
+  }
+  return await fetch(request).catch((reason) => {
+    console.error(reason);
+    return new Response("Fail.", { status: 500, headers: { "content-type": "text/html" } });
+  });
+}
+
 async function waitForMatchingUid(_uid) {
   const uid = _uid === "undefined" ? undefined : _uid;
   await auth.authStateReady();
@@ -58,15 +65,8 @@ async function waitForMatchingUid(_uid) {
   return new Response(undefined, { status: 200, headers: { "cache-control": "no-store" } });
 }
 
-async function fetchWithFirebaseHeaders(request) {
-  const authIdToken = await getAuthIdToken();
-  if (authIdToken) {
-    const headers = new Headers(request.headers);
-    headers.append("Authorization", `Bearer ${authIdToken}`);
-    request = new Request(request, { headers });
-  }
-  return await fetch(request).catch((reason) => {
-    console.error(reason);
-    return new Response("Fail.", { status: 500, headers: { "content-type": "text/html" } });
-  });
-}
+async function getAuthIdToken() {
+  await auth.authStateReady();
+  if (!auth.currentUser) return;
+  return await getIdToken(auth.currentUser);
+};
