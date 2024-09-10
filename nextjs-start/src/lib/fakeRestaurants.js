@@ -19,7 +19,7 @@ export async function generateFakeRestaurantsAndReviews() {
     // Generate a random number of ratings/reviews for this restaurant
     for (let j = 0; j < randomNumberBetween(0, 5); j++) {
       const ratingTimestamp = Timestamp.fromDate(
-        getRandomDateAfter(restaurantTimestamp.toDate()),
+        getRandomDateAfter(restaurantTimestamp.toDate())
       );
 
       const ratingData = {
@@ -40,7 +40,7 @@ export async function generateFakeRestaurantsAndReviews() {
     const avgRating = ratingsData.length
       ? ratingsData.reduce(
           (accumulator, currentValue) => accumulator + currentValue.rating,
-          0,
+          0
         ) / ratingsData.length
       : 0;
 
@@ -59,12 +59,12 @@ export async function generateFakeRestaurantsAndReviews() {
       numRatings: ratingsData.length,
       sumRating: ratingsData.reduce(
         (accumulator, currentValue) => accumulator + currentValue.rating,
-        0,
+        0
       ),
       price: randomNumberBetween(1, 4),
       photo: `https://storage.googleapis.com/firestorequickstarts.appspot.com/food_${randomNumberBetween(
         1,
-        22,
+        22
       )}.png`,
       timestamp: restaurantTimestamp,
     };
