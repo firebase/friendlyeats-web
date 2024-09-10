@@ -11,18 +11,15 @@ export const metadata = {
     "FriendlyEats is a restaurant review website built with Next.js and Firebase.",
 };
 
-
 export default async function RootLayout({ children }) {
   const { currentUser } = await getAuthenticatedAppForUser();
   return (
     <html lang="en">
-
       <body>
-            <Header initialUser={currentUser?.toJSON()}/>
+        <Header initialUser={currentUser?.toJSON()} />
 
         <main>{children}</main>
       </body>
-
     </html>
   );
 }

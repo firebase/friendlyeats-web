@@ -1,9 +1,6 @@
 {
-  "extends": ["eslint:recommended", "next"],
+  "extends": ["eslint:recommended", "next", "prettier"],
   "rules": {
-    "indent": "off",
-    "quotes": "off",
-    "no-mixed-spaces-and-tabs": "off",
     "@next/next/no-img-element": "off"
   }
 }

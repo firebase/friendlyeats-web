@@ -1,39 +1,44 @@
 {
-	"name": "my-app",
-	"version": "0.1.0",
-	"private": true,
-	"scripts": {
-		"dev": "concurrently -r -k \"npm:dev:next\" \"npm:dev:sw\"",
-		"dev:next": "next dev",
-		"dev:sw": "npm run build:sw -- --watch",
-		"build": "next build",
-		"build:sw": "esbuild auth-service-worker.js --bundle --minify --main-fields=webworker,browser,module,main --outfile=public/auth-service-worker.js",
-		"prebuild": "npm run build:sw",
-		"start": "next start",
-		"lint": "next lint"
-	},
-	"dependencies": {
-		"@google/generative-ai": "^0.10.0",
-		"firebase": "^10.11.1",
-		"firebase-admin": "^12.1.0",
-		"next": "^14.2.3",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"server-only": "^0.0.1"
-	},
-	"browser": {
-		"fs": false,
-		"os": false,
-		"path": false,
-		"child_process": false,
-		"net": false,
-		"tls": false
-	},
-	"devDependencies": {
-		"@next/eslint-plugin-next": "^14.2.9",
-		"concurrently": "^9.0.0",
-		"esbuild": "^0.20.2",
-		"eslint": "^8.0.0",
-		"eslint-config-next": "^14.2.9"
-	}
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -r -k \"npm:dev:next\" \"npm:dev:sw\"",
+    "dev:next": "next dev",
+    "dev:sw": "npm run build:sw -- --watch",
+    "build": "next build",
+    "build:sw": "esbuild auth-service-worker.js --bundle --minify --main-fields=webworker,browser,module,main --outfile=public/auth-service-worker.js",
+    "prebuild": "npm run build:sw",
+    "start": "next start",
+    "lint": "concurrently -r \"npm:lint:next\" \"npm:lint:prettier\"",
+    "lint:next": "next lint",
+    "lint:prettier": "prettier --check --ignore-path .gitignore .",
+    "lint:fix": "concurrently -r \"npm:lint:next -- --fix\" \"npm:lint:prettier -- --write\""
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.10.0",
+    "firebase": "^10.11.1",
+    "firebase-admin": "^12.1.0",
+    "next": "^14.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "server-only": "^0.0.1"
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false,
+    "child_process": false,
+    "net": false,
+    "tls": false
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.9",
+    "concurrently": "^9.0.0",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.2.9",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3"
+  }
 }
