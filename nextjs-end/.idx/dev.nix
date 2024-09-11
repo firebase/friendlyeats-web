@@ -12,7 +12,7 @@
         default.openFiles = [".env"];
       };
       onCreate = {
-        firebase-use = "firebase use";
+        firebase-setup = "firebase use && firebase use \${curl -s -H \"Metadata-Flavor: Google\" http://metadata.google.internal/computeMetadata/v1/project/project-id} || true";
       };
   };
   idx.extensions = [
