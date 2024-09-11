@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -r -k \"npm:dev:next\" \"npm:dev:sw\"",
+    "dev": "concurrently -r -k -P \"npm:dev:next -- {@}\" npm:dev:sw --",
     "dev:next": "next dev",
     "dev:sw": "npm run build:sw -- --watch",
     "build": "next build",
