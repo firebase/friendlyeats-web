@@ -12,3 +12,6 @@ env:
     value: TODO
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     value: TODO
+runConfig:
+  minInstances: 0
+  maxInstances: 2
