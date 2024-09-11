@@ -1,4 +1,4 @@
-{ pkgs, packageManager ? "npm", ... }: {
+{ pkgs, projectId, ... }: {
   packages = [
     pkgs.nodejs_20
     pkgs.j2cli
