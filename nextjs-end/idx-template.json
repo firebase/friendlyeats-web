@@ -15,13 +15,19 @@
       "required": true
     },
     {
-      "id": "apiKey",
-      "name": "Firebase API Key",
+      "id": "firebaseAppId",
+      "name": "Firebase Web App API Key",
       "type": "string",
       "required": true
     },
     {
-      "id": "apiKey",
+      "id": "firebaseApiKey",
+      "name": "Firebase Web App ID",
+      "type": "string",
+      "required": true
+    },
+    {
+      "id": "geminiApiKey",
       "name": "Gemini API Key",
       "type": "string",
       "required": true
