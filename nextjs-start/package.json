@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx -y concurrently -r -k -P \"npm:dev:next -- {@}\" npm:dev:sw --",
+    "dev": "concurrently -r -k -P \"npm:dev:next -- {@}\" npm:dev:sw --",
     "dev:next": "next dev",
     "dev:sw": "npm run build:sw -- --watch",
     "build": "next build",
-    "build:sw": "npx -y esbuild auth-service-worker.js --bundle --minify --main-fields=webworker,browser,module,main --outfile=public/auth-service-worker.js",
+    "build:sw": "esbuild auth-service-worker.js --bundle --minify --main-fields=webworker,browser,module,main --outfile=public/auth-service-worker.js",
     "prebuild": "npm run build:sw",
     "start": "next start",
-    "lint": "npx -y concurrently -r \"npm:lint:next\" \"npm:lint:prettier\"",
+    "lint": "concurrently -r \"npm:lint:next\" \"npm:lint:prettier\"",
     "lint:next": "next lint",
     "lint:prettier": "prettier --check --ignore-path .gitignore .",
-    "lint:fix": "npx -y concurrently -r \"npm:lint:next -- --fix\" \"npm:lint:prettier -- --write\""
+    "lint:fix": "concurrently -r \"npm:lint:next -- --fix\" \"npm:lint:prettier -- --write\""
   },
   "dependencies": {
     "@google/generative-ai": "^0.10.0",
