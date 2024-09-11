@@ -8,23 +8,5 @@
     "virtualization": true
   },
   "params": [
-    {
-      "id": "projectId",
-      "name": "Firebase Project ID",
-      "type": "string",
-      "required": true
-    },
-    {
-      "id": "apiKey",
-      "name": "Firebase API Key",
-      "type": "string",
-      "required": true
-    },
-    {
-      "id": "apiKey",
-      "name": "Gemini API Key",
-      "type": "string",
-      "required": true
-    }
   ]
 }

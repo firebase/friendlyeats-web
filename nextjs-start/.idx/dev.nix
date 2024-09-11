@@ -8,6 +8,9 @@
         npm-install = "npm ci --no-audit --prefer-offline --no-progress --timing";
         default.openFiles = [".env"];
       };
+      onCreate = {
+        firebase-setup = "firebase use && firebase use \$(curl -s -H \"Metadata-Flavor: Google\" http://metadata.google.internal/computeMetadata/v1/project/project-id)";
+      };
   };
   idx.extensions = [
   ];
