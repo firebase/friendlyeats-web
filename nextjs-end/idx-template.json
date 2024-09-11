@@ -1,8 +1,8 @@
 {
-  "name": "FriendlyEats NextJS (finished)",
-  "description": "Something something codelab",
+  "name": "Integrate Firebase with a Next.js app",
+  "description": "In this codelab, you'll learn how to integrate Firebase with a Next.js web app called Friendly Eats, which is a website for restaurant reviews.",
   "categories": ["Web", "Firebase", "Google Codelabs"],
-  "icon": "https://www.gstatic.com/monospace/231115/logo_react-native.svg",
+  "icon": "https://firebase.google.com/_static/firebase/images/icon.svg",
   "publisher": "Google LLC",
   "host": {
     "virtualization": true
