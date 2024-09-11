@@ -6,7 +6,8 @@
   ];
   bootstrap = ''
     npx -y giget gh:firebase/friendlyeats-web/nextjs-start#jamesdaniels_fixServiceWorkers "$WS_NAME"
-    rm "$WS_NAME/idx-template.*"
+    rm "$WS_NAME/idx-template.json"
+    rm "$WS_NAME/idx-template.nix"
     mv "$WS_NAME" "$out"
   '';
 }
