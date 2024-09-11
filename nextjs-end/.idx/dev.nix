@@ -4,7 +4,6 @@
     pkgs.nodejs_20
   ];
   env = {
-    GOOGLE_PROJECT = "<project-id>";
     NEXT_TELEMETRY_DISABLED = "1";
   };
   idx.workspace = {
@@ -13,7 +12,7 @@
         default.openFiles = [".env"];
       };
       onCreate = {
-        firebase-use = "firebase use <project-id>";
+        firebase-use = "firebase use";
       };
   };
   idx.extensions = [

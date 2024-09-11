@@ -8,7 +8,6 @@
     npx -y giget gh:firebase/friendlyeats-web/nextjs-end#jamesdaniels_fixServiceWorkers "$WS_NAME"
     rm "$WS_NAME/idx-template.json"
     rm "$WS_NAME/idx-template.nix"
-    sed -e 's/<project-id>/${projectId}/' ${.idx/dev.nix} > "$WS_NAME/.idx/dev.nix"
     mv "$WS_NAME" "$out"
   '';
 }
