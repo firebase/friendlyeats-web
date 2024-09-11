@@ -6,5 +6,6 @@
   ];
   bootstrap = ''
     npx -y giget gh:firebase/friendlyeats-web/nextjs-end#jamesdaniels_fixServiceWorkers "$WS_NAME"
+    mv "$WS_NAME" "$out"
   '';
 }
