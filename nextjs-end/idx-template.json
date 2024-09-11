@@ -2,10 +2,29 @@
   "name": "Integrate Firebase with a Next.js app",
   "description": "In this codelab, you'll learn how to integrate Firebase with a Next.js web app called Friendly Eats, which is a website for restaurant reviews.",
   "categories": ["Web", "Firebase", "Google Codelabs"],
-  "icon": "https://firebase.google.com/_static/firebase/images/icon.svg",
+  "icon_image_url": "https://firebase.google.com/_static/firebase/images/icon.svg",
   "publisher": "Google LLC",
   "host": {
     "virtualization": true
   },
-  "params": []
+  "params": [
+    {
+      "id": "projectId",
+      "name": "Firebase Project ID",
+      "type": "string",
+      "required": true
+    },
+    {
+      "id": "apiKey",
+      "name": "Firebase API Key",
+      "type": "string",
+      "required": true
+    },
+    {
+      "id": "apiKey",
+      "name": "Gemini API Key",
+      "type": "string",
+      "required": true
+    }
+  ]
 }
