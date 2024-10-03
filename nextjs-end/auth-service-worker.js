@@ -36,9 +36,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   if (pathname.startsWith("/_next/")) return;
-  // Don't add headers to non-get requests or those with an extension—this
+  // Don't add headers to GET/HEAD requests or those with an extension—this
   // helps with css, images, fonts, json, etc.
-  if (event.request.method === "GET" && pathname.includes(".")) return;
+  if (
+    (event.request.method === "GET" || event.request.method === "HEAD") &&
+    pathname.includes(".")
+  ) {
+    return;
+  }
   event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
 
