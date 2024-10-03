@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import {
   signInWithGoogle,
@@ -7,14 +7,9 @@ import {
   onAuthStateChanged,
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
-import { useRouter } from "next/navigation";
 import { firebaseConfig } from "@/src/lib/firebase/config";
 
-function useUserSession(initialUser) {
-  // The initialUser comes from the server via a server component
-  const [user, setUser] = useState(initialUser);
-  const router = useRouter();
-
+function useUserSession(user) {
   // Register the service worker that sends auth state back to server
   // The service worker is built with npm run build-service-worker
   useEffect(() => {
@@ -40,14 +35,11 @@ function useUserSession(initialUser) {
           return;
         }
         await navigator.serviceWorker.ready;
-        await fetch(`/__/auth/wait/${authUser?.uid}`, { method: "HEAD" }).catch(
-          () => undefined
-        );
-        setUser(authUser);
-        router.refresh();
+        await fetch(`/__/auth/wait/${authUser?.uid}`);
+        window.location.reload();
       });
     }
-  }, [user, router]);
+  }, [user]);
 
   return user;
 }
