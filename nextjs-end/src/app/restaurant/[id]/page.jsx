@@ -14,7 +14,8 @@ import {
 } from "@/src/components/Reviews/ReviewSummary";
 import { getFirestore } from "firebase/firestore";
 
-export default async function Home({ params }) {
+export default async function Home(props) {
+  const params = await props.params;
   const { currentUser } = await getUser();
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const restaurant = await getRestaurantById(

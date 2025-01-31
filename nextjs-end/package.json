@@ -3,25 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -r -k -P \"npm:dev:next -- {@}\" npm:dev:sw --",
-    "dev:next": "next dev",
-    "dev:sw": "npm run build:sw -- --watch",
+    "dev": "next dev",
     "build": "next build",
-    "build:sw": "esbuild auth-service-worker.js --bundle --minify --main-fields=webworker,browser,module,main --outfile=public/auth-service-worker.js",
-    "prebuild": "npm run build:sw",
     "start": "next start",
-    "lint": "concurrently -r \"npm:lint:next\" \"npm:lint:prettier\"",
+    "lint": "npm run lint:next && npm:lint:prettier",
     "lint:next": "next lint",
     "lint:prettier": "prettier --check --ignore-path .gitignore .",
-    "lint:fix": "concurrently -r \"npm:lint:next -- --fix\" \"npm:lint:prettier -- --write\""
+    "lint:fix": "npm run lint:next -- --fix && npm run lint:prettier -- --write"
   },
   "dependencies": {
     "@google/generative-ai": "^0.10.0",
-    "firebase": "^10.11.1",
-    "firebase-admin": "^12.1.0",
-    "next": "^14.2.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "cookies-next": "^5.1.0",
+    "firebase": "^11.2.0",
+    "next": "15.1.6",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "server-only": "^0.0.1"
   },
   "browser": {
@@ -33,11 +29,10 @@
     "tls": false
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.2.9",
-    "concurrently": "^9.0.0",
+    "@next/eslint-plugin-next": "15.1.6",
     "esbuild": "^0.20.2",
     "eslint": "^8.0.0",
-    "eslint-config-next": "^14.2.9",
+    "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3"
   }

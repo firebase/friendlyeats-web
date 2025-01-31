@@ -4,10 +4,9 @@ import Link from "next/link";
 import {
   signInWithGoogle,
   signOut,
-  onAuthStateChanged,
+  onIdTokenChanged,
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
-import { firebaseConfig } from "@/src/lib/firebase/config";
 
 function useUserSession(initialUser) {
   return;

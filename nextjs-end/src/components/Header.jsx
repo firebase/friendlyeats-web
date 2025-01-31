@@ -4,44 +4,28 @@ import Link from "next/link";
 import {
   signInWithGoogle,
   signOut,
-  onAuthStateChanged,
+  onIdTokenChanged,
 } from "@/src/lib/firebase/auth.js";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore.js";
-import { firebaseConfig } from "@/src/lib/firebase/config";
+import { setCookie, deleteCookie } from "cookies-next";
 
-function useUserSession(user) {
-  // Register the service worker that sends auth state back to server
-  // The service worker is built with npm run build-service-worker
+function useUserSession(initialUser) {
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      const serializedFirebaseConfig = encodeURIComponent(
-        JSON.stringify(firebaseConfig)
-      );
-      const serviceWorkerUrl = `/auth-service-worker.js?firebaseConfig=${serializedFirebaseConfig}`;
+    return onIdTokenChanged(async (user) => {
+      if (user) {
+        const idToken = await user.getIdToken();
+        await setCookie("__session", idToken);
+      } else {
+        await deleteCookie("__session");
+      }
+      if (initialUser?.uid === user?.uid) {
+        return;
+      }
+      window.location.reload();
+    });
+  }, [initialUser]);
 
-      navigator.serviceWorker
-        .register(serviceWorkerUrl, { scope: "/", updateViaCache: "none" })
-        .then((registration) => {
-          console.log("scope is: ", registration.scope);
-          registration.update();
-        });
-    }
-  }, []);
-
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      return onAuthStateChanged(async (authUser) => {
-        if (user?.uid === authUser?.uid) {
-          return;
-        }
-        await navigator.serviceWorker.ready;
-        await fetch(`/__/auth/wait/${authUser?.uid}`);
-        window.location.reload();
-      });
-    }
-  }, [user]);
-
-  return user;
+  return initialUser;
 }
 
 export default function Header({ initialUser }) {
