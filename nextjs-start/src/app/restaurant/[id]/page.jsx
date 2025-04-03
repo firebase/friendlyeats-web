@@ -14,10 +14,11 @@ import {
 } from "@/src/components/Reviews/ReviewSummary";
 import { getFirestore } from "firebase/firestore";
 
-export default async function Home({ params }) {
+export default async function Home(props) {
   // This is a server component, we can access URL
   // parameters via Next.js and download the data
   // we need for this page
+  const params = await props.params;
   const { currentUser } = await getUser();
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const restaurant = await getRestaurantById(
