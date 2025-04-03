@@ -16,7 +16,7 @@ export async function getAuthenticatedAppForUser() {
 
   // Firebase Server App is a new feature in the JS SDK that allows you to
   // instantiate the SDK with credentials retrieved from the client & has
-  // other afforances for use in server environments.
+  // other affordances for use in server environments.
   const firebaseServerApp = initializeServerApp(
     // https://github.com/firebase/firebase-js-sdk/issues/8863#issuecomment-2751401913
     initializeApp(), {
