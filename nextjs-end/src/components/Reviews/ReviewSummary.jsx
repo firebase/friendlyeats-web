@@ -1,8 +1,5 @@
-import {
-  GoogleGenerativeAI,
-  HarmBlockThreshold,
-  HarmCategory,
-} from "@google/generative-ai";
+import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
+import { genkit } from "genkit";
 import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
 import { getFirestore } from "firebase/firestore";
@@ -14,17 +11,6 @@ export async function GeminiSummary({ restaurantId }) {
     restaurantId
   );
 
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    safety_settings: [
-      {
-        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold: HarmBlockThreshold.BLOCK_NONE,
-      },
-    ],
-  });
-
   const reviewSeparator = "@";
   const prompt = `
     Based on the following restaurant reviews, 
@@ -35,9 +21,20 @@ export async function GeminiSummary({ restaurantId }) {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    if (!process.env.GEMINI_API_KEY) {
+      // Make sure GEMINI_API_KEY environment variable is set:
+      // https://firebase.google.com/docs/genkit/get-started
+      throw new Error(
+        'GEMINI_API_KEY not set. Set it with "firebase apphosting:secrets:set GEMINI_API_KEY"'
+      );
+    }
+
+    // Configure a Genkit instance.
+    const ai = genkit({
+      plugins: [googleAI()],
+      model: gemini20Flash, // set default model
+    });
+    const { text } = await ai.generate(prompt);
 
     return (
       <div className="restaurant__review_summary">
@@ -47,16 +44,7 @@ export async function GeminiSummary({ restaurantId }) {
     );
   } catch (e) {
     console.error(e);
-    if (e.message.includes("403 Forbidden")) {
-      return (
-        <p>
-          This service account doesn&apos;t have permission to talk to Gemini
-          via Vertex
-        </p>
-      );
-    } else {
-      return <p>Error contacting Gemini</p>;
-    }
+    return <p>Error summarizing reviews.</p>;
   }
 }
 
