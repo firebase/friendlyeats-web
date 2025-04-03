@@ -10,8 +10,6 @@ import { getAuth } from "firebase/auth";
 // Returns an authenticated client SDK instance for use in Server Side Rendering
 // and Static Site Generation
 export async function getAuthenticatedAppForUser() {
-  // Firebase App Hosting currently does not support cookies, so we transmit
-  // the client idToken via an Authorization header with Service Workers
   const authIdToken = (await cookies()).get("__session")?.value;
 
   // Firebase Server App is a new feature in the JS SDK that allows you to
