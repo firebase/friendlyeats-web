@@ -19,9 +19,11 @@ export async function getAuthenticatedAppForUser() {
   // other affordances for use in server environments.
   const firebaseServerApp = initializeServerApp(
     // https://github.com/firebase/firebase-js-sdk/issues/8863#issuecomment-2751401913
-    initializeApp(), {
-    authIdToken,
-  });
+    initializeApp(),
+    {
+      authIdToken,
+    }
+  );
 
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();
