@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "15.1.6",
-    "esbuild": "^0.20.2",
     "eslint": "^8.0.0",
     "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^9.1.0",
