@@ -12,10 +12,10 @@
     "lint:fix": "npm run lint:next -- --fix && npm run lint:prettier -- --write"
   },
   "dependencies": {
-    "@genkit-ai/googleai": "^1.4.0",
+    "@genkit-ai/googleai": "^1.5.0",
     "cookies-next": "^5.1.0",
-    "firebase": "^11.2.0",
-    "genkit": "^1.4.0",
+    "firebase": "^11.6.0",
+    "genkit": "^1.5.0",
     "next": "15.1.6",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "15.1.6",
-    "eslint": "^8.0.0",
+    "eslint": "^8.57.1",
     "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.5.3"
   }
 }
