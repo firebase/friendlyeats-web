@@ -12,12 +12,9 @@ export default function ReviewsListClient({
   const [reviews, setReviews] = useState(initialReviews);
 
   useEffect(() => {
-    return getReviewsSnapshotByRestaurantId(
-      restaurantId,
-      (data) => {
-        setReviews(data);
-      }
-    );
+    return getReviewsSnapshotByRestaurantId(restaurantId, (data) => {
+      setReviews(data);
+    });
   }, [restaurantId]);
   return (
     <article>

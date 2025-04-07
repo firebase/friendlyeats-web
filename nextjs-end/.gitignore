@@ -2,3 +2,4 @@ lib/firebase/config.js
 .next/
 .firebase/
 node_modules/
+.env
